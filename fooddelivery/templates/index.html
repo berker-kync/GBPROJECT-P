@@ -1,0 +1,467 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+                
+    <header class="header clearfix element_to_stick">
+        <div class="container">
+            <div id="logo">
+                <a href="index.html">
+                    <img src="{% static 'img/logo.svg' %}" width="162" height="35" alt="" class="logo_normal">
+                    <img src="{% static 'img/logo_sticky.svg' %}" width="162" height="35" alt="" class="logo_sticky">
+                </a>
+            </div>
+            <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
+            <ul id="top_menu">
+                <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li>
+                <li><a href="#0" class="wishlist_bt_top" title="Your wishlist">Your wishlist</a></li>
+            </ul>
+            <!-- /top_menu -->
+            <a href="#0" class="open_close">
+                <i class="icon_menu"></i><span>Menu</span>
+            </a>
+            <nav class="main-menu">
+                <div id="header_menu">
+                    <a href="#0" class="open_close">
+                        <i class="icon_close"></i><span>Menu</span>
+                    </a>
+                    <a href="index.html"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
+                </div>
+                <ul>
+                   <li class="submenu">
+                        <a href="#0" class="show-submenu">Home</a>
+                        <ul>
+                            <li><a href="index-13.html">KenBurns Slider <strong>New!</strong></a></li>
+                            <li><a href="index.html">Address Autocomplete</a></li>
+                            <li><a href="index-2.html">Search by Keyword</a></li>
+                            <li><a href="index-3.html">Home Version 2</a></li>
+                            <li><a href="index-4.html">Video Bg Fallback Mobile</a></li>
+                            <li class="third-level"><a href="#0">Sliders - Parallax <strong>New!</strong></a>
+                                <ul>
+                                    <li><a href="index-6.html">Owl Carousel</a></li>
+                                    <li><a href="index-7.html">Revolution Slider 1</a></li>
+                                    <li><a href="index-8.html">Revolution Slider 2</a></li>
+                                    <li><a href="index-9.html">Youtube/Vimeo Parallax</a></li>
+                                    <li><a href="index-10.html">MP4 Video Parallax</a></li>
+                                    <li><a href="index-11.html">Parallax Image</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="index-12.html">Text Rotator <strong>New!</strong></a></li>
+                            <li><a href="index-5.html">GDPR Cookie Bar EU Law</a></li>
+                            <li><a href="header-user-logged.html">Header User Logged</a></li>
+                            <li><a href="header-cart-top.html">Header Cart Top</a></li>
+                            <li><a href="modal-advertise.html">Modal 1 Cookie Session</a></li>
+                            <li><a href="modal-newsletter.html">Modal 2 Cookie Session</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#0" class="show-submenu">Listing</a>
+                        <ul>
+                            <li class="third-level"><a href="#0">List pages</a>
+                                <ul>
+                                    <li><a href="grid-listing-filterscol.html">List default</a></li>
+                                    <li><a href="grid-listing-filterscol-map.html">List with map</a></li>
+                                    <li><a href="listing-map.html">List side map</a></li>
+                                    <li><a href="grid-listing-masonry.html">List Masonry Filter</a></li>
+                                </ul>
+                            </li>
+                            <li class="third-level"><a href="#0">Detail pages</a>
+                               <ul>
+                                    <li><a href="detail-restaurant.html">Detail page 1</a></li>
+                                    <li><a href="detail-restaurant-2.html">Detail page 2</a></li>
+                                    <li><a href="detail-restaurant-3.html">Detail page 3</a></li>
+                                    <li><a href="detail-restaurant-4.html">Detail page 4</a></li>
+                                </ul>
+                            </li>
+                            <li class="third-level"><a href="#0">OpenStreetMap</a>
+                                <ul>
+                                    <li><a href="grid-listing-filterscol-openstreetmap.html">List with map</a></li>
+                                    <li><a href="listing-map-openstreetmap.html">List side map</a></li>
+                                    <li><a href="grid-listing-masonry-openstreetmap.html">List Masonry Filter</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="submit-restaurant.html">Submit Restaurant</a></li>
+                            <li><a href="submit-rider.html">Submit Rider</a></li>
+                            <li><a href="order.html">Order</a></li>
+                            <li><a href="confirm.html">Confirm Order</a></li>
+                        </ul>
+                    </li>
+                    <li class="submenu">
+                        <a href="#0" class="show-submenu">Other Pages</a>
+                       <ul>
+				        <li><a href="admin_section/index.html" target="_blank">Admin Section</a></li>
+				        <li><a href="404.html">404 Error</a></li>
+				        <li><a href="help.html">Help and Faq</a></li>
+				        <li><a href="blog.html">Blog</a></li>
+				        <li><a href="leave-review.html">Leave a review</a></li>
+				        <li><a href="contacts.html">Contacts</a></li>
+				        <li><a href="coming_soon/index.html">Coming Soon</a></li>
+				        <li><a href="login.html">Sign In</a></li>
+				        <li><a href="register.html">Sign Up</a></li>
+				        <li><a href="icon-pack-1.html">Icon Pack 1</a></li>
+				        <li><a href="icon-pack-2.html">Icon Pack 2</a></li>
+				        <li><a href="shortcodes.html">Shortcodes</a></li>
+				    </ul>
+                    </li>
+                    <li><a href="#0">Buy this template</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- /header -->
+
+    <main>
+        <div class="hero_single version_2">
+            <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
+                <div class="container">
+                    <div class="row justify-content-lg-start justify-content-md-center">
+                        <div class="col-xl-7 col-lg-8">
+                            <h1>Delivery or Takeaway Food</h1>
+                            <p>The best restaurants at the best price</p>
+                            <form method="post" action="grid-listing-filterscol.html">
+                                <div class="row g-0 custom-search-input">
+                                    <div class="col-lg-10">
+                                        <div class="form-group">
+                                            <input class="form-control no_border_r" type="text" id="autocomplete" placeholder="Address, neighborhood...">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <button class="btn_1 gradient" type="submit">Search</button>
+                                    </div>
+                                </div>
+                                <!-- /row -->
+                                <div class="search_trends">
+                                    <h5>Trending:</h5>
+                                    <ul>
+                                        <li><a href="#0">Sushi</a></li>
+                                        <li><a href="#0">Burgher</a></li>
+                                        <li><a href="#0">Chinese</a></li>
+                                        <li><a href="#0">Pizza</a></li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /row -->
+                </div>
+            </div>
+            <div class="wave hero"></div>
+        </div>
+        <!-- /hero_single -->
+
+        <div class="container margin_30_60">
+            <div class="main_title center">
+                <span><em></em></span>
+                <h2>Popular Categories</h2>
+                <p>Cum doctus civibus efficiantur in imperdiet deterruisset</p>
+            </div>
+            <!-- /main_title -->
+            <div class="owl-carousel owl-theme categories_carousel">
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>98</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_pizza.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Pizza</h3>
+                                <small>Avg price $40</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>87</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_sushi.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Japanese</h3>
+                                <small>Avg price $50</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>55</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_hamburgher.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Burghers</h3>
+                                <small>Avg price $55</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>55</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_vegetarian.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Vegetarian</h3>
+                                <small>Avg price $40</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>65</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_bakery.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Bakery</h3>
+                                <small>Avg price $60</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>25</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_chinesse.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Chinese</h3>
+                                <small>Avg price $40</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+                <div class="item_version_2">
+                    <a href="grid-listing-filterscol.html">
+                        <figure>
+                            <span>35</span>
+                            <img src="{% static 'img/home_cat_placeholder.jpg' % }" data-src="{% static 'img/home_cat_mexican.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
+                            <div class="info">
+                                <h3>Mexican</h3>
+                                <small>Avg price $35</small>
+                            </div>
+                        </figure>
+                    </a>
+                </div>
+            </div>
+            <!-- /carousel -->
+        </div>
+        <!-- /container -->
+
+        <div class="bg_gray">
+            <div class="container margin_60">
+                <div class="main_title">
+                    <span><em></em></span>
+                    <h2>Top Rated Restaurants</h2>
+                    <p>Cum doctus civibus efficiantur in imperdiet deterruisset.</p>
+                    <a href="#0">View All</a>
+                </div>
+                <div class="owl-carousel owl-theme carousel_4">
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-30%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_1.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Pizza</small>
+                                    <div class="item_title">
+                                        <h3>Da Alfredo</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take yes">Take away</span> <span class="deliv yes">Delivery</span></li>
+                                <li>
+                                    <div class="score"><strong>8.9</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-40%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_2.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Burghers</small>
+                                    <div class="item_title">
+                                        <h3>Best Burghers</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take yes">Take away</span> <span class="deliv yes">Delivery</span></li>
+                                <li>
+                                    <div class="score"><strong>7.5</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-30%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_3.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Vegetarian</small>
+                                    <div class="item_title">
+                                        <h3>Vego Life</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take no">Take away</span> <span class="deliv yes">Delivery</span></li>
+                                <li>
+                                    <div class="score yes"><strong>8.9</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-25%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_4.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Japanese</small>
+                                    <div class="item_title">
+                                        <h3>Sushi Temple</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take yes">Take away</span> <span class="deliv no">Delivery</span></li>
+                                <li>
+                                    <div class="score yes"><strong>8.9</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-30%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_5.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Pizza</small>
+                                    <div class="item_title">
+                                        <h3>Auto Pizza</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take no">Take away</span> <span class="deliv yes">Delivery</span></li>
+                                <li>
+                                    <div class="score yes"><strong>8.9</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-15%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_6.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Burghers</small>
+                                    <div class="item_title">
+                                        <h3>Alliance</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take yes">Take away</span> <span class="deliv yes">Delivery</span></li>
+                                <li>
+                                    <div class="score yes"><strong>8.9</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="strip">
+                            <figure>
+                                <span class="ribbon off">-30%</span>
+                                <img src="{% static 'img/lazy-placeholder.jpg' %}" data-src="{% static 'img/location_7.jpg' %}" class="owl-lazy" alt="" width="460" height="310">
+                                <a href="detail-restaurant.html" class="strip_info">
+                                    <small>Chinese</small>
+                                    <div class="item_title">
+                                        <h3>Alliance</h3>
+                                        <small>27 Old Gloucester St</small>
+                                    </div>
+                                </a>
+                            </figure>
+                            <ul>
+                                <li><span class="take no">Take away</span> <span class="deliv yes">Delivery</span></li>
+                                <li>
+                                    <div class="score yes"><strong>8.9</strong></div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- /carousel -->
+            </div>
+        </div>
+        <!-- /bg_gray -->
+
+        <div class="shape_element_2">
+            <div class="container margin_60_0">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="box_how">
+                                    <figure><img src="{% static 'img/lazy-placeholder-100-100-white.png' %}" data-src="{% static 'img/how_1.svg' %}" alt="" width="150" height="167" class="lazy"></figure>
+                                    <h3>Easly Order</h3>
+                                    <p>Faucibus ante, in porttitor tellus blandit et. Phasellus tincidunt metus lectus sollicitudin.</p>
+                                </div>
+                                <div class="box_how">
+                                    <figure><img src="{% static 'img/lazy-placeholder-100-100-white.png' %}" data-src="{% static 'img/how_2.svg' %}" alt="" width="130" height="145" class="lazy"></figure>
+                                    <h3>Quick Delivery</h3>
+                                    <p>Maecenas pulvinar, risus in facilisis dignissim, quam nisi hendrerit nulla, id vestibulum.</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 align-self-center">
+                                <div class="box_how">
+                                    <figure><img src="{% static 'img/lazy-placeholder-100-100-white.png' %}" data-src="{% static 'img/how_3.svg' %}" alt="" width="150" height="132" class="lazy"></figure>
+                                    <h3>Enjoy Food</h3>
+                                    <p>Morbi convallis bibendum urna ut viverra. Maecenas quis consequat libero, a feugiat eros.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="text-center mt-3 d-block d-lg-none"><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Register Now!</a></p>
+                    </div>
+                    <div class="col-lg-5 offset-lg-1 align-self-center">
+                        <div class="intro_txt">
+                            <div class="main_title">
+                                <span><em></em></span>
+                                <h2>Start Ordering Now</h2>
+                            </div>
+                            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed imperdiet libero id nisi euismod, sed porta est consectetur deserunt.</p>
+                            <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                            <p><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Register</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /shape_element_2 -->
+
+    </main>
+    <!-- /main -->
+
+
+</body>
+</html>
+{% endblock %}
