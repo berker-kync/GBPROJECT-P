@@ -8,3 +8,7 @@ def register(request):
 
 def submitrestaurant(request):
     return render(request, 'submit-restaurant.html')
+
+
+
+
