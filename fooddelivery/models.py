@@ -1,7 +1,5 @@
 from django.db import models
 from autoslug import AutoSlugField
-<<<<<<< HEAD
-=======
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
@@ -20,5 +18,4 @@ class Product(models.Model):
     
 
 
->>>>>>> 2e7bcfbff6ba30af52903e4bd1c44728bd51fc39
 
