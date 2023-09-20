@@ -168,15 +168,16 @@
 		                <section id="section-1">
 		                    <h4>Starters</h4>
 		                    <div class="row">
+								{% for product in products %}
 		                        <div class="col-md-6">
 		                            <a class="menu_item modal_dialog" href="#modal-dialog">
 		                                <figure><img src="https://www.mexicanplease.com/wp-content/uploads/2019/10/Chicken-Tinga-Enchiladas-11.jpg" data-src="https://www.mexicanplease.com/wp-content/uploads/2019/10/Chicken-Tinga-Enchiladas-11.jpg" alt="thumb" class="lazy"></figure>
-		                                <h3>1. Mexican Enchiladas</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
+		                                <h3>{{product.name}}</h3>
+		                                <p>{{product.description}}</p>
+		                                <strong>₺{{product.price}}</strong>
 		                            </a>
 		                        </div>
-		                        <div class="col-md-6">
+		                        <!-- <div class="col-md-6">
 		                            <a class="menu_item modal_dialog" href="#modal-dialog">
 		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-2.jpg' %}" alt="thumb" class="lazy"></figure>
 		                                <h3>2. Fajitas</h3>
@@ -199,7 +200,8 @@
 		                                <p>Fuisset mentitum deleniti sit ea.</p>
 		                                <strong>₺9.40</strong>
 		                            </a>
-		                        </div>
+		                        </div> -->
+								{% endfor %}
 		                    </div>
 		                    <!-- /row -->
 		                </section>
@@ -504,10 +506,10 @@
 						<div class="follow_us">
 							<h5>Follow Us</h5>
 							<ul>
-								<li><a href="#0"><img src="{% static 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==' %}" data-src="{% static 'img/twitter_icon.svg' %}" alt="" class="lazy"></a></li>
-								<li><a href="#0"><img src="{% static 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==' %}" data-src="{% static 'img/facebook_icon.svg' %}" alt="" class="lazy"></a></li>
-								<li><a href="#0"><img src="{% static 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==' %}" data-src="{% static 'img/instagram_icon.svg' %}" alt="" class="lazy"></a></li>
-								<li><a href="#0"><img src="{% static 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==' %}" data-src="{% static 'img/youtube_icon.svg' %}" alt="" class="lazy"></a></li>
+								<li><a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/twitter_icon.svg' %}" alt="" class="lazy"></a></li>
+								<li><a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/facebook_icon.svg' %}" alt="" class="lazy"></a></li>
+								<li><a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/instagram_icon.svg' %}" alt="" class="lazy"></a></li>
+								<li><a href="#0"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/youtube_icon.svg' %}" alt="" class="lazy"></a></li>
 							</ul>
 						</div>
 					</div>
@@ -536,7 +538,7 @@
 								</select>
 							</div>
 						</li>
-						<li><img src="{% static 'data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==' %}" data-src="{% static 'img/cards_all.svg' %}" alt="" width="230" height="35" class="lazy"></li>
+						<li><img src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" data-src="{% static 'img/cards_all.svg' %}" alt="" width="230" height="35" class="lazy"></li>
 					</ul>
 				</div>
 				<div class="col-lg-6">
