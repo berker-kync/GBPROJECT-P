@@ -171,7 +171,7 @@
 								{% for product in products %}
 		                        <div class="col-md-6">
 		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="https://www.mexicanplease.com/wp-content/uploads/2019/10/Chicken-Tinga-Enchiladas-11.jpg" data-src="https://www.mexicanplease.com/wp-content/uploads/2019/10/Chicken-Tinga-Enchiladas-11.jpg" alt="thumb" class="lazy"></figure>
+		                                <figure><img src="{{product.product_image}}" data-src="{{product.product_image}}" alt="thumb" class="lazy"></figure>
 		                                <h3>{{product.name}}</h3>
 		                                <p>{{product.description}}</p>
 		                                <strong>₺{{product.price}}</strong>
@@ -674,7 +674,7 @@
 	<!-- COMMON SCRIPTS -->
     <script src="{% static 'js/common_scripts.min.js' %}"></script>
     <script src="{% static 'js/common_func.js' %}"></script>
-    <script src="{% static 'assets/validate.js' %}"></script>
+    <script src="{% static 'js/validate.js' %}"></script>
 
     <!-- SPECIFIC SCRIPTS -->
     <script src="{% static 'js/sticky_sidebar.min.js' %}"></script>

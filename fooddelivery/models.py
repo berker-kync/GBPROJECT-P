@@ -8,6 +8,7 @@ class Product(models.Model):
     name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     description = models.TextField()
+    product_image = models.ImageField(upload_to='media', null=True, blank=True)
     quantity = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
