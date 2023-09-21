@@ -170,207 +170,18 @@
 		                    <div class="row">
 								{% for product in products %}
 		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
+		                            <a class="menu_item modal_dialog" data-productid="{{ product.id }}" href="#modal-dialog">
 		                                <figure><img src="{{product.product_image}}" data-src="{{product.product_image}}" alt="thumb" class="lazy"></figure>
 		                                <h3>{{product.name}}</h3>
 		                                <p>{{product.description}}</p>
 		                                <strong>₺{{product.price}}</strong>
 		                            </a>
 		                        </div>
-		                        <!-- <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-2.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>2. Fajitas</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-3.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>3. Royal Fajitas</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-4.jpg' %}" alt="thumb' %}" class="lazy"></figure>
-		                                <h3>4. Chicken Enchilada Wrap</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div> -->
 								{% endfor %}
 		                    </div>
 		                    <!-- /row -->
 		                </section>
-		                <!-- /section -->
-		                <!-- <section id="section-2">
-		                    <h4>Main Courses</h4> -->
-		                    <!-- <div class="row">
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-5.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>5. Cheese Quesadilla</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-6.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>6. Chorizo & Cheese</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-7.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>7. Beef Taco</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-8.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>8. Minced Beef Double Layer</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-9.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>9. Piri Piri Chicken</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-10.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>10. Burrito Al Pastor</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                    </div> -->
-		                    <!-- /row -->
-		                <!-- </section> -->
-		                <!-- /section -->
-		                <!-- <section id="section-3">
-		                    <h4>Desserts</h4> -->
-		                    <!-- <div class="row">
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-5.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>5. Cheese Quesadilla</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-6.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>6. Chorizo & Cheese</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-7.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>7. Beef Taco</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-8.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>8. Minced Beef Double Layer</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-9.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>9. Piri Piri Chicken</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-10.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>10. Burrito Al Pastor</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                    </div> -->
-		                    <!-- /row -->
-		                <!-- </section> -->
-		                <!-- /section -->
-		                <!-- <section id="section-4"> -->
-		                    <!-- <h4>Drinks</h4>
-		                    <div class="row">
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-5.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>11. Coca Cola</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺2.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-6.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>12. Corona Beer</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺9.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-7.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>13. Red Wine</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺19.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-8.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>14. White Wine</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺19.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-9.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>15. Mineral Water</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺1.40</strong>
-		                            </a>
-		                        </div>
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{% static 'img/menu-thumb-placeholder.jpg' %}" data-src="{% static 'img/menu-thumb-10.jpg' %}" alt="thumb" class="lazy"></figure>
-		                                <h3>16. Red Bull</h3>
-		                                <p>Fuisset mentitum deleniti sit ea.</p>
-		                                <strong>₺3.40</strong>
-		                            </a>
-		                        </div>
-		                    </div> -->
-		                    <!-- /row -->
-		                <!-- </section> -->
-		                <!-- /section -->
+
 		            </div>
 		            <!-- /col -->
 		            <div class="col-lg-4" id="sidebar_fixed">
@@ -382,16 +193,15 @@
 		                    <!-- /head -->
 		                    <div class="main">
 		                        <ul class="clearfix">
-		                            <li><a href="#0">1x Enchiladas</a><span>₺11</span></li>
-		                            <li><a href="#0">2x Burrito</a><span>₺14</span></li>
-		                            <li><a href="#0">1x Chicken</a><span>₺18</span></li>
-		                            <li><a href="#0">2x Corona Beer</a><span>₺9</span></li>
-		                            <li><a href="#0">2x Cheese Cake</a><span>₺11</span></li>
+									{% for item in cart_items %}
+										<li>
+											<a href="#0">{{ item.quantity }}x {{ item.product.name }}</a>
+											<span>₺{{ item.product.price }}</span>
+										</li>
+									{% endfor %}
 		                        </ul>
 		                        <ul class="clearfix">
-		                            <li>Subtotal<span>₺56</span></li>
-		                            <li>Delivery fee<span>₺10</span></li>
-		                            <li class="total">Total<span>₺66</span></li>
+		                            <li class="total">Total<span>₺{{ total_price }}</span></li>
 		                        </ul>
 		                        <div class="row opt_order">
 		                            <div class="col-6">
@@ -612,63 +422,28 @@
     <div class="content">
         <h5>Quantity</h5>
         <div class="numbers-row">
-            <input type="text" value="1" id="qty_1" class="qty2 form-control" name="quantity">
+            <input type="number" value="1" id="qty_1" class="qty2 form-control" name="quantity" min="1">
+            <!-- Remove the hidden productid input, as we set it dynamically with JavaScript -->
         </div>
-        <!-- <h5>Size</h5>
-        <ul class="clearfix">
-            <li>
-                <label class="container_radio">Medium<span>+ ₺3.30</span>
-                    <input type="radio" value="option1" name="options_1">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_radio">Large<span>+ ₺5.30</span>
-                    <input type="radio" value="option2" name="options_1">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_radio">Extra Large<span>+ ₺8.30</span>
-                    <input type="radio" value="option3" name="options_1">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-        </ul>
-        <h5>Extra Ingredients</h5>
-        <ul class="clearfix">
-            <li>
-                <label class="container_check">Extra Tomato<span>+ ₺4.30</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_check">Extra Peppers<span>+ ₺2.50</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_check">Extra Ham<span>+ ₺4.30</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-        </ul>
-    </div> -->
-    <div class="footer">
-        <div class="row small-gutters">
-            <div class="col-md-4">
-                <button type="reset" class="btn_1 outline full-width mb-mobile">Cancel</button>
+
+        <form action="" method="POST">
+            {% csrf_token %}
+            <!-- You don't need the data-productid attribute here -->
+            <div class="footer">
+                <div class="row small-gutters">
+                    <div class="col-md-4">
+                        <button type="reset" class="btn_1 outline full-width mb-mobile">Cancel</button>
+                    </div>
+                    <div class="col-md-8">
+                        <button type="reset" class="btn_1 full-width" id="add-to-cart-btn">Add to cart</button>
+                    </div>
+                </div>
+                <!-- /Row -->
             </div>
-            <div class="col-md-8">
-                <button type="reset" class="btn_1 full-width">Add to cart</button>
-            </div>
-        </div>
-        <!-- /Row -->
+        </form>
     </div>
-    </div>
+</div>
+
     <!-- /Modal item order -->
 	
 	<!-- COMMON SCRIPTS -->

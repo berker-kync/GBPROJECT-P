@@ -186,6 +186,41 @@
 		closeMarkup: '<button title="%title%" type="button" class="mfp-close" style="font-size:26px; margin-right:-10px;">&#215;</button>'
 	});
 
+
+	$('.modal_dialog').click(function(e) {
+		e.preventDefault();
+		let productID = $(this).data('productid');
+		$('#modal-dialog').data('productid', productID);  // Set the product ID in the modal
+	});
+	
+	$('#add-to-cart-btn').click(function(e) {
+		e.preventDefault();
+		const productQuantity = parseInt($('#qty_1').val(), 10); // Get the quantity
+		const productId = $('#modal-dialog').data('productid'); // Get the product ID from the modal
+	
+		$.ajax({
+			url: `/add_to_cart/${productId}/`, // Send the request with the specific product ID in the URL
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+				quantity: productQuantity
+			},
+			dataType: 'json',
+			success: function(data) {
+				if (data.success) {
+					// Logic to add product to cart on frontend, show success message, etc.
+					alert(data.message);
+				} else {
+					alert(data.message); // Show error message
+				}
+			},
+			error: function(err) {
+				console.error("Error adding product to cart:", err);
+			}
+		});
+	});
+	
+	
 	// Modal
 	$('.modal_dialog').magnificPopup({
 		type: 'inline',
@@ -197,7 +232,11 @@
 		midClick: true,
 		removalDelay: 300,
 		closeMarkup: '<button title="%title%" type="button" class="mfp-close"></button>',
-		mainClass: 'my-mfp-zoom-in'
+		mainClass: 'my-mfp-zoom-in',
+		callbacks: {
+			beforeOpen: function() {
+			}
+		}
 	});
 
 	// Modal images
