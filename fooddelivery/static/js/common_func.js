@@ -1,3 +1,17 @@
+// Setup AJAX to include CSRF token for Django
+function getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+$.ajaxSetup({
+    headers: { "X-CSRFToken": getCookie("csrftoken") }
+});
+
+
+
+
 (function ($) {
 
 	"use strict";
@@ -186,19 +200,58 @@
 		closeMarkup: '<button title="%title%" type="button" class="mfp-close" style="font-size:26px; margin-right:-10px;">&#215;</button>'
 	});
 
-	// Modal
-	$('.modal_dialog').magnificPopup({
-		type: 'inline',
-		fixedContentPos: true,
-		fixedBgPos: true,
-		overflowY: 'auto',
-		closeBtnInside: true,
-		preloader: false,
-		midClick: true,
-		removalDelay: 300,
-		closeMarkup: '<button title="%title%" type="button" class="mfp-close"></button>',
-		mainClass: 'my-mfp-zoom-in'
-	});
+// Modal
+$(document).ready(function() {
+    // Modal functionality
+    $('.modal_dialog').magnificPopup({
+        type: 'inline',
+        fixedContentPos: true,
+        fixedBgPos: true,
+        overflowY: 'auto',
+        closeBtnInside: true,
+        preloader: false,
+        midClick: true,
+        removalDelay: 300,
+        closeMarkup: '<button title="%title%" type="button" class="mfp-close"></button>',
+        mainClass: 'my-mfp-zoom-in',
+        callbacks: {
+            beforeOpen: function() {
+                // Get the clicked product ID
+                let productId = this.st.el.attr('data-product-id');
+                
+                // Update the input field inside the modal with the clicked product ID
+                $('#product_id').val(productId);
+                
+                // Set the form action based on the product ID
+                this.content.find('form').attr('action', '/add_to_cart/' + productId);
+            }
+        }
+    });
+
+    // AJAX form submission
+    $('form').on('submit', function(event) {
+        event.preventDefault();  // Prevent the form from causing a page reload
+
+        let formData = $(this).serialize();  // Serialize the form data
+
+        $.ajax({
+            type: $(this).attr('method'),  // Use the form's method (probably "post")
+            url: $(this).attr('action'),   // Use the form's action
+            data: formData,
+            success: function(response) {
+                // Handle the server's response here if needed
+                // For now, we'll just log it to the console
+                console.log(response);
+            },
+            error: function(error) {
+                console.error("Error:", error);
+            }
+        });
+    });
+});
+
+
+	
 
 	// Modal images
 	$('.magnific-gallery').each(function() {
@@ -251,5 +304,25 @@
             .find(".indicator")
             .toggleClass('icon_minus-06 icon_plus');
     }
+
+
+
+	// Increment product quantity functionality
+	$(document).on('click', '.increase-product-btn', function(e) {
+		e.preventDefault();
+		
+		var productId = $(this).data('id');
+		$.ajax({
+			url: `/increase_quantity/${productId}/`,
+			method: 'POST',
+			success: function(response) {
+				alert('Success!');
+			},
+			error: function(error) {
+				alert('Error occurred.');
+			}
+		});
+	});
+
 
 })(window.jQuery); 

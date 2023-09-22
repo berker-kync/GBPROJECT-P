@@ -162,20 +162,20 @@
 		<!-- /secondary_nav -->
 
 		<div class="bg_gray">
-		    <div class="container margin_detail">
-		        <div class="row">
-		            <div class="col-lg-8 list_menu">
-		                <section id="section-1">
-		                    <h4>Menü</h4>
-		                    <div class="row">
+			<div class="container margin_detail">
+				<div class="row">
+					<div class="col-lg-8 list_menu">
+						<section id="section-1">
+							<h4>Menü</h4>
+							<div class="row">
 								{% for product in products %}
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" href="#modal-dialog">
-		                                <figure><img src="{{product.product_image}}" data-src="{{product.product_image}}" alt="thumb" class="lazy"></figure>
-		                                <h3>{{product.name}}</h3>
-		                                <p>{{product.description}}</p>
-		                                <strong>₺{{product.price}}</strong>
-		                            </a>
+								<div class="col-md-6">
+									<a class="menu_item modal_dialog" href="#modal-dialog-{{product.id}}" data-product-id="{{product.id}}">
+										<figure><img src="{{product.product_image}}" data-src="{{product.product_image}}" alt="thumb" class="lazy"></figure>
+										<h3>{{product.name}}</h3>
+										<p>{{product.description}}</p>
+										<strong>₺{{product.price}}</strong>
+									</a>
 		                        </div>
 		                        <!-- <div class="col-md-6">
 		                            <a class="menu_item modal_dialog" href="#modal-dialog">
@@ -605,70 +605,30 @@
 <!-- /Sign In Modal -->
 
 <!-- Modal item order -->
-<div id="modal-dialog" class="zoom-anim-dialog mfp-hide">
-    <div class="small-dialog-header">
-        <h3>Cheese Quesadilla</h3>
-    </div>
-    <div class="content">
-        <h5>Quantity</h5>
-        <div class="numbers-row">
-            <input type="text" value="1" id="qty_1" class="qty2 form-control" name="quantity">
-        </div>
-        <!-- <h5>Size</h5>
-        <ul class="clearfix">
-            <li>
-                <label class="container_radio">Medium<span>+ ₺3.30</span>
-                    <input type="radio" value="option1" name="options_1">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_radio">Large<span>+ ₺5.30</span>
-                    <input type="radio" value="option2" name="options_1">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_radio">Extra Large<span>+ ₺8.30</span>
-                    <input type="radio" value="option3" name="options_1">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-        </ul>
-        <h5>Extra Ingredients</h5>
-        <ul class="clearfix">
-            <li>
-                <label class="container_check">Extra Tomato<span>+ ₺4.30</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_check">Extra Peppers<span>+ ₺2.50</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-            <li>
-                <label class="container_check">Extra Ham<span>+ ₺4.30</span>
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-        </ul>
-    </div> -->
-    <div class="footer">
-        <div class="row small-gutters">
-            <div class="col-md-4">
-                <button type="reset" class="btn_1 outline full-width mb-mobile">Cancel</button>
-            </div>
-            <div class="col-md-8">
-                <button type="reset" class="btn_1 full-width">Add to cart</button>
-            </div>
-        </div>
-        <!-- /Row -->
-    </div>
-    </div>
+{% for product in products %}
+<div id="modal-dialog-{{product.id}}" class="zoom-anim-dialog mfp-hide">
+	<form method="post" action="/add_to_cart/<int:product_id>">
+		{% csrf_token %}
+		<div class="small-dialog-header">
+			<h3>{{product.name}}</h3>
+		</div>
+		<div class="content">
+			<h5>Quantity</h5>
+			<div class="numbers-row">
+				<input type="text" value="1" id="qty_1" class="qty2 form-control" name="quantity">
+			</div>
+			<input type="hidden" name="product_id" id="product_id"> 
+		</div>
+	<div class="footer">
+		<!-- ... existing code ... -->
+		<div class="col-md-8">
+			<button type="submit" class="btn_1 full-width">Add to cart</button>
+		</div>
+	</div>
+</div>
+</form>
+</div>
+{% endfor %}
     <!-- /Modal item order -->
 	
 	<!-- COMMON SCRIPTS -->
