@@ -124,14 +124,14 @@
 	                    <div class="box_order mobile_fixed">
 	                        <div class="head">
 	                            <h3>Order Summary</h3>
-	                            <a href="#0" class="close_panel_mobile"><i class="icon_close"></i></a>
+	                            <a href="#" class="close_panel_mobile"><i class="icon_close"></i></a>
 	                        </div>
 	                        <!-- /head -->
-	                        <div class="main">
-								{% for product in products_in_basket %}
-									<li><a href="#0">{{ product.name }}</a><span>${{ product.price }}</span></li>
-								{% endfor %}
+							<div class="main">
 								<ul class="clearfix">
+									{% for product in food_basket %}
+										<li><a href="#">{{ product.name }}</a><span>${{ product.price }}</span></li>
+									{% endfor %}
 									<li>Subtotal<span>${{ subtotal }}</span></li>
 									<li>Delivery fee<span>${{ delivery_fee }}</span></li>
 									<li class="total">Total<span>${{ total }}</span></li>

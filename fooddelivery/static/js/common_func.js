@@ -308,6 +308,7 @@ $(document).ready(function() {
 
 
 	// Increment product quantity functionality
+
 	$(document).on('click', '.increase-product-btn', function(e) {
 		e.preventDefault();
 		
@@ -315,14 +316,54 @@ $(document).ready(function() {
 		$.ajax({
 			url: `/increase_quantity/${productId}/`,
 			method: 'POST',
+			data: {
+				'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+			},
 			success: function(response) {
-				alert('Success!');
+				if(response.success) {
+					alert('Success!');
+					updateOrderSummary();
+				} else {
+					alert('Failed to update quantity.');
+				}
 			},
 			error: function(error) {
 				alert('Error occurred.');
 			}
 		});
 	});
+	
+	function updateOrderSummary() {
+		$.get('/products_in_basket/', function(data) {
+			// Replace the order summary section with new content.
+			$('#sidebar_fixed').html(data);
+		});
+	}
+	
+
+
+
+
+
+
+
+
+
+	// $(document).on('click', '.increase-product-btn', function(e) {
+	// 	e.preventDefault();
+		
+	// 	var productId = $(this).data('id');
+	// 	$.ajax({
+	// 		url: `/increase_quantity/${productId}/`,
+	// 		method: 'POST',
+	// 		success: function(response) {
+	// 			alert('Success!');
+	// 		},
+	// 		error: function(error) {
+	// 			alert('Error occurred.');
+	// 		}
+	// 	});
+	// });
 
 
 })(window.jQuery); 
