@@ -209,13 +209,43 @@
 			success: function(data) {
 				if (data.success) {
 					// Logic to add product to cart on frontend, show success message, etc.
-					alert(data.message);
+					alert(data.message); // Show success message
+					$('#modal-dialog').modal('hide'); // Hide the modal once added to cart
+					$('#qty_1').val(1); // Reset the quantity to 1
+					$("#cart-items").html(data.cart_items);
+					$("#total-price").text(data.total_price);
 				} else {
 					alert(data.message); // Show error message
 				}
 			},
 			error: function(err) {
 				console.error("Error adding product to cart:", err);
+			}
+		});
+	});
+
+
+	// remove from cart
+	$('.remove-item-btn').click(function(e) {
+		e.preventDefault();
+		const productId = $(this).data('id'); // Get the product ID from the modal
+	
+		$.ajax({
+			url: `/remove_from_cart/${productId}/`, // Send the request with the specific product ID in the URL
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+			},
+			dataType: 'json',
+			success: function(data) {
+				if (data.success) {
+					// Logic to add product to cart on frontend, show success message, etc.
+					alert(data.message); // Show success message
+					$("#cart-items").html(data.cart_items);
+					$("#total-price").text(data.total_price);
+				} else {
+					alert(data.message); // Show error message
+				}
 			}
 		});
 	});

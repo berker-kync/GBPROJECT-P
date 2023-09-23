@@ -221,7 +221,7 @@
 }
 .box_order .main ul {
   list-style: none;
-  padding: 0;
+  padding: auto;
 }
 .box_order .main ul li {
   margin-bottom: 8px;
@@ -254,6 +254,8 @@
 .box_order .main ul li span {
   float: right;
 }
+
+
 .box_order .form-group {
   margin: 0 0 10px 0;
 }

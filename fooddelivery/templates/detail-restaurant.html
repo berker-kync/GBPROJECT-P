@@ -4,6 +4,7 @@
 
     <!-- SPECIFIC CSS -->
     <link href="{% static 'css/detail-page.css' %}" rel="stylesheet">
+	<link href="{% static 'css/custom.css' %}" rel="stylesheet">
 
 
 
@@ -171,7 +172,7 @@
 								{% for product in products %}
 		                        <div class="col-md-6">
 		                            <a class="menu_item modal_dialog" data-productid="{{ product.id }}" href="#modal-dialog">
-		                                <figure><img src="{{product.product_image}}" data-src="{{product.product_image}}" alt="thumb" class="lazy"></figure>
+		                                <figure><img src="{{product.product_image.url}}" data-src="{{product.product_image.url}}" alt="thumb" class="lazy"></figure>
 		                                <h3>{{product.name}}</h3>
 		                                <p>{{product.description}}</p>
 		                                <strong>₺{{product.price}}</strong>
@@ -191,17 +192,18 @@
 		                        <a href="#0" class="close_panel_mobile"><i class="icon_close"></i></a>
 		                    </div>
 		                    <!-- /head -->
-		                    <div class="main">
+		                    <div class="main" id="cart-items">
 		                        <ul class="clearfix">
 									{% for item in cart_items %}
+										{% csrf_token %}
 										<li>
-											<a href="#0">{{ item.quantity }}x {{ item.product.name }}</a>
+											<button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.product.name }}</button>
 											<span>₺{{ item.product.price }}</span>
 										</li>
 									{% endfor %}
 		                        </ul>
 		                        <ul class="clearfix">
-		                            <li class="total">Total<span>₺{{ total_price }}</span></li>
+		                            <li class="total" id="total-price">Total<span>₺{{ total_price }}</span></li>
 		                        </ul>
 		                        <div class="row opt_order">
 		                            <div class="col-6">
