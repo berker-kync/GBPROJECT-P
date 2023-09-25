@@ -51,6 +51,10 @@ def add_to_cart(request, product_id):
             if product.quantity < selected_quantity:
                 return JsonResponse({"success": False, "message": "Insufficient product stock."})
 
+            # Create a session if it doesn't exist
+            if not request.session.session_key:
+                request.session.save()
+
             # Check if the product is in the cart already
             cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, product=product).first()
             
@@ -71,34 +75,22 @@ def add_to_cart(request, product_id):
         except (Product.DoesNotExist, ValueError):
             return JsonResponse({"success": False, "message": "Product not found or invalid data."})
 
-def remove_from_cart(request, product_id):
+def remove_from_cart(request, id):
     if request.method == "POST":
         try:
-            product = Product.objects.get(id=product_id)
-            selected_quantity = int(request.POST.get('quantity', 1))
-
             # Check if the product is in the cart already
-            cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, product=product).first()
-            
-            if cart_item:
-                cart_item.quantity -= selected_quantity
-                if cart_item.quantity <= 0:
-                    cart_item.delete()  # Remove item from the cart
-                else:
-                    cart_item.save()   # Save the updated quantity
+            cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, id=id).first()
 
+            if cart_item:
+                cart_item.delete()  # Remove item from the cart entirely
             else:
-                # Create a new cart item
-                ShoppingCart.objects.create(
-                    product=product,
-                    quantity=selected_quantity,
-                    session_key=request.session.session_key
-                )
-            
+                return JsonResponse({"success": False, "message": "Product not found in the cart."})
+
             return JsonResponse({"success": True, "message": "Product removed from cart."})
-        
+
         except (Product.DoesNotExist, ValueError):
             return JsonResponse({"success": False, "message": "Product not found or invalid data."})
+
 
 
 # def cart_summary(request):
