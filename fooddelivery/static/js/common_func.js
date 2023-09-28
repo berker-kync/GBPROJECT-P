@@ -208,10 +208,10 @@
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
-					// Logic to add product to cart on frontend, show success message, etc.
-					alert(data.message); // Show success message
-					$('#modal-dialog').modal('hide'); // Hide the modal once added to cart
+					$.magnificPopup.close(); // Hide the modal once added to cart
 					$('#qty_1').val(1); // Reset the quantity to 1
+					// reload the page
+					location.reload();
 					$("#cart-items").html(data.cart_items);
 					$("#total-price").text(data.total_price);
 				} else {
@@ -223,7 +223,6 @@
 			}
 		});
 	});
-
 
 	// remove from cart
 	$('.remove-item-btn').click(function(e) {
@@ -239,8 +238,8 @@
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
-					// Logic to add product to cart on frontend, show success message, etc.
-					alert(data.message); // Show success message
+					// reload the page
+					location.reload();
 					$("#cart-items").html(data.cart_items);
 					$("#total-price").text(data.total_price);
 				} else {
