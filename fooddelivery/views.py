@@ -3,7 +3,12 @@ from .models import Product, ShoppingCart
 from django.http import JsonResponse
 
 def index(request):
-    return render(request, 'index.html')
+
+    # Ten products list
+    products = Product.objects.all()[:10]
+
+
+    return render(request, 'index.html', {'products': products})
 
 def submitrestaurant(request):
     return render(request, 'submit-restaurant.html')
