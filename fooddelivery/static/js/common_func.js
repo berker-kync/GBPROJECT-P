@@ -208,7 +208,6 @@
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
-					$.magnificPopup.close(); // Hide the modal once added to cart
 					$('#qty_1').val(1); // Reset the quantity to 1
 					// reload the page
 					location.reload();
