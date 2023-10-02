@@ -6,9 +6,10 @@ def index(request):
 
     # Ten products list
     products = Product.objects.all()[:10]
-
-
     return render(request, 'index.html', {'products': products})
+
+def about(request):
+    return render(request, 'about.html')
 
 def submitrestaurant(request):
     return render(request, 'submit-restaurant.html')
