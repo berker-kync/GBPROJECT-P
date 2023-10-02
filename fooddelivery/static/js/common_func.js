@@ -200,58 +200,87 @@ $.ajaxSetup({
 		closeMarkup: '<button title="%title%" type="button" class="mfp-close" style="font-size:26px; margin-right:-10px;">&#215;</button>'
 	});
 
-// Modal
-$(document).ready(function() {
-    // Modal functionality
-    $('.modal_dialog').magnificPopup({
-        type: 'inline',
-        fixedContentPos: true,
-        fixedBgPos: true,
-        overflowY: 'auto',
-        closeBtnInside: true,
-        preloader: false,
-        midClick: true,
-        removalDelay: 300,
-        closeMarkup: '<button title="%title%" type="button" class="mfp-close"></button>',
-        mainClass: 'my-mfp-zoom-in',
-        callbacks: {
-            beforeOpen: function() {
-                // Get the clicked product ID
-                let productId = this.st.el.attr('data-product-id');
-                
-                // Update the input field inside the modal with the clicked product ID
-                $('#product_id').val(productId);
-                
-                // Set the form action based on the product ID
-                this.content.find('form').attr('action', '/add_to_cart/' + productId);
-            }
-        }
-    });
 
-    // AJAX form submission
-    $('form').on('submit', function(event) {
-        event.preventDefault();  // Prevent the form from causing a page reload
-
-        let formData = $(this).serialize();  // Serialize the form data
-
-        $.ajax({
-            type: $(this).attr('method'),  // Use the form's method (probably "post")
-            url: $(this).attr('action'),   // Use the form's action
-            data: formData,
-            success: function(response) {
-                // Handle the server's response here if needed
-                // For now, we'll just log it to the console
-                console.log(response);
-            },
-            error: function(error) {
-                console.error("Error:", error);
-            }
-        });
-    });
-});
-
-
+	$('.modal_dialog').click(function(e) {
+		e.preventDefault();
+		let productID = $(this).data('productid');
+		$('#modal-dialog').data('productid', productID);  // Set the product ID in the modal
+	});
 	
+	$('#add-to-cart-btn').click(function(e) {
+		e.preventDefault();
+		const productQuantity = parseInt($('#qty_1').val(), 10); // Get the quantity
+		const productId = $('#modal-dialog').data('productid'); // Get the product ID from the modal
+	
+		$.ajax({
+			url: `/add_to_cart/${productId}/`, // Send the request with the specific product ID in the URL
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+				quantity: productQuantity
+			},
+			dataType: 'json',
+			success: function(data) {
+				if (data.success) {
+					$.magnificPopup.close(); // Hide the modal once added to cart
+					$('#qty_1').val(1); // Reset the quantity to 1
+					// reload the page
+					location.reload();
+					$("#cart-items").html(data.cart_items);
+					$("#total-price").text(data.total_price);
+				} else {
+					alert(data.message); // Show error message
+				}
+			},
+			error: function(err) {
+				console.error("Error adding product to cart:", err);
+			}
+		});
+	});
+
+	// remove from cart
+	$('.remove-item-btn').click(function(e) {
+		e.preventDefault();
+		const productId = $(this).data('id'); // Get the product ID from the modal
+	
+		$.ajax({
+			url: `/remove_from_cart/${productId}/`, // Send the request with the specific product ID in the URL
+			type: "POST",
+			data: {
+				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+			},
+			dataType: 'json',
+			success: function(data) {
+				if (data.success) {
+					// reload the page
+					location.reload();
+					$("#cart-items").html(data.cart_items);
+					$("#total-price").text(data.total_price);
+				} else {
+					alert(data.message); // Show error message
+				}
+			}
+		});
+	});
+	
+	
+	// Modal
+	$('.modal_dialog').magnificPopup({
+		type: 'inline',
+		fixedContentPos: true,
+		fixedBgPos: true,
+		overflowY: 'auto',
+		closeBtnInside: true,
+		preloader: false,
+		midClick: true,
+		removalDelay: 300,
+		closeMarkup: '<button title="%title%" type="button" class="mfp-close"></button>',
+		mainClass: 'my-mfp-zoom-in',
+		callbacks: {
+			beforeOpen: function() {
+			}
+		}
+	});
 
 	// Modal images
 	$('.magnific-gallery').each(function() {

@@ -13,7 +13,7 @@
     <header class="header clearfix element_to_stick">
         <div class="container">
             <div id="logo">
-                <a href="index.html">
+                <a href="/">
                     <img src="{% static 'img/logo.svg' %}" width="162" height="35" alt="" class="logo_normal">
                     <img src="{% static 'img/logo_sticky.svg' %}" width="162" height="35" alt="" class="logo_sticky">
                 </a>
@@ -21,22 +21,22 @@
             <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
             <ul id="top_menu">
                 <!-- <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li> -->
-                <li><a href="#0" class="cart_bt" title="Your cart">Your Cart</a></li>
+                <li><a href="#0" class="cart_bt" title="Sepetim">Sepetim</a></li>
             </ul>
             <!-- /top_menu -->
             <a href="#0" class="open_close">
-                <i class="icon_menu"></i><span>Menu</span>
+                <i class="icon_menu"></i><span>Menü</span>
             </a>
             <nav class="main-menu">
                 <div id="header_menu">
                     <a href="#0" class="open_close">
-                        <i class="icon_close"></i><span>Menu</span>
+                        <i class="icon_close"></i><span>Menü</span>
                     </a>
-                    <a href="index.html"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
+                    <a href="/"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
                 </div>
                 <ul>
                    <li class="submenu">
-                        <a href="#0" class="show-submenu">Home</a>
+                        <a href="/" class="show-submenu">Anasayfa</a>
                         <!-- <ul>
                             <li><a href="index-12.html">Text Rotator <strong>New!</strong></a></li>
                             <li><a href="index-5.html">GDPR Cookie Bar EU Law</a></li>
@@ -47,7 +47,7 @@
                         </ul> -->
                     </li>
                     <li class="submenu">
-                        <a href="#0" class="show-submenu">Menu</a>
+                        <a href="/detail-restaurant" class="show-submenu">Menü</a>
                         <!-- <ul>
                             <li class="third-level"><a href="#0">List pages</a>
                                 <ul>
@@ -79,7 +79,7 @@
                         </ul> -->
                     </li>
                     <li class="submenu">
-                        <a href="#0" class="show-submenu">About</a>
+                        <a href="#0" class="show-submenu">Hakkımızda</a>
                        <!-- <ul>
 				        <li><a href="admin_section/index.html" target="_blank">Admin Section</a></li>
 				        <li><a href="404.html">404 Error</a></li>
@@ -107,8 +107,8 @@
                 <div class="container">
                     <div class="row justify-content-lg-start justify-content-md-center">
                         <div class="col-xl-7 col-lg-8">
-                            <h1>Delivery or Takeaway Food</h1>
-                            <p>The best restaurants at the best price</p>
+                            <h1>Sipariş veya Gel-Al</h1>
+                            <p>En iyi restoran, En iyi fiyat</p>
                             <!-- <form method="post" action="grid-listing-filterscol.html">
                                 <div class="row g-0 custom-search-input">
                                     <div class="col-lg-10">
@@ -148,91 +148,22 @@
             </div>
             <!-- /main_title -->
             <div class="owl-carousel owl-theme categories_carousel">
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>98</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_pizza.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Pizza</h3>
-                                <small>Avg price $40</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>87</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_sushi.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Japanese</h3>
-                                <small>Avg price $50</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>55</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_hamburgher.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Burghers</h3>
-                                <small>Avg price $55</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>55</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_vegetarian.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Vegetarian</h3>
-                                <small>Avg price $40</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>65</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_bakery.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Bakery</h3>
-                                <small>Avg price $60</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>25</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' %}" data-src="{% static 'img/home_cat_chinesse.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Chinese</h3>
-                                <small>Avg price $40</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
-                <div class="item_version_2">
-                    <a href="grid-listing-filterscol.html">
-                        <figure>
-                            <span>35</span>
-                            <img src="{% static 'img/home_cat_placeholder.jpg' % }" data-src="{% static 'img/home_cat_mexican.jpg' %}" alt="" class="owl-lazy" width="350" height="450">
-                            <div class="info">
-                                <h3>Mexican</h3>
-                                <small>Avg price $35</small>
-                            </div>
-                        </figure>
-                    </a>
-                </div>
+                {% for product in products %}
+                    <div class="item_version_2">
+                        <a href="grid-listing-filterscol.html">
+                            <figure>
+                                <span>{{ product.id }}</span>
+                                <img src="{{product.product_image.url}}" data-src="{{product.product_image.url}}" alt="" class="owl-lazy" width="350" height="450">
+                                <div class="info">
+                                    <h3>{{ product.name }}</h3>
+                                    <small>{{ product.price }}</small>
+                                </div>
+                            </figure>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
+            
             <!-- /carousel -->
         </div>
         <!-- /container -->
@@ -406,34 +337,34 @@
                             <div class="col-lg-6">
                                 <div class="box_how">
                                     <figure><img src="{% static 'img/lazy-placeholder-100-100-white.png' %}" data-src="{% static 'img/how_1.svg' %}" alt="" width="150" height="167" class="lazy"></figure>
-                                    <h3>Easly Order</h3>
-                                    <p>Faucibus ante, in porttitor tellus blandit et. Phasellus tincidunt metus lectus sollicitudin.</p>
+                                    <h3>Kolay Sipariş</h3>
+                                    <p>Kolayca sipariş verebilirsiniz.</p>
                                 </div>
                                 <div class="box_how">
                                     <figure><img src="{% static 'img/lazy-placeholder-100-100-white.png' %}" data-src="{% static 'img/how_2.svg' %}" alt="" width="130" height="145" class="lazy"></figure>
-                                    <h3>Quick Delivery</h3>
-                                    <p>Maecenas pulvinar, risus in facilisis dignissim, quam nisi hendrerit nulla, id vestibulum.</p>
+                                    <h3>Hızlı Teslim</h3>
+                                    <p>Hızlı bir şekilde siparişleriniz teslim edilir</p>
                                 </div>
                             </div>
                             <div class="col-lg-6 align-self-center">
                                 <div class="box_how">
                                     <figure><img src="{% static 'img/lazy-placeholder-100-100-white.png' %}" data-src="{% static 'img/how_3.svg' %}" alt="" width="150" height="132" class="lazy"></figure>
-                                    <h3>Enjoy Food</h3>
-                                    <p>Morbi convallis bibendum urna ut viverra. Maecenas quis consequat libero, a feugiat eros.</p>
+                                    <h3>Yemeğin Tadını Çıkar</h3>
+                                    <p>Tatlı yemekler burada.</p>
                                 </div>
                             </div>
                         </div>
-                        <p class="text-center mt-3 d-block d-lg-none"><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Order Now!</a></p>
+                        <p class="text-center mt-3 d-block d-lg-none"><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
                     </div>
                     <div class="col-lg-5 offset-lg-1 align-self-center">
                         <div class="intro_txt">
                             <div class="main_title">
                                 <span><em></em></span>
-                                <h2>Start Ordering Now</h2>
+                                <h2>Şimdi Sipariş Ver</h2>
                             </div>
                             <p class="lead">Bu restoran, damak zevkinizi yeniden keşfetmenize aracılık ediyor. Sipariş verdiğiniz her tabakta, geleneksel lezzetlerin modern dokunuşlarla buluşmasına tanık olacaksınız. 
                                 Ambiyansıyla huzur, menüsüyle şölen; burası sadece bir sipariş platformu değil, bir deneyim. Lezzet yolculuğuna hazırsanız, sizi bekleyen enfes tatlarla tanıştıralım.</p>
-                            <p><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Order Now!</a></p>
+                            <p><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
                         </div>
                     </div>
                 </div>
