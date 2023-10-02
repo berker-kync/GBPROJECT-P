@@ -1,36 +1,40 @@
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="tr">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="FooYes - Quality delivery or takeaway food">
-    <meta name="author" content="Ansonika">
-    <title>TencereKapak - Yemekte kalite</title>
-
-    <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
-    <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'img/apple-touch-icon-57x57-precomposed.png' %}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'img/apple-touch-icon-72x72-precomposed.png' %}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'img/apple-touch-icon-114x114-precomposed.png' %}">
-    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{% static 'img/apple-touch-icon-144x144-precomposed.png' %}">
-    
-
-    <!-- GOOGLE WEB FONT -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<!-- BASE CSS -->
-<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
-<link href="{% static 'css/style.css' %}" rel="stylesheet">
-
-
-
-<!-- YOUR CUSTOM CSS -->
-<link href="{% static 'css/custom.css' %}" rel="stylesheet">
-
-{% block register %}
-
-{% endblock %}
+	<header class="header_in clearfix">
+	    <div class="container">
+	        <div id="logo">
+	            <a href="/">
+	                <img src="{% static 'img/logo_sticky.svg' %}" width="140" height="35" alt="">
+	            </a>
+	        </div>
+	        <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
+	        <ul id="top_menu">
+	            <!-- <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li> -->
+                <li><a href="#0" class="cart_bt" title="Your cart">Sepetiniz</a></li>
+	        </ul>
+	        <!-- /top_menu -->
+	        <a href="#0" class="open_close">
+	            <i class="icon_menu"></i><span>Menü</span>
+	        </a>
+	        <nav class="main-menu">
+	            <div id="header_menu">
+	                <a href="/" class="open_close">
+	                    <i class="icon_close"></i><span>Menü</span>
+	                </a>
+	                <a href="/"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
+	            </div>
+	            <ul>
+	                 <li class="submenu">
+                        <a href="/" class="show-submenu">Anasayfa</a>
+                    </li>
+	                <li class="submenu">
+	                    <a href="detail-restaurant" class="show-submenu">Menü</a>
+	                </li>
+	                <li class="submenu">
+                        <a href="about" class="show-submenu">Hakkımızda</a>
+                    </li>
+	            </ul>
+	        </nav>
+	    </div>
+	</header>
+	<!-- /header -->

@@ -3,7 +3,7 @@ from .models import Product, ShoppingCart
 from django.http import JsonResponse
 
 def index(request):
-
+    
     # Ten products list
     products = Product.objects.all()[:10]
 
@@ -14,6 +14,9 @@ def submitrestaurant(request):
     return render(request, 'submit-restaurant.html')
 
 def detailRestaurant(request):
+
+    if request.method == "POST":
+        return render(request, 'order.html')
 
     products = Product.objects.all()
 
@@ -83,3 +86,15 @@ def remove_from_cart(request, id):
 
 
 
+def order(request):
+
+    cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
+
+    total_price = sum(item.total_price for item in cart_items)
+
+    context = {'cart_items': cart_items, 'total_price': total_price}
+
+    return render(request, 'order.html', context)
+
+def confirmorder(request):
+    return render(request, 'confirm.html')
