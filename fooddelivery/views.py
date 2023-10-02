@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from .models import Product, ShoppingCart
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 
 def index(request):
 
-    # Ten products list
     products = Product.objects.all()[:10]
     return render(request, 'index.html', {'products': products})
 
 def about(request):
     return render(request, 'about.html')
+
+def error_404(request, exception):
+    return render(request, '404.html', status=404)
 
 def submitrestaurant(request):
     return render(request, 'submit-restaurant.html')
@@ -17,10 +20,9 @@ def submitrestaurant(request):
 def detailRestaurant(request):
     products = Product.objects.all()
 
-    # Fetch cart items for this session
+
     cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
 
-    # Calculate the total price
     total_price = sum(item.total_price for item in cart_items)
 
     context = {
@@ -41,19 +43,19 @@ def add_to_cart(request, product_id):
             if product.quantity < selected_quantity:
                 return JsonResponse({"success": False, "message": "Insufficient product stock."})
 
-            # Create a session if it doesn't exist
+
             if not request.session.session_key:
                 request.session.save()
 
-            # Check if the product is in the cart already
+
             cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, product=product).first()
             
             if cart_item:
-                # Update the quantity
+
                 cart_item.quantity += selected_quantity
                 cart_item.save()
             else:
-                # Create a new cart item
+
                 ShoppingCart.objects.create(
                     product=product,
                     quantity=selected_quantity,
@@ -68,11 +70,11 @@ def add_to_cart(request, product_id):
 def remove_from_cart(request, id):
     if request.method == "POST":
         try:
-            # Check if the product is in the cart already
+
             cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, id=id).first()
 
             if cart_item:
-                cart_item.delete()  # Remove item from the cart entirely
+                cart_item.delete()  
             else:
                 return JsonResponse({"success": False, "message": "Product not found in the cart."})
 

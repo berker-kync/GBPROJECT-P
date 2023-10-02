@@ -11,3 +11,5 @@ urlpatterns = [
     path('remove_from_cart/<int:id>/', views.remove_from_cart, name="remove_from_cart"),
     path('about', views.about, name="about")
 ]
+
+handler404 = 'fooddelivery.views.error_404'
