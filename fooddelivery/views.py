@@ -10,9 +10,6 @@ def index(request):
 
     return render(request, 'index.html', {'products': products})
 
-def submitrestaurant(request):
-    return render(request, 'submit-restaurant.html')
-
 def detailRestaurant(request):
 
     if request.method == "POST":

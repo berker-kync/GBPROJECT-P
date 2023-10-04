@@ -9,7 +9,7 @@
     <title>TencereKapak - Yemekte kalite</title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/TencereKapak.svg' %}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'img/apple-touch-icon-57x57-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'img/apple-touch-icon-72x72-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'img/apple-touch-icon-114x114-precomposed.png' %}">
@@ -36,8 +36,8 @@
         <div class="container">
             <div id="logo">
                 <a href="/">
-                    <img src="{% static 'img/logo.svg' %}" width="162" height="35" alt="" class="logo_normal">
-                    <img src="{% static 'img/logo_sticky.svg' %}" width="162" height="35" alt="" class="logo_sticky">
+                    <img src="{% static 'img/TencereKapak.svg' %}" width="200" height="60" alt="" class="logo_normal">
+                    <img src="{% static 'img/TencereKapak.svg' %}" width="200" height="60" alt="" class="logo_sticky">
                 </a>
             </div>
             <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
@@ -172,7 +172,7 @@
             <div class="owl-carousel owl-theme categories_carousel">
                 {% for product in products %}
                     <div class="item_version_2">
-                        <a href="grid-listing-filterscol.html">
+                        <a href="/detail-restaurant">
                             <figure>
                                 <span>{{ product.id }}</span>
                                 <img src="{{product.product_image.url}}" data-src="{{product.product_image.url}}" alt="" class="owl-lazy" width="350" height="450">
@@ -386,7 +386,7 @@
                             </div>
                             <p class="lead">Bu restoran, damak zevkinizi yeniden keşfetmenize aracılık ediyor. Sipariş verdiğiniz her tabakta, geleneksel lezzetlerin modern dokunuşlarla buluşmasına tanık olacaksınız. 
                                 Ambiyansıyla huzur, menüsüyle şölen; burası sadece bir sipariş platformu değil, bir deneyim. Lezzet yolculuğuna hazırsanız, sizi bekleyen enfes tatlarla tanıştıralım.</p>
-                            <p><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
+                            <p><a href="detail-restaurant" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
                         </div>
                     </div>
                 </div>

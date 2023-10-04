@@ -1881,6 +1881,7 @@ header.sticky a.open_close:hover,
   #logo img {
     width: auto;
     height: 28px;
+    fill: #689C98;
   }
 }
 
