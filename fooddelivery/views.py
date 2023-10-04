@@ -98,3 +98,6 @@ def order(request):
 
 def confirmorder(request):
     return render(request, 'confirm.html')
+
+def notfound(request):
+    return render(request, '404.html')

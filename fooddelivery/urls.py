@@ -11,4 +11,5 @@ urlpatterns = [
     path('remove_from_cart/<int:id>/', views.remove_from_cart, name="remove_from_cart"),
     path('order', views.order, name="order"),
     path('confirm', views.confirmorder, name="confirm"),
+    path('notfound', views.notfound, name="notfound"),
 ]
