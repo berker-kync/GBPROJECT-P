@@ -14,7 +14,12 @@
 					<div class="col-xl-7 col-lg-9">
                         <div>
                             <h1>{{ page_title }}</h1>
+                            <h5>{{ subtitle }}</h5>							
                             <p>{{ page_content }}</p><br>
+                            <h5>{{ subtitle2 }}</h5>									
+							<p>{{ page_content2 }}</p><br>
+                            <h5>{{ subtitle3 }}</h5>									
+							<p>{{ page_content3 }}</p><br>
                             {% if page_image.url %}
                                 <img src="{{ page_image.url }}" alt="{{ page_image.alt }}" height="200px">
                             {% endif %}

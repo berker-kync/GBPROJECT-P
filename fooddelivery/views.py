@@ -89,18 +89,23 @@ def extra_pages(request, page_name):
     content_dict = {
         'about': {
             'page_title': 'HAKKIMIZDA',
-            'page_content': 'Çok da bi şey yok aslında.. ',
+            'page_content': '2017 yılında iki girişimci arkadaşın mutfak sevdalıları için kurduğu Mutfağınızın Yıldızı, kısa sürede ülkenin en sevilen yemek sipariş platformlarından biri haline geldi. Amacımız, lezzetli yemeklerin kapınıza kadar ulaşmasını sağlamakla kalmayıp, hem sizin için hem de iş ortaklarımız için eşsiz bir deneyim yaratmaktır. ',
+            'page_content2': 'Sadece bir tıklamayla, yerel restoranlardan ulusal markalara kadar geniş bir yelpazede mutfağın eşsiz lezzetlerini keşfetme fırsatı sunuyoruz. Güvenli, hızlı ve kolay sipariş süreciyle lezzetin adımlarını sizlere getiriyoruz.',
+            'page_content3': 'Sürdürülebilir bir büyüme ve adil bir ekosistem yaratma hedefimizle, tüm paydaşlarımızın memnuniyetini ön planda tutuyoruz. Siz de bu büyük ailenin bir parçası olun, lezzetin tadını birlikte çıkaralım!',
             'page_image': {'url': '', 'alt': ''}
         },
         'privacy': {
             'page_title': 'GİZLİLİK',
-            'page_content': 'Onu söyleyemiyoruz yalnız. ',
+            'page_content': 'Biz, TencereKapak, kullanıcılarımızın gizliliğine büyük değer veririz. Web sitemizi ziyaret ettiğinizde veya servislerimizi kullandığınızda topladığımız kişisel veriler, sadece hizmetlerimizi size sunmak, kullanıcı deneyimini geliştirmek ve yasal yükümlülükleri yerine getirmek amacıyla kullanılır. Bu verilere, adınız, e-posta adresiniz, telefon numaranız ve ödeme bilgileriniz dahil olabilir. Verileriniz, üçüncü taraflarla kesinlikle paylaşılmaz veya satılmaz.',
             'page_image': {'url': '', 'alt': ''}
         },
         'termsconditions': {
             'page_title': 'ŞARTLAR & KOŞULLAR',
-            'page_content': 'TencereKapak LTD. gerektiği taktirde summoning seansları esnasında üyelerinin ruhlarını kurban etmeyi daima saklı tutar. ',
-            'page_image': {'url': 'https://m.media-amazon.com/images/I/612+XnLD1RL._AC_UF894,1000_QL80_.jpg', 'alt': 'pentagram'}
+            'subtitle': '1. Kabul:',            
+            'page_content': 'TencereKapak web sitesini kullanarak veya hizmetlerimizi satın alarak, bu şartlar ve koşulları kabul etmiş sayılırsınız. Eğer bu şartlar ve koşullarla ilgili bir anlaşmazlık yaşarsanız, lütfen hizmetlerimizi kullanmayın veya web sitemizi ziyaret etmeyin.',
+            'subtitle2': '2. Hizmetler:',
+            'page_content2': 'TencereKapak, web sitesinde listelenen hizmetleri sunmaktadır. Hizmetlerimizin sürekli kullanılabilirliği veya kesintisiz olacağı konusunda herhangi bir garanti vermemekteyiz. Ayrıca, hizmetlerimizi veya web sitemizi, önceden bildirimde bulunmaksızın herhangi bir zamanda değiştirme hakkımızı saklı tutarız.',                       
+            'page_image': {'url': '', 'alt': ''}
         },
         'contacts': {
             'page_title': 'İLETİŞİM',
