@@ -91,7 +91,7 @@ def extra_pages(request, page_name):
             'page_title': 'HAKKIMIZDA',
             'page_content': '2017 yılında iki girişimci arkadaşın mutfak sevdalıları için kurduğu Mutfağınızın Yıldızı, kısa sürede ülkenin en sevilen yemek sipariş platformlarından biri haline geldi. Amacımız, lezzetli yemeklerin kapınıza kadar ulaşmasını sağlamakla kalmayıp, hem sizin için hem de iş ortaklarımız için eşsiz bir deneyim yaratmaktır. ',
             'page_content2': 'Sadece bir tıklamayla, yerel restoranlardan ulusal markalara kadar geniş bir yelpazede mutfağın eşsiz lezzetlerini keşfetme fırsatı sunuyoruz. Güvenli, hızlı ve kolay sipariş süreciyle lezzetin adımlarını sizlere getiriyoruz.',
-            'page_content3': 'Sürdürülebilir bir büyüme ve adil bir ekosistem yaratma hedefimizle, tüm paydaşlarımızın memnuniyetini ön planda tutuyoruz. Siz de bu büyük ailenin bir parçası olun, lezzetin tadını birlikte çıkaralım!',
+            'page_content3': 'Sürdürülebilir bir büyüme ve adil bir ekosistem yaratma hedefimizle, tüm paydaşlarımızın memnuniyetini ön planda tutuyoruz. Siz de bu büyük ailenin bir parçası olun, lezzetin tadını birlikte çıkaralım!   ',
             'page_image': {'url': '', 'alt': ''}
         },
         'privacy': {
