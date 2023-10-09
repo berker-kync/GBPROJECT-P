@@ -30,7 +30,7 @@
 
 </head>
 
-<body>
+<body data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75">
                 
     <header class="header clearfix element_to_stick">
         <div class="container">
@@ -101,7 +101,7 @@
                         </ul> -->
                     </li>
                     <li class="submenu">
-                        <a href="#0" class="show-submenu">Hakkımızda</a>
+                        <a href="{% url 'extra_pages' page_name='about' %}" class="show-submenu">Hakkımızda</a> 
                        <!-- <ul>
 				        <li><a href="admin_section/index.html" target="_blank">Admin Section</a></li>
 				        <li><a href="404.html">404 Error</a></li>
@@ -122,6 +122,11 @@
         </div>
     </header>
     <!-- /header -->
+
+
+
+
+
 
     <main>
         <div class="hero_single version_2">
@@ -172,7 +177,7 @@
             <div class="owl-carousel owl-theme categories_carousel">
                 {% for product in products %}
                     <div class="item_version_2">
-                        <a href="grid-listing-filterscol.html">
+                        <a href="detail-restaurant">
                             <figure>
                                 <span>{{ product.id }}</span>
                                 <img src="{{product.product_image.url}}" data-src="{{product.product_image.url}}" alt="" class="owl-lazy" width="350" height="450">
@@ -376,7 +381,7 @@
                                 </div>
                             </div>
                         </div>
-                        <p class="text-center mt-3 d-block d-lg-none"><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
+                        <p class="text-center mt-3 d-block d-lg-none"><a href="/detail-restaurant" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
                     </div>
                     <div class="col-lg-5 offset-lg-1 align-self-center">
                         <div class="intro_txt">
@@ -386,7 +391,7 @@
                             </div>
                             <p class="lead">Bu restoran, damak zevkinizi yeniden keşfetmenize aracılık ediyor. Sipariş verdiğiniz her tabakta, geleneksel lezzetlerin modern dokunuşlarla buluşmasına tanık olacaksınız. 
                                 Ambiyansıyla huzur, menüsüyle şölen; burası sadece bir sipariş platformu değil, bir deneyim. Lezzet yolculuğuna hazırsanız, sizi bekleyen enfes tatlarla tanıştıralım.</p>
-                            <p><a href="#0" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
+                            <p><a href="/detail-restaurant" class="btn_1 medium gradient pulse_bt mt-2">Şimdi Sipariş Ver!</a></p>
                         </div>
                     </div>
                 </div>

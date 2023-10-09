@@ -31,6 +31,56 @@
 <!-- YOUR CUSTOM CSS -->
 <link href="{% static 'css/custom.css' %}" rel="stylesheet">
 
+{% block additional_css %}
+
+{% endblock additional_css %}
+
+
+</head>
+
+<body data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75"></body>
+				
+	<header class="header_in clearfix">
+	    <div class="container">
+	        <div id="logo">
+	            <a href="/">
+	                <img src="{% static 'img/logo_sticky.svg' %}" width="140" height="35" alt="">
+	            </a>
+	        </div>
+	        <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
+	        <ul id="top_menu">
+	            <!-- <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li> -->
+                <li><a href="#0" class="cart_bt" title="Your cart">Sepetiniz</a></li>
+	        </ul>
+	        <!-- /top_menu -->
+	        <a href="#0" class="open_close">
+	            <i class="icon_menu"></i><span>Menü</span>
+	        </a>
+	        <nav class="main-menu">
+	            <div id="header_menu">
+	                <a href="/" class="open_close">
+	                    <i class="icon_close"></i><span>Menü</span>
+	                </a>
+	                <a href="/"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
+	            </div>
+	            <ul>
+	                 <li class="submenu">
+                        <a href="/" class="show-submenu">Anasayfa</a>
+                    </li>
+	                <li class="submenu">
+	                    <a href="detail-restaurant" class="show-submenu">Menü</a>
+	                </li>
+	                <li class="submenu">
+                        <a href="{% url 'extra_pages' page_name='about' %}" class="show-submenu">Hakkımızda</a>
+                    </li>
+	            </ul>
+	        </nav>
+	    </div>
+	</header>
+	<!-- /header -->
+
+
+
 {% block register %}
 
 {% endblock %}
