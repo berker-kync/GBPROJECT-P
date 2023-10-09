@@ -1,7 +1,6 @@
 {% load static %}
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,19 +24,19 @@
     <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/style.css' %}" rel="stylesheet">
 
-
-    <!-- SPECIFIC CSS -->
-    <link href="{% static 'css/home.css' %}" rel="stylesheet">
-
-    {% block extra_css %} {% endblock extra_css %} 
+    {% block extra_css %} {% endblock %} 
 </head>
 <body>
 
 {% include 'header.html' %}
 
-    {% block content %} {% endblock %} 
+    {% block content %} {% endblock %}
 
 {% include 'footer.html' %}
+
+{% block extra_models %} {% endblock %}
+
+    {% block extra_js %} {% endblock %}
 
 </body>
 </html>

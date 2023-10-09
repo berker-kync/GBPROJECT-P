@@ -2,7 +2,6 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from django.contrib.auth.models import User
 
 
 class Product(models.Model):
@@ -46,28 +45,23 @@ class ShoppingCart(models.Model):
     def total_price(self):
         return self.product.price * self.quantity
     
+# customer model
 
-# order model
+class Customer(models.Model):
+    name = models.CharField(max_length=100, null=False, blank=False)
+    email = models.EmailField(null=False, blank=False)
+    phone = models.CharField(max_length=20, null=True, blank=False)
+    address = models.TextField(null=False, blank=False)
+    city = models.CharField(max_length=100, null=False, blank=False)
+    postal_code = models.CharField(max_length=10, null=False, blank=False)
 
-# class Order(models.Model):
-#     STATUS = (
-#         ('pending', 'Pending'),
-#         ('approved', 'Approved'),
-#         ('rejected', 'Rejected'),
-#     )
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#     total_price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
-#     status = models.CharField(max_length=10, choices=STATUS, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'customer'
+        verbose_name = 'Customer'
+        verbose_name_plural = 'Customers'
 
-#     class Meta:
-#         db_table = 'order'
-#         verbose_name = 'Order'
-#         verbose_name_plural = 'Orders'
-
-#     def __str__(self):
-#         return f'{self.user.username} - {self.total_price} - {self.status}'
+    def __str__(self):
+        return f'{self.name} - {self.email}'
 
 class Order(models.Model):
     STATUS = (
@@ -76,7 +70,7 @@ class Order(models.Model):
         ('rejected', 'Rejected'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")  # Hangi kullanıcının siparişi olduğu
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")  # Hangi kullanıcının siparişi olduğu
     products = models.ManyToManyField(Product, through='OrderItem')  # Hangi ürünlerin siparişte olduğu
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     status = models.CharField(max_length=10, choices=STATUS, default='pending')
@@ -91,7 +85,11 @@ class Order(models.Model):
         verbose_name_plural = 'Orders'
 
     def __str__(self):
-        return f"Order #{self.id} - {self.user.username}"
+        return f"Order #{self.id} - {self.customer.name}"
+    
+    @property
+    def total_item(self):
+        return self.order_items.count()
 
 
 class OrderItem(models.Model):
