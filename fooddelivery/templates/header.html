@@ -4,7 +4,8 @@
 	    <div class="container">
 	        <div id="logo">
 	            <a href="/">
-	                <img src="{% static 'img/logo_sticky.svg' %}" width="140" height="35" alt="">
+					<img src="{% static 'img/TencereKapak.svg' %}" width="162" height="35" alt="" class="logo_normal">
+
 	            </a>
 	        </div>
 	        <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
@@ -23,19 +24,6 @@
 	                </a>
 	                <a href="/"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
 	            </div>
-<<<<<<< HEAD
-	            <ul>
-	                 <li class="submenu">
-                        <a href="/" class="show-submenu">Anasayfa</a>
-                    </li>
-	                <li class="submenu">
-	                    <a href="/detail-restaurant" class="show-submenu">Menü</a>
-	                </li>
-	                <li class="submenu">
-                        <a href="{% url 'extra_pages' page_name='about' %}" class="show-submenu">Hakkımızda</a>
-                    </li>
-	            </ul>
-=======
                 <ul>
 					<li class="submenu">
 						 <a href="/" class="show-submenu">Anasayfa</a>
@@ -44,10 +32,9 @@
 						 <a href="/detail-restaurant" class="show-submenu">Menü</a>
 					 </li>
 					 <li class="submenu">
-						 <a href="{% url 'extra_pages' page_name='about' %}" class="show-submenu">Hakkımızda</a> 
+						 <a href="/about" class="show-submenu">Hakkımızda</a> 
 					 </li>
 				 </ul>
->>>>>>> origin/v1
 	        </nav>
 	    </div>
 	</header>

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}	
+	<main>
+
+		<!-- /page_header -->
+
+		<div class="container margin_60_20">			
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="singlepost">
+						<figure><img alt="" class="img-fluid" src="{% static 'img/blog-single.jpg' %}"></figure>
+						<h1>HAKKIMIZDA</h1>
+						<div class="postmeta">
+						</div>
+						<!-- /post meta -->
+						<div class="post-content">
+                            <h5>Biz Kimiz?</h5>
+							<div class="dropcaps">
+								<p>Lezzetli Yemekler A.Ş., kaliteli malzemelerle hazırlanmış, birbirinden farklı ve özenle seçilmiş yemekleri, müşterilerine hızlı ve sıcak bir şekilde ulaştırmayı amaç edinmiş bir yemek sipariş platformudur. Geleneksel tatlarla modern lezzetleri bir araya getirerek, kullanıcılarımıza geniş bir yemek yelpazesi sunuyoruz.</p>
+							</div>
+                            
+                            <h5>Misyonumuz</h5>
+							<p>Müşteri memnuniyetini en üst seviyede tutmak ve en kaliteli hizmeti sunabilmek adına sürekli olarak kendimizi yeniliyoruz. Lezzetli Yemekler A.Ş. olarak, sipariş sürecinin başından sonuna kadar olan kısmında en iyi deneyimi sunmak için çalışıyoruz. Günün her saati, her türlü damak zevkine hitap edebilmek için çeşitli restoranlarla iş birliği içindeyiz.</p>
+
+                            <h5>Vizyonumuz</h5>
+                            <p>Gıda sektöründeki teknolojik yenilikleri yakından takip ederek, yemek sipariş deneyimini bir üst seviyeye taşımak. Hem restoranlar için hem de kullanıcılar için en güvenilir, hızlı ve kolay kullanımlı platform olabilmek adına, sektördeki liderliğimizi korumak ve global bir marka olma yolunda ilerlemek.</p>
+						</div>
+						<!-- /post -->
+					</div>
+					<!-- /single-post -->
+
+
+					<hr>
+
+				
+
+				</div>
+				<!-- /col -->
+
+
+			</div>
+			<!-- /row -->	
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+{% endblock %}

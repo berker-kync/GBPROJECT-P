@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}	
+	<main>
+
+		<!-- /page_header -->
+
+		<div class="container margin_60_20">			
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="singlepost">
+						<figure><img alt="" class="img-fluid" src="{% static 'img/blog-single.jpg' %}"></figure>
+						<h1>GİZLİLİK POLİTİKASI</h1>
+						<div class="postmeta">
+						</div>
+						<!-- /post meta -->
+						<div class="post-content">
+                            <h5></h5>
+							<p>Bu gizlilik politikası, TencereKapat ("Şirket", "biz" veya "bizim" olarak anılacaktır) tarafından işletilen [web sitesi adresiniz] adresindeki web sitesini ("Hizmet") ziyaret eden veya kullanan herkes için geçerlidir.</p>
+							<h5>1. Toplanan Bilgiler</h5>
+							<ul>
+								<li>Kullanıcının Hizmete erişimi sırasında isim, e-posta adresi, telefon numarası gibi bazı kişisel bilgiler toplanabilir.</li>
+								<li>Hizmetimize erişim sağlandığında IP adresi, tarayıcı türü, ziyaret süresi gibi otomatik olarak toplanan bilgilere de erişim sağlanabilir.</li>
+							</ul>
+							<h5>2. Bilgilerin Kullanımı</h5>
+							<p>Toplanan bilgiler kullanıcı deneyimini artırmak, hizmet kalitesini yükseltmek, hizmetle ilgili sorunları çözmek ve kullanıcılara özel teklifler sunmak için kullanılabilir.</p>
+							<h5>3. Çerezler (Cookies)</h5>
+							<p>Hizmet, kullanıcı deneyimini iyileştirmek için çerezler kullanabilir. Kullanıcılar, web tarayıcılarının çerez kullanımını engelleyerek veya çerezleri silerek bu özelliği devre dışı bırakabilirler, ancak bu Hizmetin bazı özelliklerini etkileyebilir.</p>
+							<h5>4. Üçüncü Taraf Bağlantıları</h5>
+							<p>Hizmetimizde, üçüncü taraf web sitelerine bağlantılar bulunabilir. Bu sitelere tıkladığınızda, bu sitelerin kendi gizlilik politikaları ve şartları geçerli olacaktır. TencereKapat, bu sitelerdeki içerikten veya uygulamalardan sorumlu değildir.</p>
+							<h5>5. Bilgilerin Korunması</h5>
+							<p>TencereKapat, kullanıcıların kişisel bilgilerini korumak için ticari olarak kabul edilen en iyi yöntemleri kullanmaktadır. Ancak, hiçbir iletim yönteminin veya elektronik saklama yönteminin %100 güvenli olmadığını unutmamanız önemlidir.</p>
+							<h5>6. Değişiklikler</h5>	
+							<p>TencereKapat, bu gizlilik politikasını dilediği zaman değiştirme hakkını saklı tutar. Değişiklikler web sitemizde yayınlandığında yürürlüğe girer.</p>
+
+						</div>
+						<!-- /post -->
+					</div>
+					<!-- /single-post -->
+
+
+					<hr>
+
+				
+
+				</div>
+				<!-- /col -->
+
+
+			</div>
+			<!-- /row -->	
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+{% endblock %}

@@ -1,0 +1,30 @@
+/*============================================================================================*/
+/* Your custom styles below */
+/* Butona css ekledim. */
+/*============================================================================================*/
+
+
+.box_order .main .remove-item-btn:before{
+    font-family: "ElegantIcons";
+    content: "\4f";
+    font-size: 16px;
+    font-size: 1rem;
+    left: -20px;
+    top: 3px;
+    line-height: 1;
+    position: absolute;
+}
+
+.box_order .main .remove-item-btn{
+    border: none;
+    text-align: center;
+    background: none;
+    border-radius: 20px;
+    position: relative;
+    bottom: auto;
+}
+
+
+.box_order .main .remove-item-btn:hover {
+    color: red;
+}
