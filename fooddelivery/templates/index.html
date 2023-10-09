@@ -9,7 +9,7 @@
     <title>TencereKapak - Yemekte kalite</title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/TencereKapak.svg' %}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'img/apple-touch-icon-57x57-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'img/apple-touch-icon-72x72-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'img/apple-touch-icon-114x114-precomposed.png' %}">
@@ -30,14 +30,14 @@
 
 </head>
 
-<body data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75">
+<body data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75" data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75">
                 
     <header class="header clearfix element_to_stick">
         <div class="container">
             <div id="logo">
                 <a href="/">
-                    <img src="{% static 'img/logo.svg' %}" width="162" height="35" alt="" class="logo_normal">
-                    <img src="{% static 'img/logo_sticky.svg' %}" width="162" height="35" alt="" class="logo_sticky">
+                    <img src="{% static 'img/TencereKapak.svg' %}" width="162" height="35" alt="" class="logo_normal">
+                    <img src="{% static 'img/TencereKapak.svg' %}" width="162" height="35" alt="" class="logo_sticky">
                 </a>
             </div>
             <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
@@ -177,7 +177,7 @@
             <div class="owl-carousel owl-theme categories_carousel">
                 {% for product in products %}
                     <div class="item_version_2">
-                        <a href="detail-restaurant">
+                        <a href="/detail-restaurant">
                             <figure>
                                 <span>{{ product.id }}</span>
                                 <img src="{{product.product_image.url}}" data-src="{{product.product_image.url}}" alt="" class="owl-lazy" width="350" height="450">

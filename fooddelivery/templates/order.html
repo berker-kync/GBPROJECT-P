@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/order-sign_up.css' %}" rel="stylesheet">
+    <link href="{% static 'css/detail-page.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+<body>
+
+    <main class="bg_gray">
+        <div class="container margin_60_20">
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="box_order_form">
+                            <div class="head">
+                                <div class="title">
+                                    <h3>Kişisel Bilgiler</h3>
+                                </div>
+                            </div>
+                            <!-- /head -->
+                            <div class="main">
+                                {{ form|crispy }}
+                            </div>
+                        </div>
+                        <!-- /box_order_form -->
+                        <div class="box_order_form">
+                            <div class="head">
+                                <div class="title">
+                                    <h3>Ödeme Yöntemi</h3>
+                                </div>
+                            </div>
+                            <!-- /head -->
+                            <div class="main">
+                                <div class="payment_select">
+                                    <label class="container_radio">Nakit Ödeme
+                                        <input type="radio" value="" name="payment_method">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <i class="icon_wallet"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /box_order_form -->
+                    </div>
+                    <!-- /col -->
+                    <div class="col-xl-4 col-lg-4" id="sidebar_fixed">
+                        <div class="box_order">
+                            <div class="head">
+                                <h3>Sipariş Özeti</h3>
+                                <div>Pizzeria da Alfredo</div>
+                            </div>
+                            <!-- /head -->
+                            <div class="main" id="cart-items">
+                                <ul class="clearfix">
+                                    {% for item in cart_items %}
+                                        <li>
+                                            <button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.product.name }}</button>
+                                            <span>₺{{ item.product.price }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                
+                                <ul class="clearfix">
+                                    <li class="total" id="total-price">Toplam<span>₺{{ total_price }}</span></li>
+                                </ul>
+                                <div class="text-center"><small>Veya Bize Telefon Ulaş <strong>0216 4843254</strong></small></div>
+                                <button type="submit" class="btn_1 gradient full-width mb_5">Sipariş Oluştur</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- /box_booking -->
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->  
+    </main>
+    <!-- /main -->
+{% endblock %}
