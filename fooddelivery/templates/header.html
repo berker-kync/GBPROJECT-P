@@ -23,16 +23,17 @@
 	                </a>
 	                <a href="/"><img src="{% static 'img/logo.svg' %}" width="162" height="35" alt=""></a>
 	            </div>
-	            <ul>
-	                 <li class="submenu">
-                        <a href="/" class="show-submenu">Anasayfa</a>
-                    </li>
-	                <li class="submenu">
-	                    <a href="detail-restaurant" class="show-submenu">Menü</a>
-	                </li>
-					<a href="{% url 'extra_pages' page_name='about' %}" class="show-submenu">Hakkımızda</a>
-					</li>
-	            </ul>
+                <ul>
+					<li class="submenu">
+						 <a href="/" class="show-submenu">Anasayfa</a>
+					 </li>
+					 <li class="submenu">
+						 <a href="/detail-restaurant" class="show-submenu">Menü</a>
+					 </li>
+					 <li class="submenu">
+						 <a href="{% url 'extra_pages' page_name='about' %}" class="show-submenu">Hakkımızda</a> 
+					 </li>
+				 </ul>
 	        </nav>
 	    </div>
 	</header>
