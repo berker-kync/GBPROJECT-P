@@ -1,9 +1,7 @@
-from os import name
 from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-from django.contrib.auth.models import User
 
 
 class Product(models.Model):
@@ -63,7 +61,7 @@ class Customer(models.Model):
         verbose_name_plural = 'Customers'
 
     def __str__(self):
-        return self.user.username
+        return f'{self.name} - {self.email}'
 
 class Order(models.Model):
     STATUS = (
@@ -87,7 +85,11 @@ class Order(models.Model):
         verbose_name_plural = 'Orders'
 
     def __str__(self):
-        return f"Order #{self.id} - {self.user.username}"
+        return f"Order #{self.id} - {self.customer.name}"
+    
+    @property
+    def total_item(self):
+        return self.order_items.count()
 
 
 class OrderItem(models.Model):

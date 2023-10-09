@@ -145,6 +145,8 @@ def order(request):
             # Yeni bir sipariş oluştur
             order = Order.objects.create(
                 customer=customer,
+                shipping_address=customer.address,
+                total_price=sum(item.total_price for item in cart_items),
                 status='pending'
             )
 
