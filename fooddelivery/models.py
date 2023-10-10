@@ -2,7 +2,6 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-
 from .validators import phone_number_validator
 
 
