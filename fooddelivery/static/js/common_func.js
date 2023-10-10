@@ -371,8 +371,7 @@ $.ajaxSetup({
 	
 
 
-
-
+	// Cancel Order Button
 
 
 

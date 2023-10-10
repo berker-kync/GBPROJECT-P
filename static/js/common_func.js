@@ -1,3 +1,17 @@
+// Setup AJAX to include CSRF token for Django
+function getCookie(name) {
+    let value = "; " + document.cookie;
+    let parts = value.split("; " + name + "=");
+    if (parts.length == 2) return parts.pop().split(";").shift();
+}
+
+$.ajaxSetup({
+    headers: { "X-CSRFToken": getCookie("csrftoken") }
+});
+
+
+
+
 (function ($) {
 
 	"use strict";
@@ -267,6 +281,7 @@
 		}
 	});
 
+
 	// Modal images
 	$('.magnific-gallery').each(function() {
 	    $(this).magnificPopup({
@@ -318,5 +333,65 @@
             .find(".indicator")
             .toggleClass('icon_minus-06 icon_plus');
     }
+
+
+
+	// Increment product quantity functionality
+
+	$(document).on('click', '.increase-product-btn', function(e) {
+		e.preventDefault();
+		
+		var productId = $(this).data('id');
+		$.ajax({
+			url: `/increase_quantity/${productId}/`,
+			method: 'POST',
+			data: {
+				'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
+			},
+			success: function(response) {
+				if(response.success) {
+					alert('Success!');
+					updateOrderSummary();
+				} else {
+					alert('Failed to update quantity.');
+				}
+			},
+			error: function(error) {
+				alert('Error occurred.');
+			}
+		});
+	});
+	
+	function updateOrderSummary() {
+		$.get('/products_in_basket/', function(data) {
+			// Replace the order summary section with new content.
+			$('#sidebar_fixed').html(data);
+		});
+	}
+	
+
+
+	// Cancel Order Button
+
+
+
+
+
+	// $(document).on('click', '.increase-product-btn', function(e) {
+	// 	e.preventDefault();
+		
+	// 	var productId = $(this).data('id');
+	// 	$.ajax({
+	// 		url: `/increase_quantity/${productId}/`,
+	// 		method: 'POST',
+	// 		success: function(response) {
+	// 			alert('Success!');
+	// 		},
+	// 		error: function(error) {
+	// 			alert('Error occurred.');
+	// 		}
+	// 	});
+	// });
+
 
 })(window.jQuery); 

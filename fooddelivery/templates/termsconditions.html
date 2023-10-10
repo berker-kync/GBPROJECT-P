@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}	
+	<main>
+
+		<!-- /page_header -->
+
+		<div class="container margin_60_20">			
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="singlepost">
+						<figure><img alt="" class="img-fluid" src="{% static 'img/blog-single.jpg' %}"></figure>
+						<h1>KULLANIM ŞARTLARI</h1>
+						<div class="postmeta">
+						</div>
+						<!-- /post meta -->
+						<div class="post-content">
+                            <h5>1.Genel Bilgiler</h5>
+							<p>Bu kullanım şartları ("Şartlar"), TencereKapat ("Şirket", "biz" veya "bizim" olarak anılacaktır) tarafından işletilen "tencerekapak.com" adresindeki web sitesini ("Hizmet") ziyaret eden veya kullanan herkes için geçerlidir.</p>
+							<h5>2.Hizmet Şartları</h5>
+							<ul>
+								<li>TencereKapat, kullanıcılarına yemek siparişi hizmeti sunar.</li>
+								<li>Siparişleriniz, belirttiğiniz adrese belirttiğiniz süre içerisinde teslim edilir. Olası gecikmelerde TencereKapat sorumluluğu üstlenmez, ancak müşteri memnuniyeti için gerekli adımları atar.</li>
+								<li>Ödeme işlemleri sırasında yaşanabilecek sorunlarda veya banka ile ilgili problemlerde TencereKapat sorumlu tutulamaz.</li>
+							</ul>
+							<h5>3. Üyelik ve Güvenlik</h5>
+							<ul>
+								<li>Kullanıcılar, hizmetlerimizden faydalanabilmek için üye olmalıdır. Üyelik işlemi sırasında verilen bilgilerin doğru olması zorunludur.</li>
+								<li>Kullanıcılar, üye girişi yaparak siparişlerini takip edebilirler. Üyelik bilgilerinin gizliliği ve güvenliği kullanıcının sorumluluğundadır.</li>
+							</ul>
+							<h5>4. İptal ve İade Politikası</h5>
+							<ul>
+								<li>Sipariş iptali veya değişikliği sadece siparişin hazırlanmaya başlamadığı durumlarda yapılabilmektedir.</li>
+								<li>Teslimat sonrası iade talepleri, sadece ürünle ilgili bir sorun olduğunda kabul edilir. Bu tür taleplerin TencereKapat müşteri hizmetlerine ulaşarak belirtilmesi gerekmektedir.</li>
+							</ul>
+							<h5>5.Değişiklikler</h5>
+							<p>TencereKapat, bu kullanım şartlarını dilediği zaman değiştirme hakkını saklı tutar. Değişiklikler web sitemizde yayınlandığında yürürlüğe girer.</p>							
+						</div>
+						<!-- /post -->
+					</div>
+					<!-- /single-post -->
+
+
+					<hr>
+
+				
+
+				</div>
+				<!-- /col -->
+
+
+			</div>
+			<!-- /row -->	
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}	
+	<main>
+
+		<!-- /page_header -->
+
+		<div class="container margin_60_20">			
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="singlepost">
+						<figure><img alt="" class="img-fluid" src="{% static 'img/blog-single.jpg' %}"></figure>
+						<h1>İLETİŞİM</h1>
+						<div class="postmeta">
+						</div>
+						<!-- /post meta -->
+						<div class="post-content">
+                            <h5></h5>
+							<p>Bize her zaman aşağıdaki iletişim bilgileri üzerinden ulaşabilirsiniz. Sorularınız, önerileriniz veya iş birliği teklifleriniz için bize yazmaktan çekinmeyin!</p>
+							<hr>                         
+							<h5>Genel Merkez Adresi:</h5>
+							<p>Lezzet Cad. No:34, Gourmet Mah. İstanbul, Türkiye</p>
+							<hr>
+							<h5>Telefon:</h5>
+							<p>+90 (212) 123 45 67</p>
+							<hr>
+							<h5>E-posta:</h5>
+							<p>info@tencerekapak.com.tr</p>
+							<hr>
+							<h5>Çalışma Saatlerimiz:</h5>
+							<p>Hafta içi: 09:00 - 19:00</p>
+							<p>Hafta sonu: 10:00 - 16:00</p>
+							<hr>	
+							<h5>Sosyal Medya Hesaplarımız:</h5>
+							<p>Facebook: @tencerekapak</p>
+							<p>Instagram: @tencerekapak</p>
+							<p>Twitter: @tencerekapak</p>
+							<hr>								
+
+						</div>
+						<!-- /post -->
+					</div>
+					<!-- /single-post -->
+
+
+					<hr>
+
+				
+
+				</div>
+				<!-- /col -->
+
+
+			</div>
+			<!-- /row -->	
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+{% endblock %}
