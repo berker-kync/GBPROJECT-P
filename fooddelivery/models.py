@@ -3,6 +3,8 @@ from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
+from .validators import phone_number_validator
+
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -47,10 +49,12 @@ class ShoppingCart(models.Model):
     
 # customer model
 
+
+
 class Customer(models.Model):
     name = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(null=False, blank=False)
-    phone = models.CharField(max_length=20, null=True, blank=False)
+    phone = models.CharField(max_length=20, null=True, blank=False, validators=[phone_number_validator])
     address = models.TextField(null=False, blank=False)
     city = models.CharField(max_length=100, null=False, blank=False)
     postal_code = models.CharField(max_length=10, null=False, blank=False)
@@ -62,6 +66,9 @@ class Customer(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.email}'
+    
+
+
 
 class Order(models.Model):
     STATUS = (
