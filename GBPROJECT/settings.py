@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*0bth#8yj=n0@=3vew^dkrq5gtlh$#9+&%88n5#f#)z_c8foy+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -83,6 +83,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Change 'fooddelivery' to the app name where your 'Customer' model is defined
+AUTH_USER_MODEL = 'fooddelivery.Customer'
 
 
 # Password validation
