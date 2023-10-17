@@ -1,7 +1,7 @@
 from math import e
 from os import name
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, ShoppingCart, Order, OrderItem
+from .models import Product, ShoppingCart, Order, OrderItem, Restaurant
 from django.http import JsonResponse
 from django.contrib import messages
 from .forms import OrderForm
@@ -50,6 +50,11 @@ def detailRestaurant(request):
     }
 
     return render(request, 'detail-restaurant.html',context)
+
+     
+def RestaurantList(request):
+    restaurants = Restaurant.objects.all()
+    return render(request, 'restaurant-list.html', {'restaurants': restaurants})
 
 
 def add_to_cart(request, product_id):

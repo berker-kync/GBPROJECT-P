@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}    
+<!-- SPECIFIC CSS -->
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+
+{% block content %}	
+	
+	<main>
+		<div class="page_header element_to_stick">
+		    <div class="container">
+		    	<div class="row">
+		    		<div class="col-xl-8 col-lg-7 col-md-7 d-none d-md-block">
+		        		<h1>Kaç restoran listelendiyse</h1>
+		        		<!-- <a href="#0">Change address</a> -->
+		    		</div>
+		    		<div class="col-xl-4 col-lg-5 col-md-5">
+
+		    		</div>
+		    	</div>
+		    	<!-- /row -->		       
+		    </div>
+		</div>
+		<!-- /page_header -->
+
+		<div class="container margin_30_20">			
+			<div class="row">
+				<aside class="col-lg-3" id="sidebar_fixed">
+					<div class="type_delivery">
+					</div>
+					<!-- /type_delivery -->
+				
+					<a href="#0" class="open_filters btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
+				
+					<div class="filter_col">
+						
+					</div>
+				</aside>
+
+				<div class="col-lg-9">
+					<div class="row">
+						<div class="col-12">
+							<h2 class="title_small"></h2>
+							<!-- /carousel -->
+						</div>
+					</div>
+					<!-- /row -->
+
+					<div class="promo">
+						<h3>İlk 14 gün ücretsiz teslimat fırsatı!</h3>
+						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+						<i class="icon-food_icon_delivery"></i>
+					</div>
+					<!-- /promo -->
+					
+					<div class="row">
+						<div class="col-12"><h2 class="title_small">Restoranlar</h2></div>
+                        <div class="row">
+                            {% for restaurant in restaurants %}
+                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                                <div class="strip">
+                                    <figure>
+                                        <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
+                                        <a href="detail-restaurant.html" class="strip_info">
+                                            <small>{{ restaurant.category }}</small>
+                                            <div class="item_title">
+                                                <h3>{{ restaurant.name }}</h3>
+                                                <small>{{ restaurant.address }}</small>
+                                            </div>
+                                        </a>
+                                    </figure>
+                                    <ul>
+                                        <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
+                                         <li>
+                                             <div class="score"><strong>{{ restaurant.score }}</strong></div>
+                                         </li>
+                                     </ul>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+						<!-- /strip grid -->
+
+						<!-- /strip grid -->
+
+					</div>
+					<!-- /row -->
+					<div class="pagination_fg">
+					  <a href="#">&laquo;</a>
+					</div>
+				</div>
+				<!-- /col -->
+			</div>		
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+
+{% endblock %}

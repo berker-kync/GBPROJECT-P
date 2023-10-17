@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Order, Customer
+from .models import Product, Order, Customer, Restaurant, Restaurant_Category, Menu_Category
 
 
 class CustomerAdmin(admin.ModelAdmin):
@@ -13,6 +13,11 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('customer__name', 'shipping_address')
 
 
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Product)
+admin.site.register(Restaurant)
+admin.site.register(Restaurant_Category)
+admin.site.register(Menu_Category)
