@@ -1,12 +1,12 @@
 from math import e
 from os import name
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, ShoppingCart, Order, OrderItem, Restaurant
+from .models import Product, ShoppingCart, Order, OrderItem, Restaurant, Restaurant_Category
 from django.http import JsonResponse
 from django.contrib import messages
 from .forms import OrderForm
 from django.db import transaction  # İşlemleri atomik bir şekilde yürütmek için
-from django.shortcuts import get_object_or_404
+
 
 
 
@@ -37,24 +37,33 @@ def detailRestaurant(request):
         return render(request, 'order.html')
 
     products = Product.objects.all()
-
-
     cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
-
     total_price = sum(item.total_price for item in cart_items)
-
     context = {
         'products': products,
         'cart_items': cart_items,
         'total_price': total_price,
     }
-
     return render(request, 'detail-restaurant.html',context)
 
      
 def RestaurantList(request):
     restaurants = Restaurant.objects.all()
-    return render(request, 'restaurant-list.html', {'restaurants': restaurants})
+    restaurant_categories = Restaurant_Category.objects.all()
+    
+    highly_rated_restaurants_9plus = restaurants.filter(score__gte=9.0).count()
+    highly_rated_restaurants_8plus = restaurants.filter(score__gte=8.0).count()
+    highly_rated_restaurants_7plus = restaurants.filter(score__gte=7.0).count()
+    highly_rated_restaurants_6plus = restaurants.filter(score__gte=6.0).count()
+    
+    return render(request, 'restaurant-list.html', {
+        'restaurants': restaurants,
+        'restaurant_categories': restaurant_categories,
+        'highly_rated_restaurants_9plus': highly_rated_restaurants_9plus,
+        'highly_rated_restaurants_8plus': highly_rated_restaurants_8plus,
+        'highly_rated_restaurants_7plus': highly_rated_restaurants_7plus,
+        'highly_rated_restaurants_6plus': highly_rated_restaurants_6plus,
+    })
 
 
 def add_to_cart(request, product_id):

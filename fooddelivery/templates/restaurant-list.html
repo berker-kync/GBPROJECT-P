@@ -29,26 +29,78 @@
 		<div class="container margin_30_20">			
 			<div class="row">
 				<aside class="col-lg-3" id="sidebar_fixed">
-					<div class="type_delivery">
-					</div>
-					<!-- /type_delivery -->
 				
 					<a href="#0" class="open_filters btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
 				
 					<div class="filter_col">
-						
+						<div class="inner_bt clearfix">Filters<a href="#" class="open_filters"><i class="icon_close"></i></a></div>
+
+						<!-- /filter_type -->
+                        <div class="filter_type">
+                            <h4><a href="#filter_2" data-bs-toggle="collapse" class="closed">Kategoriler</a></h4>
+                            <div class="collapse" id="filter_2">
+                                <ul>
+                                    {% for restaurant_category in restaurant_categories %}
+                                    <li>
+                                        <label class="container_check">{{ restaurant_category.name }} 
+                                            <small>
+                                            {% for restaurant in restaurants %}
+                                            {% if restaurant.category == restaurant_category %}
+                                            {% if not forloop.first %}, {% endif %}{{ forloop.counter }}
+                                            {% endif %}
+                                            {% endfor %}
+                                            </small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+						<!-- /filter_type -->
+						<div class="filter_type last">
+                            <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Puan</a></h4>
+                            <div class="collapse" id="filter_4">
+                                <ul>
+                                    <li>
+                                        <label class="container_check">Efsane 9+
+                                            <small>{{ highly_rated_restaurants_9plus }}</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Harika 8+
+                                            <small>{{ highly_rated_restaurants_8plus }}</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">İyi 7+
+                                            <small>{{ highly_rated_restaurants_7plus }}</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Fena Değil 6+
+                                            <small>{{ highly_rated_restaurants_6plus }}</small>
+                                            <input type="checkbox">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+						<!-- /filter_type -->
+						<p><a href="#0" class="btn_1 outline full-width">Filter</a></p>
 					</div>
 				</aside>
 
-				<div class="col-lg-9">
-					<div class="row">
-						<div class="col-12">
-							<h2 class="title_small"></h2>
-							<!-- /carousel -->
-						</div>
-					</div>
-					<!-- /row -->
 
+				<div class="col-lg-9">
 					<div class="promo">
 						<h3>İlk 14 gün ücretsiz teslimat fırsatı!</h3>
 						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
