@@ -10,8 +10,7 @@
 	        </div>
 	        <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
 	        <ul id="top_menu">
-	            <!-- <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li> -->
-                <li><a href="#0" class="cart_bt" title="Your cart">Sepetiniz</a></li>
+                <li class="submenu"><a href="#0" class="cart_bt" title="Your cart">Sepetiniz</a></li>
 	        </ul>
 	        <!-- /top_menu -->
 	        <a href="#0" class="open_close">
@@ -34,6 +33,11 @@
 					 <li class="submenu">
 						 <a href="/about" class="show-submenu">Hakkımızda</a> 
 					 </li>
+					 {% if user.is_authenticated %}
+					 <li class="submenu"><a href="/logout" class="show-submenu">Çıkış Yap</a></li>
+					 {% else %}
+					 <li class="submenu"><a href="/login" class="show-submenu">Giriş Yap</a></li>
+					 {% endif %}
 				 </ul>
 	        </nav>
 	    </div>

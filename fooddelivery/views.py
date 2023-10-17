@@ -1,19 +1,62 @@
 from math import e
 from os import name
+import time
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, ShoppingCart, Order, OrderItem
-from django.http import JsonResponse
+from .models import Product, ShoppingCart, Order, OrderItem, Customer
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.contrib import messages
-from .forms import OrderForm
+from .forms import OrderForm, RegisterForm, LoginForm
 from django.db import transaction  # İşlemleri atomik bir şekilde yürütmek için
 from django.shortcuts import get_object_or_404
-
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+      
     products = Product.objects.all()[:10]
+
     return render(request, 'index.html', {'products': products})
 
+def Login(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+
+    form = LoginForm(request.POST or None)
+    
+    if request.method == "POST" and form.is_valid():
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+
+        customer = authenticate(request, email=email, password=password)
+        if customer and not customer.is_superuser:
+            login(request, user=customer)
+            messages.success(request, 'You have successfully logged in.')
+            return redirect('index')
+        else:
+            messages.error(request, 'Invalid email or password.')
+
+    return render(request, 'login.html', {'form': form})
+
+def user_logout(request):
+    logout(request)
+    return redirect('index')
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('index')
+
+    form = RegisterForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, 'Your account has been created.')
+        # if you want to login response after register
+        return HttpRequest('/login')
+
+    return render(request, 'register.html', {'form': form})
+
+@login_required
 def about(request):
     return render(request, 'about.html')
 
