@@ -16,3 +16,4 @@ class OrderForm(forms.ModelForm):
     city = forms.CharField(validators=[city_validator])
     postal_code = forms.CharField(validators=[postcode_validator])
 
+

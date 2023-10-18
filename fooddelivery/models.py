@@ -2,7 +2,7 @@ from re import A
 from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from decimal import Decimal
 from .validators import phone_number_validator
 from restaurants.models import *
@@ -63,10 +63,26 @@ class ShoppingCart(models.Model):
     @property
     def total_price(self):
         return self.product.price * self.quantity
-    
+
+
 # customer model
 
 class CustomerManager(BaseUserManager):
+    def create_superuser(self, email, name, password=None):
+        if not email:
+            raise ValueError("Customers must have an email address")
+        if not password:
+            raise ValueError("Customers must have a password")
+        customer_obj = self.model(
+            email=self.normalize_email(email),
+            name=name
+        )
+        customer_obj.set_password(password)
+        customer_obj.is_superuser = True
+        customer_obj.is_staff = True
+        customer_obj.save(using=self._db)
+        return customer_obj
+
     def create_user(self, email, name=None, password=None, is_active=True):
         if not email:
             raise ValueError("Customers must have an email address")
@@ -81,13 +97,14 @@ class CustomerManager(BaseUserManager):
         customer_obj.save(using=self._db)
         return customer_obj
 
-class Customer(AbstractBaseUser):
+class Customer(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100, null=False, blank=False)
-    email = models.EmailField(null=False, blank=False)
+    email = models.EmailField(null=False, blank=False, unique=True)
     phone = models.CharField(max_length=20, null=True, blank=False, validators=[phone_number_validator])
     address = models.TextField(null=False, blank=False)
     city = models.CharField(max_length=100, null=False, blank=False)
     postal_code = models.CharField(max_length=10, null=False, blank=False)
+    is_staff = models.BooleanField(default=False)
 
     objects = CustomerManager()
 
@@ -97,6 +114,12 @@ class Customer(AbstractBaseUser):
         db_table = 'customer'
         verbose_name = 'Customer'
         verbose_name_plural = 'Customers'
+
+    def has_perm(self, perm, obj=None):
+        return self.is_staff
+    
+    def has_module_perms(self, app_label):
+        return self.is_staff
 
     def __str__(self):
         return f'{self.name} - {self.email}'
