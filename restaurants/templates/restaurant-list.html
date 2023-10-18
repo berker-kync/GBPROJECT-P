@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+
 {% block extra_css %}    
 <!-- SPECIFIC CSS -->
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
@@ -42,15 +44,10 @@
                                 <ul>
                                     {% for restaurant_category in restaurant_categories %}
                                     <li>
-                                        <label class="container_check">{{ restaurant_category.name }} 
-                                            <small>
-                                            {% for restaurant in restaurants %}
-                                            {% if restaurant.category == restaurant_category %}
-                                            {% if not forloop.first %}, {% endif %}{{ forloop.counter }}
-                                            {% endif %}
-                                            {% endfor %}
-                                            </small>
-                                            <input type="checkbox">
+                                        <label class="container_check">
+                                            <input type="checkbox" class="category-checkbox" data-category-id="{{ restaurant_category.id }}">
+                                            {{ restaurant_category.name }}
+                                            <small>{{ restaurant_category.restaurant_count }}</small>
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -95,7 +92,7 @@
                             </div>
                         </div>
 						<!-- /filter_type -->
-						<p><a href="#0" class="btn_1 outline full-width">Filter</a></p>
+                        <p><button id="filter-button" >Click me</button></p>
 					</div>
 				</aside>
 
@@ -108,32 +105,30 @@
 					</div>
 					<!-- /promo -->
 					
-					<div class="row">
-						<div class="col-12"><h2 class="title_small">Restoranlar</h2></div>
-                        <div class="row">
-                            {% for restaurant in restaurants %}
-                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
-                                <div class="strip">
-                                    <figure>
-                                        <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
-                                        <a href="detail-restaurant.html" class="strip_info">
-                                            <small>{{ restaurant.category }}</small>
-                                            <div class="item_title">
-                                                <h3>{{ restaurant.name }}</h3>
-                                                <small>{{ restaurant.address }}</small>
-                                            </div>
-                                        </a>
-                                    </figure>
-                                    <ul>
-                                        <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
-                                         <li>
-                                             <div class="score"><strong>{{ restaurant.score }}</strong></div>
-                                         </li>
-                                     </ul>
-                                </div>
+                    <div class="row" id="restaurant-list">
+                        {% for restaurant in restaurants %}
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                            <div class="strip">
+                                <figure>
+                                    <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
+                                    <a href="detail-restaurant.html" class="strip_info">
+                                        <small>{{ restaurant.category }}</small>
+                                        <div class="item_title">
+                                            <h3>{{ restaurant.name }}</h3>
+                                            <small>{{ restaurant.address }}</small>
+                                        </div>
+                                    </a>
+                                </figure>
+                                <ul>
+                                    <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
+                                     <li>
+                                         <div class="score"><strong>{{ restaurant.score }}</strong></div>
+                                     </li>
+                                 </ul>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
+                    </div>
 						<!-- /strip grid -->
 
 						<!-- /strip grid -->
@@ -141,7 +136,6 @@
 					</div>
 					<!-- /row -->
 					<div class="pagination_fg">
-					  <a href="#">&laquo;</a>
 					</div>
 				</div>
 				<!-- /col -->

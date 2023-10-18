@@ -31,6 +31,8 @@ urlpatterns = [
 
     path('admin/', admin.site.urls),
     path('', include('fooddelivery.urls')),
+    path('', include('restaurants.urls')),
+
 ]
 
 
