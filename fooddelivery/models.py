@@ -1,10 +1,25 @@
 from re import A
 from django.db import models
 from autoslug import AutoSlugField
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from decimal import Decimal
 from .validators import phone_number_validator
+from restaurants.models import *
+
+
+
+class Menu_Category (models.Model):
+    name = models.CharField(max_length=150, unique=True, null=True)
+
+    class Meta:
+        app_label = 'fooddelivery'
+
+    class Meta:
+        db_table = 'menu_category'
+        verbose_name = 'Menu Category'
+        verbose_name_plural = 'Menu Categories'
+
 
 
 class Product(models.Model):
@@ -12,6 +27,7 @@ class Product(models.Model):
     name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     description = models.TextField()
+    category = models.ForeignKey('Menu_Category', on_delete=models.CASCADE, related_name='menu', blank=True, null=True)     
     product_image = models.ImageField(upload_to='products/img', null=True, blank=True)
     quantity = models.PositiveIntegerField()
     is_active = models.BooleanField(default=True)
