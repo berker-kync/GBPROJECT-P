@@ -1,68 +1,11 @@
-from re import A
 from django.db import models
 from autoslug import AutoSlugField
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from decimal import Decimal
 from .validators import phone_number_validator
 from restaurants.models import *
 
-
-
-class Menu_Category (models.Model):
-    name = models.CharField(max_length=150, unique=True, null=True)
-
-    class Meta:
-        app_label = 'fooddelivery'
-
-    class Meta:
-        db_table = 'menu_category'
-        verbose_name = 'Menu Category'
-        verbose_name_plural = 'Menu Categories'
-
-
-
-class Product(models.Model):
-    name = models.CharField(max_length=255)
-    name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
-    description = models.TextField()
-    category = models.ForeignKey('Menu_Category', on_delete=models.CASCADE, related_name='menu', blank=True, null=True)     
-    product_image = models.ImageField(upload_to='products/img', null=True, blank=True)
-    quantity = models.PositiveIntegerField()
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'product'
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
-
-    def __str__(self):
-        return f'{self.name} - ₺{self.price}'
-
-
-# cart model
-
-class ShoppingCart(models.Model):
-    session_key = models.CharField(max_length=255, null=True, blank=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=1)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'shopping_cart'
-        verbose_name = 'Shopping Cart'
-        verbose_name_plural = 'Shopping Carts'
-
-    def __str__(self):
-        return f'{self.product.name} - {self.quantity}'
-
-    @property
-    def total_price(self):
-        return self.product.price * self.quantity
 
 
 # customer model
@@ -123,6 +66,59 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.name} - {self.email}'
+
+class Menu_Category (models.Model):
+    name = models.CharField(max_length=150, unique=True, null=True)
+
+    class Meta:
+        app_label = 'fooddelivery'
+
+    class Meta:
+        db_table = 'menu_category'
+        verbose_name = 'Menu Category'
+        verbose_name_plural = 'Menu Categories'
+
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    description = models.TextField()
+    category = models.ForeignKey(Menu_Category, on_delete=models.CASCADE, related_name='menu', blank=True, null=True)     
+    product_image = models.ImageField(upload_to='products/img', null=True, blank=True)
+    quantity = models.PositiveIntegerField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'product'
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+
+    def __str__(self):
+        return f'{self.name} - ₺{self.price}'
+
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts')
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'cart'
+        verbose_name = 'Cart'
+        verbose_name_plural = 'Carts'
+    
+    def __str__(self):
+        return f'{self.customer.name} - {self.quantity}'
+    
+    @property
+    def total_price(self):
+        return self.product.price * self.quantity
 
 
 class Order(models.Model):

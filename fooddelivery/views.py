@@ -1,13 +1,10 @@
-from math import e
-from os import name
-import time
+from calendar import c
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, ShoppingCart, Order, OrderItem, Customer, Restaurant, Restaurant_Category
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from .models import Product, Cart, Order, OrderItem
+from django.http import HttpRequest, JsonResponse
 from django.contrib import messages
 from .forms import OrderForm, RegisterForm, LoginForm
 from django.db import transaction  # İşlemleri atomik bir şekilde yürütmek için
-
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 
@@ -74,41 +71,23 @@ def custom_404(request, exception):
 
 
 
+@login_required  # Requires the user to be authenticated
 def detailRestaurant(request):
-
     if request.method == "POST":
         return render(request, 'order.html')
 
     products = Product.objects.all()
-    cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
+    cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
     context = {
         'products': products,
         'cart_items': cart_items,
         'total_price': total_price,
     }
-    return render(request, 'detail-restaurant.html',context)
-
-     
-def RestaurantList(request):
-    restaurants = Restaurant.objects.all()
-    restaurant_categories = Restaurant_Category.objects.all()
-    
-    highly_rated_restaurants_9plus = restaurants.filter(score__gte=9.0).count()
-    highly_rated_restaurants_8plus = restaurants.filter(score__gte=8.0).count()
-    highly_rated_restaurants_7plus = restaurants.filter(score__gte=7.0).count()
-    highly_rated_restaurants_6plus = restaurants.filter(score__gte=6.0).count()
-    
-    return render(request, 'restaurant-list.html', {
-        'restaurants': restaurants,
-        'restaurant_categories': restaurant_categories,
-        'highly_rated_restaurants_9plus': highly_rated_restaurants_9plus,
-        'highly_rated_restaurants_8plus': highly_rated_restaurants_8plus,
-        'highly_rated_restaurants_7plus': highly_rated_restaurants_7plus,
-        'highly_rated_restaurants_6plus': highly_rated_restaurants_6plus,
-    })
+    return render(request, 'detail-restaurant.html', context)
 
 
+@login_required  # Requires the user to be authenticated
 def add_to_cart(request, product_id):
     if request.method == "POST":
         try:
@@ -118,65 +97,64 @@ def add_to_cart(request, product_id):
             if product.quantity < selected_quantity:
                 return JsonResponse({"success": False, "message": "Insufficient product quantity."})
 
-            # Create a session if it doesn't exist
-            if not request.session.session_key:
-                request.session.save()
-
             # Check if the product is in the cart already
-            cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, product=product).first()
-            
+            cart_item = Cart.objects.filter(customer=request.user, product=product).first()
+
             if cart_item:
-                # Update the quantity
+                # Update the quantity of the existing cart item
                 cart_item.quantity += selected_quantity
                 cart_item.save()
             else:
                 # Create a new cart item
-                ShoppingCart.objects.create(
+                Cart.objects.create(
+                    customer=request.user,
                     product=product,
-                    quantity=selected_quantity,
-                    session_key=request.session.session_key
+                    quantity=selected_quantity
                 )
             
-            return JsonResponse({"success": True, "message": "Product added to cart."})
+            return JsonResponse({"success": True, "message": "Product added to cart"})
         
         except (Product.DoesNotExist, ValueError):
             return JsonResponse({"success": False, "message": "Product not found or invalid data."})
 
+
+@login_required  # Requires the user to be authenticated
 def remove_from_cart(request, id):
-    if request.method == "POST":
-        try:
+    try:
+        # Find the cart item by its ID, associated with the authenticated user (Customer)
+        cart_item = Cart.objects.filter(customer=request.user, id=id).first()
 
-            cart_item = ShoppingCart.objects.filter(session_key=request.session.session_key, id=id).first()
-
-            if cart_item:
-                cart_item.delete()  
-            else:
-                return JsonResponse({"success": False, "message": "Product not found in the cart."})
-
+        if cart_item:
+            # Remove the cart item
+            cart_item.delete()
             return JsonResponse({"success": True, "message": "Product removed from cart."})
+        else:
+            return JsonResponse({"success": False, "message": "Product not found in the cart."})
 
-        except (Product.DoesNotExist, ValueError):
-            return JsonResponse({"success": False, "message": "Product not found or invalid data."})
+    except (Cart.DoesNotExist, ValueError):
+        return JsonResponse({"success": False, "message": "Cart item not found or invalid data."})
 
 
+
+@login_required  # Requires the user to be authenticated
 def order(request):
     form = OrderForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-        cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
+        cart_items = Cart.objects.filter(customer=request.user)
 
-        # Stokta yeterli ürün olup olmadığını kontrol edelim
+        # Check if there is enough stock for each product in the cart
         for item in cart_items:
             if item.product.quantity < item.quantity:
-                messages.error(request, f"{item.product.name} için stokta yeterli ürün yok.")
-                return redirect('cart')  # Veya ilgili URL'ye yönlendirme yapabilirsiniz
+                messages.error(request, f"{item.product.name} doesn't have enough stock.")
+                return redirect('cart')  # Redirect to the cart page or any other appropriate action
 
-        # Eğer yeterli stok varsa siparişi tamamla
-        with transaction.atomic():  # Bu bloktaki işlemlerin tümünün başarılı olmasını sağlar
-            # Yeni bir müşteri oluştur
-            customer = form.save()
+        # If there is enough stock, complete the order
+        with transaction.atomic():  # Ensures that all operations within this block are successful
+            # Get the authenticated user (Customer) for the order
+            customer = request.user
 
-            # Yeni bir sipariş oluştur
+            # Create a new order
             order = Order.objects.create(
                 customer=customer,
                 shipping_address=customer.address,
@@ -184,7 +162,7 @@ def order(request):
                 status='pending'
             )
 
-            # Sipariş ürünlerini oluştur
+            # Create order items
             for item in cart_items:
                 OrderItem.objects.create(
                     order=order,
@@ -192,20 +170,22 @@ def order(request):
                     quantity=item.quantity
                 )
 
-                # Ürün stok adedini güncelle
+                # Update the product's stock quantity
                 item.product.quantity -= item.quantity
                 item.product.save()
 
-            # Sepeti temizle
+            # Clear the cart
             cart_items.delete()
 
             messages.success(request, 'Your order has been received.')
             return redirect('confirm')
 
-    cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
+    cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
     context = {'cart_items': cart_items, 'total_price': total_price, 'form': form}
     return render(request, 'order.html', context)
+
+
 
 
 def confirmorder(request):

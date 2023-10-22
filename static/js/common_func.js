@@ -282,6 +282,7 @@ $.ajaxSetup({
 	});
 
 
+
 	// Modal images
 	$('.magnific-gallery').each(function() {
 	    $(this).magnificPopup({
