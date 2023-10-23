@@ -4,7 +4,6 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from decimal import Decimal
 from .validators import phone_number_validator
-from restaurants.models import *
 
 
 
@@ -40,13 +39,13 @@ class CustomerManager(BaseUserManager):
         customer_obj.save(using=self._db)
         return customer_obj
 
+
+
 class Customer(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=100, null=False, blank=False)
     email = models.EmailField(null=False, blank=False, unique=True)
-    phone = models.CharField(max_length=20, null=True, blank=False, validators=[phone_number_validator])
-    address = models.TextField(null=False, blank=False)
-    city = models.CharField(max_length=100, null=False, blank=False)
-    postal_code = models.CharField(max_length=10, null=False, blank=False)
+    phone = models.CharField(max_length=10, null=True, blank=False, validators=[phone_number_validator])
+    address = models.ManyToManyField('Adress', related_name='customers', blank=True)
     is_staff = models.BooleanField(default=False)
 
     objects = CustomerManager()
@@ -102,7 +101,7 @@ class Product(models.Model):
 
 
 class Cart(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='carts')
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name='carts')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts')
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -120,12 +119,34 @@ class Cart(models.Model):
     def total_price(self):
         return self.product.price * self.quantity
 
+class Adress(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_addresses')
+    name = models.CharField(max_length=100, null=False, blank=False)
+    phone = models.CharField(max_length=10, null=True, blank=False, validators=[phone_number_validator])
+    street = models.TextField(null=False, blank=False)
+    apartment = models.TextField(null=False, blank=False)
+    door_number = models.TextField(null=False, blank=False)
+    city = models.CharField(max_length=100, null=False, blank=False)
+    postal_code = models.CharField(max_length=10, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'adress'
+        verbose_name = 'Adress'
+        verbose_name_plural = 'Adresses'
+
+    def __str__(self):
+        return f'{self.name} - {self.customer.name}'
+
+
 
 class Order(models.Model):
     STATUS = (
         ('pending', 'Pending'),
         ('approved', 'Approved'),
         ('rejected', 'Rejected'),
+        ('delivered', 'Delivered'),
     )
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")  # Hangi kullanıcının siparişi olduğu
@@ -133,7 +154,7 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     status = models.CharField(max_length=10, choices=STATUS, default='pending')
     # is_paid = models.BooleanField(default=False)  # Ödeme durumu
-    shipping_address = models.TextField()  # Gönderim adresi
+    shipping_address = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orders_adresses')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -144,16 +165,17 @@ class Order(models.Model):
 
     def __str__(self):
         return f"Order #{self.id} - {self.customer.name}"
-    
+
     @property
     def total_item(self):
         return self.order_items.count()
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitems')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
+    shipping = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orderitems_adresses')
 
     class Meta:
         db_table = 'order_item'

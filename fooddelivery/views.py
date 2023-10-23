@@ -1,10 +1,10 @@
-from calendar import c
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, Cart, Order, OrderItem
+from .models import Adress, Product, Cart, Order, OrderItem
 from django.http import HttpRequest, JsonResponse
+from django.db import transaction
+from django.db.utils import IntegrityError
 from django.contrib import messages
 from .forms import OrderForm, RegisterForm, LoginForm
-from django.db import transaction  # İşlemleri atomik bir şekilde yürütmek için
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 
@@ -48,12 +48,11 @@ def register(request):
     if request.method == "POST" and form.is_valid():
         form.save()
         messages.success(request, 'Your account has been created.')
-        # if you want to login response after register
-        return HttpRequest('/login')
+        return redirect('login')
 
     return render(request, 'register.html', {'form': form})
 
-@login_required
+
 def about(request):
     return render(request, 'about.html')
 
@@ -71,7 +70,7 @@ def custom_404(request, exception):
 
 
 
-@login_required  # Requires the user to be authenticated
+@login_required(login_url='/login')  # Requires the user to be authenticated
 def detailRestaurant(request):
     if request.method == "POST":
         return render(request, 'order.html')
@@ -87,7 +86,7 @@ def detailRestaurant(request):
     return render(request, 'detail-restaurant.html', context)
 
 
-@login_required  # Requires the user to be authenticated
+@login_required(login_url='/login')  # User login olmasını saglar.
 def add_to_cart(request, product_id):
     if request.method == "POST":
         try:
@@ -118,7 +117,7 @@ def add_to_cart(request, product_id):
             return JsonResponse({"success": False, "message": "Product not found or invalid data."})
 
 
-@login_required  # Requires the user to be authenticated
+@login_required(login_url='/login')  # Requires the user to be authenticated
 def remove_from_cart(request, id):
     try:
         # Find the cart item by its ID, associated with the authenticated user (Customer)
@@ -136,7 +135,7 @@ def remove_from_cart(request, id):
 
 
 
-@login_required  # Requires the user to be authenticated
+@login_required(login_url='/login')
 def order(request):
     form = OrderForm(request.POST or None)
 
@@ -147,38 +146,63 @@ def order(request):
         for item in cart_items:
             if item.product.quantity < item.quantity:
                 messages.error(request, f"{item.product.name} doesn't have enough stock.")
-                return redirect('cart')  # Redirect to the cart page or any other appropriate action
+                return redirect('cart')
 
-        # If there is enough stock, complete the order
-        with transaction.atomic():  # Ensures that all operations within this block are successful
-            # Get the authenticated user (Customer) for the order
-            customer = request.user
+        try:
+            with transaction.atomic():
+                # Get the authenticated user (Customer) for the order
+                customer = request.user
 
-            # Create a new order
-            order = Order.objects.create(
-                customer=customer,
-                shipping_address=customer.address,
-                total_price=sum(item.total_price for item in cart_items),
-                status='pending'
-            )
+                # if shipping address exists don't create a new one
+                shipping_address = Adress.objects.filter(customer=customer).first()
 
-            # Create order items
-            for item in cart_items:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item.product,
-                    quantity=item.quantity
+                if not shipping_address:
+                    # Create a new shipping address
+                    shipping_address = Adress.objects.create(
+                        customer=customer,
+                        name=form.cleaned_data.get('name'),
+                        phone=form.cleaned_data.get('phone'),
+                        street=form.cleaned_data.get('street'),
+                        apartment=form.cleaned_data.get('apartment'),
+                        door_number=form.cleaned_data.get('door_number'),
+                        city=form.cleaned_data.get('city'),
+                        postal_code=form.cleaned_data.get('postal_code')
+                    )
+
+                # Create a new order
+                order = Order.objects.create(
+                    customer=customer,
+                    shipping_address=shipping_address,
+                    total_price=sum(item.total_price for item in cart_items),
+                    status='pending'
                 )
 
+                # Create order items
+                for item in cart_items:
+                    OrderItem.objects.create(
+                        order=order,
+                        product=item.product,
+                        quantity=item.quantity,
+                        shipping_id=shipping_address.id
+                    )
+
                 # Update the product's stock quantity
-                item.product.quantity -= item.quantity
-                item.product.save()
+                for item in cart_items:
+                    item.product.quantity -= item.quantity
+                    item.product.save()
 
-            # Clear the cart
-            cart_items.delete()
+                # Clear the cart
+                cart_items.delete()
 
-            messages.success(request, 'Your order has been received.')
-            return redirect('confirm')
+                messages.success(request, 'Your order has been received.')
+                return redirect('confirm')
+        except IntegrityError as e:
+            # Rollback the transaction in case of an error
+            transaction.set_rollback(True)
+
+            # Display an error message to the user
+            messages.error(request, f"An error occurred while processing your order: {e}")
+            return redirect('order')
 
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)

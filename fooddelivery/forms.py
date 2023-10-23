@@ -1,44 +1,45 @@
-from cProfile import label
-from collections.abc import Mapping
-from os import name
-from typing import Any
+from unittest.util import _MAX_LENGTH
 from django import forms
-from django.forms.utils import ErrorList
-from .models import Customer
+from .models import Adress, Customer
 from .validators import phone_number_validator
 from django.contrib.auth.forms import UserCreationForm
 
 class OrderForm(forms.ModelForm):
     class Meta:
-        model = Customer
-        fields = ['name', 'email', 'phone', 'address', 'city', 'postal_code']
+        model = Adress
+        fields = ['name', 'phone', 'street', 'apartment', 'door_number', 'city', 'postal_code']
 
-    phone = forms.CharField(max_length=20, validators=[phone_number_validator])
-    postal_code = forms.CharField(max_length=5, min_length=5)
-    name = forms.CharField(min_length=3, max_length=50)
-    address = forms.CharField(min_length=15, max_length=150)
+    name = forms.CharField(label="Adres İsmi", min_length=2, max_length=50)
+    phone = forms.CharField(label="Telefon", max_length=10, validators=[phone_number_validator])
+    street = forms.CharField(label="Sokak", min_length=5, max_length=60)
+    apartment = forms.CharField(label="Apartman ve Apt. No", max_length=20)
+    door_number = forms.CharField(label="İç Kapı No", max_length=3)
+    city = forms.CharField(label="Şehir", max_length=20)
+    postal_code = forms.CharField(label='Posta Kodu', min_length=5, max_length=5)
+
 
 class RegisterForm(UserCreationForm):
     class Meta:
         model = Customer
-        fields = ['name', 'email', 'phone', 'address', 'city', 'postal_code']
+        fields = ['name', 'email', 'phone']
 
     
     name = forms.CharField(label="Ad Soyad", min_length=3, max_length=50)
     email = forms.EmailField(label="Email", max_length=100)
     phone = forms.CharField(label="Telefon" ,max_length=10, validators=[phone_number_validator])
-    address = forms.CharField(label="Adres" ,min_length=15, max_length=150)
-    city = forms.CharField(label="Şehir", max_length=20)
-    postal_code = forms.CharField(label="Posta Kodu", max_length=5, min_length=5)
     
     widgets = {
         'name': forms.TextInput(attrs={'class': 'form-control'}),
         'email': forms.EmailInput(attrs={'class': 'form-control'}),
         'phone': forms.TextInput(attrs={'class': 'form-control'}),
-        'address': forms.TextInput(attrs={'class': 'form-control'}),
-        'city': forms.TextInput(attrs={'class': 'form-control'}),
-        'postal_code': forms.TextInput(attrs={'class': 'form-control'}),
     }
+
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     address = cleaned_data.get('address')
+    
+    # if not address:
+    #     raise forms.ValidationError("Please provide your address.")
 
 
 class LoginForm(forms.Form):
