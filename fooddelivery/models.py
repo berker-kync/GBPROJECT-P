@@ -20,6 +20,9 @@ class Menu_Category (models.Model):
         verbose_name = 'Menu Category'
         verbose_name_plural = 'Menu Categories'
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 
 class Product(models.Model):
@@ -41,6 +44,9 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.name} - ₺{self.price}'
+    
+
+
 
 
 # cart model
@@ -147,3 +153,34 @@ class OrderItem(models.Model):
     @property
     def total_item_price(self):
         return self.product.price * self.quantity
+    
+
+
+
+
+
+
+
+class Menu(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menus')
+    name = models.CharField(max_length=150)
+    price = models.DecimalField(null=True, max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    description = models.TextField(null=True)
+    category = models.ForeignKey(Menu_Category, on_delete=models.CASCADE, related_name='menu_items', null=True)  
+    quantity = models.PositiveIntegerField(null=True)
+    product_image = models.ImageField(upload_to='products/img', null=True, blank=True)
+    is_active = models.BooleanField(default=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=False, null=True)
+    updated_at = models.DateTimeField(auto_now=False, null=True)
+
+    class Meta:
+        db_table = 'menu'
+        verbose_name = 'Menu'
+        verbose_name_plural = 'Menus'
+
+
+    def __str__(self):
+        return f"{self.category} - {self.name}"
+    
+
+

@@ -1,7 +1,7 @@
 from math import e
 from os import name
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, ShoppingCart, Order, OrderItem, Restaurant, Restaurant_Category
+from .models import Product, ShoppingCart, Order, OrderItem, Restaurant, Restaurant_Category, Menu
 from django.http import JsonResponse
 from django.contrib import messages
 from .forms import OrderForm
@@ -31,20 +31,23 @@ def custom_404(request, exception):
 
 
 
-def detailRestaurant(request):
 
+def detailRestaurant(request, name_slug):
     if request.method == "POST":
         return render(request, 'order.html')
 
-    products = Product.objects.all()
+    restaurant = Restaurant.objects.get(name_slug=name_slug)
+    food_items = Menu.objects.filter(restaurant=restaurant)
     cart_items = ShoppingCart.objects.filter(session_key=request.session.session_key)
     total_price = sum(item.total_price for item in cart_items)
     context = {
-        'products': products,
+        'food_items': food_items,
+        'restaurant': restaurant,
         'cart_items': cart_items,
         'total_price': total_price,
     }
-    return render(request, 'detail-restaurant.html',context)
+    return render(request, 'detail-restaurant.html', context)
+
 
     
 

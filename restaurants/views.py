@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from .models import Restaurant, Restaurant_Category
 from django.db.models import Count
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
+
 
 def panel(request):
     return render(request, 'restaurants-panel.html')
@@ -36,6 +37,9 @@ def filter_restaurants(request):
     filtered_data = [{'name': restaurant.name, 'category': restaurant.category.name, 'score': restaurant.score} for restaurant in filtered_restaurants]
 
     return JsonResponse({'filtered_restaurants': filtered_restaurants})
+
+
+
 
 
 

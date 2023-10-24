@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Order, Customer, Restaurant, Restaurant_Category, Menu_Category
+from .models import Product, Order, Customer, Restaurant, Restaurant_Category, Menu_Category, Menu
 
 
 class CustomerAdmin(admin.ModelAdmin):
@@ -21,3 +21,5 @@ admin.site.register(Product)
 admin.site.register(Restaurant)
 admin.site.register(Restaurant_Category)
 admin.site.register(Menu_Category)
+admin.site.register(Menu)
+
