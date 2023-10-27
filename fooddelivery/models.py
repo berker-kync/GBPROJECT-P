@@ -6,7 +6,6 @@ from decimal import Decimal
 from .validators import phone_number_validator
 
 
-
 # customer model
 
 class CustomerManager(BaseUserManager):
@@ -63,7 +62,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return self.is_staff
 
-    def __str__(self):
+    def _str_(self):
         return f'{self.name} - {self.email}'
 
 class Menu_Category (models.Model):
@@ -144,6 +143,89 @@ class Adress(models.Model):
 
 
 
+# menu category model
+
+class Menu_Category (models.Model):
+    name = models.CharField(max_length=150, unique=True, null=True)
+
+    class Meta:
+        app_label = 'fooddelivery'
+
+    class Meta:
+        db_table = 'menu_category'
+        verbose_name = 'Menu Category'
+        verbose_name_plural = 'Menu Categories'
+
+    def __str__(self):
+        return f'{self.name}'
+
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
+    price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    description = models.TextField()
+    category = models.ForeignKey(Menu_Category, on_delete=models.CASCADE, related_name='menu', blank=True, null=True)     
+    product_image = models.ImageField(upload_to='products/img', null=True, blank=True)
+    quantity = models.PositiveIntegerField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'product'
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+
+    def __str__(self):
+        return f'{self.name} - ₺{self.price}'
+    
+
+
+# cart model
+
+class Cart(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name='carts')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts')
+    quantity = models.PositiveIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'cart'
+        verbose_name = 'Cart'
+        verbose_name_plural = 'Carts'
+    
+    def _str_(self):
+        return f'{self.customer.name} - {self.quantity}'
+    
+    @property
+    def total_price(self):
+        return self.product.price * self.quantity
+
+class Adress(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_addresses')
+    name = models.CharField(max_length=100, null=False, blank=False)
+    phone = models.CharField(max_length=10, null=True, blank=False, validators=[phone_number_validator])
+    street = models.TextField(null=False, blank=False)
+    apartment = models.TextField(null=False, blank=False)
+    door_number = models.TextField(null=False, blank=False)
+    city = models.CharField(max_length=100, null=False, blank=False)
+    postal_code = models.CharField(max_length=10, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'adress'
+        verbose_name = 'Adress'
+        verbose_name_plural = 'Adresses'
+
+    def _str_(self):
+        return f'{self.name} - {self.customer.name}'
+
+
+
 class Order(models.Model):
     STATUS = (
         ('pending', 'Pending'),
@@ -166,7 +248,7 @@ class Order(models.Model):
         verbose_name = 'Order'
         verbose_name_plural = 'Orders'
 
-    def __str__(self):
+    def _str_(self):
         return f"Order #{self.id} - {self.customer.name}"
 
     @property
@@ -185,9 +267,36 @@ class OrderItem(models.Model):
         verbose_name = 'Order Item'
         verbose_name_plural = 'Order Items'
 
-    def __str__(self):
+    def _str_(self):
         return f"{self.product.name} - {self.quantity}"
 
     @property
     def total_item_price(self):
         return self.product.price * self.quantity
+    
+
+
+
+class Menu(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menus')
+    name = models.CharField(max_length=150)
+    price = models.DecimalField(null=True, max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    description = models.TextField(null=True)
+    category = models.ForeignKey(Menu_Category, on_delete=models.CASCADE, related_name='menu_items')  
+    quantity = models.PositiveIntegerField()
+    product_image = models.ImageField(upload_to='products/img', null=False, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=False)
+    updated_at = models.DateTimeField(auto_now=False)
+
+    class Meta:
+        db_table = 'menu'
+        verbose_name = 'Menu'
+        verbose_name_plural = 'Menus'
+
+
+    def __str__(self):
+        return f"{self.category} - {self.name}"
+    
+
+

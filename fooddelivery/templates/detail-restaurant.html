@@ -34,16 +34,19 @@
 
 	<main>
 
-		<div class="hero_in detail_page background-image" data-background="url(https://img.interempresas.net/fotos/2535345.jpeg)">
-			<div class="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-				
+		<div class="hero_in detail_page background-image" data-backgroung="{{ restaurant.restaurant_image.url }}">
+			<div class="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">				
 				<div class="container">
 					<div class="main_info">
 						<div class="row">
 							<div class="col-xl-4 col-lg-5 col-md-6">
-								<div class="head"><div class="score"><span>Superb<em>350 Yorum</em></span><strong>8.9</strong></div></div>
-								<h1>Pizzeria da Alfredo</h1>
-								ITALIAN - 27 Old Gloucester St, 4530 - <a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x47e66e1de36f4147:0xb6615b4092e0351f!2sAssistance+Publique+-+H%C3%B4pitaux+de+Paris+(AP-HP)+-+Si%C3%A8ge!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="blank">Get directions</a>
+								<div class="head"><div class="score">
+									<span> {{restaurant.category}} Mutfağı
+										<!-- <em>350 Yorum</em> -->
+									</span>
+									<strong>{{restaurant.score}}</strong></div></div>
+								<h1>{{restaurant.name}}</h1>
+								{{restaurant.address}} - <a href="https://www.google.com/maps/dir//Assistance+%E2%80%93+H%C3%B4pitaux+De+Paris,+3+Avenue+Victoria,+75004+Paris,+Francia/@48.8606548,2.3348734,14z/data=!4m15!1m6!3m5!1s0x47e66e1de36f4147:0xb6615b4092e0351f!2sAssistance+Publique+-+H%C3%B4pitaux+de+Paris+(AP-HP)+-+Si%C3%A8ge!8m2!3d48.8568376!4d2.3504305!4m7!1m0!1m5!1m1!1s0x47e67031f8c20147:0xa6a9af76b1e2d899!2m2!1d2.3504327!2d48.8568361" target="blank">Get directions</a>
 							</div>
 							<div class="col-xl-8 col-lg-7 col-md-6 position-relative">
 								<div class="buttons clearfix">
@@ -70,7 +73,7 @@
 		            <!-- <li><a href="#section-2"></a></li>
 		            <li><a href="#section-3"></a></li>
 		            <li><a href="#section-4"></a></li> -->
-		            <li><a href="#section-5"><i class="icon_chat_alt"></i>Yorumlar</a></li>
+		            <!-- <li><a href="#section-5"><i class="icon_chat_alt"></i></a></li> -->
 		        </ul>
 		    </div>
 		    <span></span>
@@ -81,22 +84,22 @@
 		    <div class="container margin_detail">
 		        <div class="row">
 		            <div class="col-lg-8 list_menu">
-		                <section id="section-1">
-		                    <h4>Menü</h4>
-		                    <div class="row">
-								{% for product in products %}
-		                        <div class="col-md-6">
-		                            <a class="menu_item modal_dialog" data-productid="{{ product.id }}" href="#modal-dialog">
-		                                <figure><img src="{{product.product_image.url}}" data-src="{{product.product_image.url}}" alt="thumb" class="lazy"></figure>
-		                                <h3>{{product.name}}</h3>
-		                                <p>{{product.description}}</p>
-		                                <strong>₺{{product.price}}</strong>
-		                            </a>
-		                        </div>
+						<section id="section-1">
+							<h4>Menü</h4>
+							<div class="row">
+								{% for food_item in food_items %}
+								<div class="col-md-6">
+									<a class="menu_item modal_dialog" data-productid="{{ food_item.id }}" href="#modal-dialog">
+										<figure><img src="{{ food_item.product_image.url }}" data-src="{{ food_item.product_image.url }}" alt="thumb" class="lazy"></figure>
+										<h3>{{ food_item.name }}</h3>
+										<p>{{ food_item.description }}</p>
+										<strong>₺{{ food_item.price }}</strong>
+									</a>
+								</div>
 								{% endfor %}
-		                    </div>
-		                    <!-- /row -->
-		                </section>
+							</div>
+						</section>
+
 
 		            </div>
 		            <!-- /col -->

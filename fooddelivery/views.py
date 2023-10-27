@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Adress, Product, Cart, Order, OrderItem, Customer
+from .models import Adress, Product, Cart, Order, OrderItem, Customer, Restaurant, Menu
 from django.http import HttpRequest, JsonResponse
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -7,6 +7,7 @@ from django.contrib import messages
 from .forms import OrderForm, RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+
 
 
 def index(request):
@@ -78,16 +79,21 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
+    
 @login_required(login_url='/login')  # Requires the user to be authenticated
-def detailRestaurant(request):
+def detailRestaurant(request, name_slug):
     if request.method == "POST":
         return render(request, 'order.html')
 
     products = Product.objects.all()
+    restaurant = Restaurant.objects.get(name_slug=name_slug)
+    food_items = Menu.objects.filter(restaurant=restaurant)
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
     context = {
         'products': products,
+        'food_items': food_items,
+        'restaurant': restaurant,
         'cart_items': cart_items,
         'total_price': total_price,
     }

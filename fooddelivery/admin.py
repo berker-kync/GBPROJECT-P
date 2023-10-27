@@ -11,7 +11,7 @@ class CustomerAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ('id', 'customer', 'total_price', 'status', 'created_at', 'updated_at')
     list_filter = ('status', 'created_at', 'updated_at')
-    search_fields = ('customer__name', 'customer__email')
+    search_fields = ('customer_name', 'customer_email')
     list_editable = ('status',)
 
 class AdressAdmin(admin.ModelAdmin):
@@ -27,3 +27,5 @@ admin.site.register(Adress)
 admin.site.register(Restaurant)
 admin.site.register(Restaurant_Category)
 admin.site.register(Menu_Category)
+admin.site.register(Menu)
+
