@@ -8,7 +8,7 @@ from decimal import Decimal
 
 
 class Restaurant_Category (models.Model):
-    name = models.CharField(max_length=150, unique=True, null=True)
+    name = models.CharField(max_length=150, unique=True)
 
     class Meta:
         app_label = 'fooddelivery'
@@ -25,16 +25,16 @@ class Restaurant_Category (models.Model):
 class Restaurant(models.Model):
     name = models.CharField(max_length=150)
     name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
-    category = models.ForeignKey(Restaurant_Category, on_delete=models.CASCADE, related_name='restaurants', blank=True, null=True)
+    category = models.ForeignKey(Restaurant_Category, on_delete=models.CASCADE, related_name='restaurants')
     score = models.DecimalField(max_digits=3, decimal_places=1, validators=[MinValueValidator(Decimal('0.1')), MaxValueValidator(Decimal('10.0'))])
-    restaurant_image = models.ImageField(upload_to='restaurant/img', null=True, blank=True)
+    restaurant_image = models.ImageField(upload_to='restaurant/img')
     address = models.CharField(max_length=255)
     province = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=10, validators=[RegexValidator(regex='^\d{10}$')], blank=True)
+    phone_number = models.CharField(max_length=10, validators=[RegexValidator(regex='^\d{10}$')])
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     payment_methods = models.CharField(max_length=255)
-    opening_hour = models.TimeField(null=True)
-    closing_hour = models.TimeField(null=True)
+    opening_hour = models.TimeField()
+    closing_hour = models.TimeField()
     minimum_order_amount = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     is_open = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)

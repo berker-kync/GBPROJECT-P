@@ -85,6 +85,9 @@ DATABASES = {
     }
 }
 
+# Change 'fooddelivery' to the app name where your 'Customer' model is defined
+AUTH_USER_MODEL = 'fooddelivery.Customer'
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
