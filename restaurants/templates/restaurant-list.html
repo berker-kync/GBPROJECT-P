@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 
+
+
 {% block extra_css %}    
 <!-- SPECIFIC CSS -->
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
@@ -42,22 +44,18 @@
                                 <ul>
                                     {% for restaurant_category in restaurant_categories %}
                                     <li>
-                                        <label class="container_check">{{ restaurant_category.name }} 
-                                            <small>
-                                            {% for restaurant in restaurants %}
-                                            {% if restaurant.category == restaurant_category %}
-                                            {% if not forloop.first %}, {% endif %}{{ forloop.counter }}
-                                            {% endif %}
-                                            {% endfor %}
-                                            </small>
-                                            <input type="checkbox">
+                                        <label class="container_check">
+                                            <input type="checkbox" class="category-checkbox" data-category-id="{{ restaurant_category.id }}" data-category-name="{{ restaurant_category.name }}">
+                                            {{ restaurant_category.name }}
+                                            <small>{{ restaurant_category.restaurant_count }}</small>
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     {% endfor %}
                                 </ul>
-                            </div>
+                            </div>                            
                         </div>
+                        <p><button id="filter-button">Filtre uygula</button></p>
 						<!-- /filter_type -->
 						<div class="filter_type last">
                             <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Puan</a></h4>
@@ -66,28 +64,28 @@
                                     <li>
                                         <label class="container_check">Efsane 9+
                                             <small>{{ highly_rated_restaurants_9plus }}</small>
-                                            <input type="checkbox">
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li>
                                         <label class="container_check">Harika 8+
                                             <small>{{ highly_rated_restaurants_8plus }}</small>
-                                            <input type="checkbox">
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li>
                                         <label class="container_check">İyi 7+
                                             <small>{{ highly_rated_restaurants_7plus }}</small>
-                                            <input type="checkbox">
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
                                     <li>
                                         <label class="container_check">Fena Değil 6+
                                             <small>{{ highly_rated_restaurants_6plus }}</small>
-                                            <input type="checkbox">
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
                                             <span class="checkmark"></span>
                                         </label>
                                     </li>
@@ -95,7 +93,7 @@
                             </div>
                         </div>
 						<!-- /filter_type -->
-						<p><a href="#0" class="btn_1 outline full-width">Filter</a></p>
+                        <p><button id="" >Tıkla banağh</button></p>
 					</div>
 				</aside>
 
@@ -108,32 +106,30 @@
 					</div>
 					<!-- /promo -->
 					
-					<div class="row">
-						<div class="col-12"><h2 class="title_small">Restoranlar</h2></div>
-                        <div class="row">
-                            {% for restaurant in restaurants %}
-                            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
-                                <div class="strip">
-                                    <figure>
-                                        <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
-                                        <a href="detail-restaurant.html" class="strip_info">
-                                            <small>{{ restaurant.category }}</small>
-                                            <div class="item_title">
-                                                <h3>{{ restaurant.name }}</h3>
-                                                <small>{{ restaurant.address }}</small>
-                                            </div>
-                                        </a>
-                                    </figure>
-                                    <ul>
-                                        <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
-                                         <li>
-                                             <div class="score"><strong>{{ restaurant.score }}</strong></div>
-                                         </li>
-                                     </ul>
-                                </div>
+                    <div class="row" id="restaurant-list">
+                        {% for restaurant in restaurants %}
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                            <div class="strip" data-category="{{ restaurant.category }}" data-score="{{ restaurant.score }}">
+                                <figure>
+                                    <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
+                                    <a href="{% url 'detail-restaurant' restaurant.name_slug %}" class="strip_info"> <!-- Update the href attribute here -->
+                                        <small>{{ restaurant.category }}</small>
+                                        <div class="item_title">
+                                            <h3>{{ restaurant.name }}</h3>
+                                            <small>{{ restaurant.address }}</small>
+                                        </div>
+                                    </a>
+                                </figure>
+                                <ul>
+                                    <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
+                                     <li>
+                                         <div class="score"><strong>{{ restaurant.score }}</strong></div>
+                                     </li>
+                                 </ul>
                             </div>
-                            {% endfor %}
                         </div>
+                        {% endfor %}
+                    </div>                    
 						<!-- /strip grid -->
 
 						<!-- /strip grid -->
@@ -141,7 +137,6 @@
 					</div>
 					<!-- /row -->
 					<div class="pagination_fg">
-					  <a href="#">&laquo;</a>
 					</div>
 				</div>
 				<!-- /col -->
