@@ -77,6 +77,9 @@ class Menu_Category (models.Model):
         verbose_name = 'Menu Category'
         verbose_name_plural = 'Menu Categories'
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 
 class Product(models.Model):

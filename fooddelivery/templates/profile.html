@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+<!-- {% block extra_css %}
+
+
+{% endblock extra_css %} -->
+
+{% block content %}
+    <!-- Kullanıcı herşeyini görsün. 
+    bir tane de tıklama olsun. Onunla da sipariş geçmişini görsün.  -->
+    {% if users %}
+
+    <div class="container">
+        <h1>Welcome to Your Profile</h1>
+        <div>
+            <h2>User Information</h2>
+            {% for user in users %}
+                <p>Name: {{ user.name }}</p>
+                <p>Email: {{ user.email }}</p>
+            {% endfor %}
+        </div>
+
+        <div>
+            <h2>Address Information</h2>
+            {% for address in customer_adress %}
+                <p>Name: {{ address.name }}</p>
+                <p>Phone: {{ address.phone }}</p>
+                <p>Street: {{ address.street }}</p>
+                <p>Apartment: {{ address.apartment }}</p>
+                <p>Door Number: {{ address.door_number }}</p>
+                <p>City: {{ address.city }}</p>
+                <p>Postal Code: {{ address.postal_code }}</p>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% else %}
+    <p>No users found.</p>
+{% endif %}
+
+        
+
+{% endblock %}

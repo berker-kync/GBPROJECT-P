@@ -1,4 +1,3 @@
-from unittest.util import _MAX_LENGTH
 from django import forms
 from .models import Adress, Customer
 from .validators import phone_number_validator

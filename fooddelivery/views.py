@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Adress, Product, Cart, Order, OrderItem
+from django.shortcuts import render, redirect
+from .models import Adress, Product, Cart, Order, OrderItem, Customer
 from django.http import HttpRequest, JsonResponse
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -68,6 +68,14 @@ def privacy(request):
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
+@login_required(login_url='/login')
+def profile(request):
+    
+    customer = request.user
+    users = Customer.objects.filter(email=customer.email)
+    customer_adress = Adress.objects.filter(customer=request.user)
+    context = {'users': users, 'customer_adress': customer_adress}
+    return render(request, 'profile.html', context)
 
 
 @login_required(login_url='/login')  # Requires the user to be authenticated
@@ -84,6 +92,7 @@ def detailRestaurant(request):
         'total_price': total_price,
     }
     return render(request, 'detail-restaurant.html', context)
+
 
 
 @login_required(login_url='/login')  # User login olmasını saglar.
