@@ -61,8 +61,8 @@
                                 <ul class="clearfix">
                                     {% for item in cart_items %}
                                         <li>
-                                            <button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.product.name }}</button>
-                                            <span>₺{{ item.product.price }}</span>
+                                            <button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.menu.name }}</button>
+                                            <span>₺{{ item.menu.price }}</span>
                                         </li>
                                     {% endfor %}
                                 </ul>

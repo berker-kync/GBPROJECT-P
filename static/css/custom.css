@@ -28,3 +28,7 @@
 .box_order .main .remove-item-btn:hover {
     color: red;
 }
+
+.asteriskField {
+    display: none;
+}

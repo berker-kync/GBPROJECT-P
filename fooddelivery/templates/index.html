@@ -61,11 +61,17 @@
                         <a href="/" class="show-submenu">Anasayfa</a>
                     </li>
                     <li class="submenu">
-                        <a href="/detail-restaurant" class="show-submenu">Menü</a>
+                        <a href="/restaurant-list" class="show-submenu">Restoranlar</a>
                     </li>
                     <li class="submenu">
                         <a href="/about" class="show-submenu">Hakkımızda</a> 
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="submenu"><a href="/profile" class="show-submenu">Hesabım</a></li>
+                    <li class="submenu"><a href="/logout" class="show-submenu">Çıkış Yap</a></li>
+                    {% else %}
+                    <li class="submenu"><a href="/login" class="show-submenu">Giriş Yap</a></li>
+                    {% endif %}
                 </ul>
             </nav>
         </div>

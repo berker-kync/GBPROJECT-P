@@ -1,0 +1,78 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="FooYes - Quality delivery or takeaway food">
+    <meta name="author" content="Ansonika">
+    <title>TencereKapak - Yemekte kalite</title>
+
+    <!-- Favicons-->
+    <link rel="shortcut icon" href="{% static 'img/TencereKapak.svg' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'img/apple-touch-icon-57x57-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'img/apple-touch-icon-72x72-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'img/apple-touch-icon-114x114-precomposed.png' %}">
+    <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{% static 'img/apple-touch-icon-144x144-precomposed.png' %}">
+    
+
+    <!-- GOOGLE WEB FONT -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- BASE CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/order-sign_up.css' %}" rel="stylesheet">
+
+    <!-- YOUR CUSTOM CSS -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+    
+</head>
+
+<body id="register_bg">
+
+    <div id="register">
+        <aside>
+            <figure>
+                <a href="/"><img src="{% static 'img/TencereKapak.svg' %}" width="140" height="35" alt=""></a>
+            </figure>
+
+            <form method="post" action="{% url 'register' %}" autocomplete="off">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+                {% if form.errors %}
+                    <div class="alert alert-danger">
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div id="pass-info" class="clearfix"></div>
+                <button type="submit" class="btn_1 gradient full-width">Üye Ol</button>
+                <div class="text-center mt-2"><small>Hesabınız var mı? <strong><a href="login">Giriş Yap</a></strong></small></div>
+            </form>
+
+            <div class="copy">© 2023 TencereKapak</div>
+        </aside>
+    </div>
+    <!-- /login -->
+	
+	<!-- COMMON SCRIPTS -->
+    <!-- <script src="js/common_scripts.min.js"></script>
+    <script src="js/common_func.js"></script>
+    <script src="assets/validate.js"></script> -->
+	
+	<!-- SPECIFIC SCRIPTS -->
+	<!-- <script src="js/pw_strenght.js"></script>	 -->
+  
+</body>
+</html>

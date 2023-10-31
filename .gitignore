@@ -1,4 +1,5 @@
 __pycache__/
+pyc
 food
 .DS_Store
 foodvenv
@@ -6,3 +7,4 @@ fodovski
 .venv
 *.pyc
 staticfiles
+.db.sqlite3

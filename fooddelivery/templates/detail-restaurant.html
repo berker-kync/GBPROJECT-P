@@ -85,24 +85,26 @@
 		        <div class="row">
 		            <div class="col-lg-8 list_menu">
 						{% for category in menu_categories %}
-							<section id="{{ category.menu_slug }}">
-								<h4>{{ category.name }}</h4>
-								<div class="row">
-									{% for food_item in food_items %}
-										{% if food_item.category == category %}
-										<div class="col-md-6">
-											<a class="menu_item modal_dialog" data-productid="{{ food_item.id }}" href="#modal-dialog">
-												<figure><img src="{{ food_item.product_image.url }}" data-src="{{ food_item.product_image.url }}" alt="thumb" class="lazy"></figure>
-												<h3>{{ food_item.name }}</h3>
-												<p>{{ food_item.description }}</p>
-												<strong>₺{{ food_item.price }}</strong>
-											</a>
-										</div>
-										{% endif %}
-									{% endfor %}
-								</div>
-							</section>
-						{% endfor %}
+						<section id="{{ category.menu_slug }}">
+							<h4>{{ category.name }}</h4>
+							<div class="row">
+								{% for food_item in food_items %}
+									{% if food_item.category == category %}
+									<div class="col-md-6">
+										<a class="menu_item modal_dialog" data-productid="{{ food_item.id }}" href="#modal-dialog">
+											<figure><img src="{{ food_item.product_image.url }}" data-src="{{ food_item.product_image.url }}" alt="thumb" class="lazy"></figure>
+											<h3>{{ food_item.name }}</h3>
+											<p>{{ food_item.description }}</p>
+											<strong>₺{{ food_item.price }}</strong>
+										</a>
+									</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+						</section>
+					{% endfor %}
+
+
 		            </div>
 		            <!-- /col -->
 		            <div class="col-lg-4" id="sidebar_fixed">
@@ -117,8 +119,8 @@
 									{% for item in cart_items %}
 										{% csrf_token %}
 										<li>
-											<button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.product.name }}</button>
-											<span>₺{{ item.product.price }}</span>
+											<button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.menu.name }}</button>
+											<span>₺{{ item.menu.price }}</span>
 										</li>
 									{% endfor %}
 		                        </ul>

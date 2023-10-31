@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
+      
     restaurants = Restaurant.objects.all()[:10]
 
     return render(request, 'index.html', {'restaurants': restaurants})
@@ -74,9 +75,23 @@ def profile(request):
     customer = request.user
     users = Customer.objects.filter(email=customer.email)
     customer_adress = Adress.objects.filter(customer=request.user)
-    context = {'users': users, 'customer_adress': customer_adress}
+    order_history = Order.objects.filter(customer=customer).prefetch_related('orderitems__menu').order_by('-created_at')
+    context = {'users': users, 'customer_adress': customer_adress, 'order_history': order_history}
     return render(request, 'profile.html', context)
 
+
+# def order_history(request):
+#buraya order item
+#     customer = request.user
+
+#     # Kullanıcının sipariş geçmişini al
+#     order_history = Order.objects.filter(customer=customer).order_by('-created_at')
+
+#     context = {
+#         'order_history': order_history
+#     }
+
+#     return render(request, 'order_history.html', context)
 
     
 @login_required(login_url='/login')  # Requires the user to be authenticated
@@ -90,6 +105,9 @@ def detailRestaurant(request, name_slug):
     total_price = sum(item.total_price for item in cart_items)
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant)
     menu_slugs = [category.menu_slug for category in menu_categories]
+    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant)
+    menu_slugs = [category.menu_slug for category in menu_categories]
+
     context = {
         'food_items': food_items,
         'restaurant': restaurant,
@@ -102,49 +120,32 @@ def detailRestaurant(request, name_slug):
 
 
 
-@login_required(login_url='/login')  # User login olmasını saglar.
-def add_to_cart(request, restaurant_id):
+@login_required(login_url='/login')
+def add_to_cart(request, menu_id):
     if request.method == "POST":
         try:
-            restaurant = Restaurant.objects.get(id=restaurant_id)
+            menu = Menu.objects.get(id=menu_id)
             selected_quantity = int(request.POST.get('quantity', 1))
 
-            # Check if the restaurant is open (You should implement this logic based on your requirements)
-            if not restaurant.is_open:
-                return JsonResponse({"success": False, "message": "Restaurant is currently closed."})
+            if menu.quantity < selected_quantity:
+                return JsonResponse({"success": False, "message": "Insufficient menu item quantity."})
 
-            # Check if the restaurant has the selected menu item
-            menu_item_id = request.POST.get('menu_item_id')
-            menu_item = Menu.objects.filter(id=menu_item_id, restaurant=restaurant).first()
-
-            if not menu_item:
-                return JsonResponse({"success": False, "message": "Menu item not found."})
-
-            # Check if the quantity is valid
-            if selected_quantity <= 0:
-                return JsonResponse({"success": False, "message": "Invalid quantity."})
-
-            # Check if the product is in the cart already
-            cart_item = Cart.objects.filter(customer=request.user, menu_item=menu_item).first()
+            cart_item = Cart.objects.filter(customer=request.user, menu=menu).first()
 
             if cart_item:
-                # Update the quantity of the existing cart item
                 cart_item.quantity += selected_quantity
                 cart_item.save()
             else:
-                # Create a new cart item
                 Cart.objects.create(
                     customer=request.user,
-                    menu_item=menu_item,
+                    menu=menu,
                     quantity=selected_quantity
                 )
             
             return JsonResponse({"success": True, "message": "Menu item added to cart"})
         
-        except (Restaurant.DoesNotExist, ValueError):
-            return JsonResponse({"success": False, "message": "Restaurant not found or invalid data."})
-
-    return JsonResponse({"success": False, "message": "Invalid request method."})
+        except (Menu.DoesNotExist, ValueError):
+            return JsonResponse({"success": False, "message": "Menu item not found or invalid data."})
 
 
 @login_required(login_url='/login')  # Requires the user to be authenticated
@@ -164,7 +165,6 @@ def remove_from_cart(request, id):
         return JsonResponse({"success": False, "message": "Cart item not found or invalid data."})
 
 
-
 @login_required(login_url='/login')
 def order(request):
     form = OrderForm(request.POST or None)
@@ -172,34 +172,28 @@ def order(request):
     if request.method == "POST" and form.is_valid():
         cart_items = Cart.objects.filter(customer=request.user)
 
-        # Check if there is enough stock for each product in the cart
         for item in cart_items:
-            if item.product.quantity < item.quantity:
-                messages.error(request, f"{item.product.name} doesn't have enough stock.")
+            if item.menu.quantity < item.quantity:
+                messages.error(request, f"{item.menu.name} doesn't have enough stock.")
                 return redirect('cart')
 
         try:
             with transaction.atomic():
-                # Get the authenticated user (Customer) for the order
                 customer = request.user
-
-                # if shipping address exists don't create a new one
                 shipping_address = Adress.objects.filter(customer=customer).first()
 
                 if not shipping_address:
-                    # Create a new shipping address
                     shipping_address = Adress.objects.create(
-                        customer=customer,
-                        name=form.cleaned_data.get('name'),
-                        phone=form.cleaned_data.get('phone'),
-                        street=form.cleaned_data.get('street'),
-                        apartment=form.cleaned_data.get('apartment'),
-                        door_number=form.cleaned_data.get('door_number'),
-                        city=form.cleaned_data.get('city'),
-                        postal_code=form.cleaned_data.get('postal_code')
+                            customer=customer,
+                            name=form.cleaned_data.get('name'),
+                            phone=form.cleaned_data.get('phone'),
+                            street=form.cleaned_data.get('street'),
+                            apartment=form.cleaned_data.get('apartment'),
+                            door_number=form.cleaned_data.get('door_number'),
+                            city=form.cleaned_data.get('city'),
+                            postal_code=form.cleaned_data.get('postal_code')
                     )
 
-                # Create a new order
                 order = Order.objects.create(
                     customer=customer,
                     shipping_address=shipping_address,
@@ -207,25 +201,24 @@ def order(request):
                     status='pending'
                 )
 
-                # Create order items
                 for item in cart_items:
                     OrderItem.objects.create(
                         order=order,
-                        product=item.product,
+                        menu=item.menu,
                         quantity=item.quantity,
                         shipping_id=shipping_address.id
                     )
 
                 # Update the product's stock quantity
                 for item in cart_items:
-                    item.product.quantity -= item.quantity
-                    item.product.save()
+                    item.menu.quantity -= item.quantity
+                    item.menu.save()
 
-                # Clear the cart
                 cart_items.delete()
 
                 messages.success(request, 'Your order has been received.')
-                return redirect('confirm')
+                return redirect('confirm')  # Specify the target view here
+
         except IntegrityError as e:
             # Rollback the transaction in case of an error
             transaction.set_rollback(True)
@@ -233,12 +226,12 @@ def order(request):
             # Display an error message to the user
             messages.error(request, f"An error occurred while processing your order: {e}")
             return redirect('order')
+        
 
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
     context = {'cart_items': cart_items, 'total_price': total_price, 'form': form}
     return render(request, 'order.html', context)
-
 
 
 

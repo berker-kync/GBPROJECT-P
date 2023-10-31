@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Order History</h1>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Date</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Shipping Address</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in order_history %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.created_at|date:"F d, Y H:i" }}</td>
+            <td>{{ order.total_price }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                {{ order.shipping_address.street }},
+                {{ order.shipping_address.apartment }},
+                {{ order.shipping_address.door_number }},
+                {{ order.shipping_address.city }},
+                {{ order.shipping_address.postal_code }}
+            </td>
+            <td>
+                <a href="{% url 'order_details' order.id %}">View</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
