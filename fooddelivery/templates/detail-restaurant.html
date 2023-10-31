@@ -34,7 +34,7 @@
 
 	<main>
 
-		<div class="hero_in detail_page background-image" data-backgroung="{{ restaurant.restaurant_image.url }}">
+		<div class="hero_in detail_page background-image" data-background="url('{{ restaurant.restaurant_image.url }}')">
 			<div class="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">				
 				<div class="container">
 					<div class="main_info">
@@ -66,41 +66,43 @@
 		</div>
 		<!--/hero_in-->
 
-		<nav class="secondary_nav sticky_horizontal">
-		    <div class="container">
-		        <ul id="secondary_nav">
-		            <li><a href="#section-1">Menü</a></li>
-		            <!-- <li><a href="#section-2"></a></li>
-		            <li><a href="#section-3"></a></li>
-		            <li><a href="#section-4"></a></li> -->
-		            <!-- <li><a href="#section-5"><i class="icon_chat_alt"></i></a></li> -->
-		        </ul>
-		    </div>
-		    <span></span>
-		</nav>
+
+        <nav class="secondary_nav sticky_horizontal">
+            <div class="container">
+                <ul id="secondary_nav">
+					{% for category in menu_categories %}
+                    <li><a href="#{{ category.menu_slug }}">{{category.name}}</a></li>
+					{% endfor %}
+                    <li></li>
+                </ul>
+            </div>
+            <span></span>
+        </nav>
 		<!-- /secondary_nav -->
 
 		<div class="bg_gray">
 		    <div class="container margin_detail">
 		        <div class="row">
 		            <div class="col-lg-8 list_menu">
-						<section id="section-1">
-							<h4>Menü</h4>
-							<div class="row">
-								{% for food_item in food_items %}
-								<div class="col-md-6">
-									<a class="menu_item modal_dialog" data-productid="{{ food_item.id }}" href="#modal-dialog">
-										<figure><img src="{{ food_item.product_image.url }}" data-src="{{ food_item.product_image.url }}" alt="thumb" class="lazy"></figure>
-										<h3>{{ food_item.name }}</h3>
-										<p>{{ food_item.description }}</p>
-										<strong>₺{{ food_item.price }}</strong>
-									</a>
+						{% for category in menu_categories %}
+							<section id="{{ category.menu_slug }}">
+								<h4>{{ category.name }}</h4>
+								<div class="row">
+									{% for food_item in food_items %}
+										{% if food_item.category == category %}
+										<div class="col-md-6">
+											<a class="menu_item modal_dialog" data-productid="{{ food_item.id }}" href="#modal-dialog">
+												<figure><img src="{{ food_item.product_image.url }}" data-src="{{ food_item.product_image.url }}" alt="thumb" class="lazy"></figure>
+												<h3>{{ food_item.name }}</h3>
+												<p>{{ food_item.description }}</p>
+												<strong>₺{{ food_item.price }}</strong>
+											</a>
+										</div>
+										{% endif %}
+									{% endfor %}
 								</div>
-								{% endfor %}
-							</div>
-						</section>
-
-
+							</section>
+						{% endfor %}
 		            </div>
 		            <!-- /col -->
 		            <div class="col-lg-4" id="sidebar_fixed">

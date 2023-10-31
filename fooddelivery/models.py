@@ -69,41 +69,18 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
 # menu category model
 
-class Menu_Category (models.Model):
+class Menu_Category(models.Model):
     name = models.CharField(max_length=150, unique=True, null=True)
-
-    class Meta:
-        app_label = 'fooddelivery'
+    menu_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
 
     class Meta:
         db_table = 'menu_category'
         verbose_name = 'Menu Category'
         verbose_name_plural = 'Menu Categories'
+        app_label = 'fooddelivery'
 
     def __str__(self):
         return f'{self.name}'
-
-
-
-class Product(models.Model):
-    name = models.CharField(max_length=255)
-    name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
-    description = models.TextField()
-    category = models.ForeignKey(Menu_Category, on_delete=models.CASCADE, related_name='menu', blank=True, null=True)     
-    product_image = models.ImageField(upload_to='products/img', null=True, blank=True)
-    quantity = models.PositiveIntegerField()
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'product'
-        verbose_name = 'Product'
-        verbose_name_plural = 'Products'
-
-    def __str__(self):
-        return f'{self.name} - ₺{self.price}'
     
 
 
@@ -111,7 +88,7 @@ class Product(models.Model):
 
 class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name='carts')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='carts')
+    product = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='carts')
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -159,7 +136,7 @@ class Order(models.Model):
     )
 
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="orders")  # Hangi kullanıcının siparişi olduğu
-    products = models.ManyToManyField(Product, through='OrderItem')  # Hangi ürünlerin siparişte olduğu
+    products = models.ManyToManyField(Restaurant, through='OrderItem')  # Hangi ürünlerin siparişte olduğu
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     status = models.CharField(max_length=10, choices=STATUS, default='pending')
     # is_paid = models.BooleanField(default=False)  # Ödeme durumu
@@ -182,7 +159,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitems')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     shipping = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orderitems_adresses')
 

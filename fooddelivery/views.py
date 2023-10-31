@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import Adress, Product, Cart, Order, OrderItem, Customer, Restaurant, Menu
+from .models import Adress, Cart, Order, OrderItem, Customer, Restaurant, Menu, Menu_Category
 from django.http import HttpRequest, JsonResponse
 from django.db import transaction
 from django.db.utils import IntegrityError
@@ -11,8 +11,9 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    products = Product.objects.all()[:10]
-    return render(request, 'index.html', {'products': products})
+    restaurants = Restaurant.objects.all()[:10]
+
+    return render(request, 'index.html', {'restaurants': restaurants})
 
 def Login(request):
     if request.user.is_authenticated:
@@ -83,34 +84,48 @@ def detailRestaurant(request, name_slug):
     if request.method == "POST":
         return render(request, 'order.html')
 
-    products = Product.objects.all()
     restaurant = Restaurant.objects.get(name_slug=name_slug)
     food_items = Menu.objects.filter(restaurant=restaurant)
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
+    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant)
+    menu_slugs = [category.menu_slug for category in menu_categories]
     context = {
-        'products': products,
         'food_items': food_items,
         'restaurant': restaurant,
         'cart_items': cart_items,
         'total_price': total_price,
+        'menu_categories': menu_categories,
+        'menu_slugs': menu_slugs,
     }
     return render(request, 'detail-restaurant.html', context)
 
 
 
 @login_required(login_url='/login')  # User login olmasını saglar.
-def add_to_cart(request, product_id):
+def add_to_cart(request, restaurant_id):
     if request.method == "POST":
         try:
-            product = Product.objects.get(id=product_id)
+            restaurant = Restaurant.objects.get(id=restaurant_id)
             selected_quantity = int(request.POST.get('quantity', 1))
 
-            if product.quantity < selected_quantity:
-                return JsonResponse({"success": False, "message": "Insufficient product quantity."})
+            # Check if the restaurant is open (You should implement this logic based on your requirements)
+            if not restaurant.is_open:
+                return JsonResponse({"success": False, "message": "Restaurant is currently closed."})
+
+            # Check if the restaurant has the selected menu item
+            menu_item_id = request.POST.get('menu_item_id')
+            menu_item = Menu.objects.filter(id=menu_item_id, restaurant=restaurant).first()
+
+            if not menu_item:
+                return JsonResponse({"success": False, "message": "Menu item not found."})
+
+            # Check if the quantity is valid
+            if selected_quantity <= 0:
+                return JsonResponse({"success": False, "message": "Invalid quantity."})
 
             # Check if the product is in the cart already
-            cart_item = Cart.objects.filter(customer=request.user, product=product).first()
+            cart_item = Cart.objects.filter(customer=request.user, menu_item=menu_item).first()
 
             if cart_item:
                 # Update the quantity of the existing cart item
@@ -120,14 +135,16 @@ def add_to_cart(request, product_id):
                 # Create a new cart item
                 Cart.objects.create(
                     customer=request.user,
-                    product=product,
+                    menu_item=menu_item,
                     quantity=selected_quantity
                 )
             
-            return JsonResponse({"success": True, "message": "Product added to cart"})
+            return JsonResponse({"success": True, "message": "Menu item added to cart"})
         
-        except (Product.DoesNotExist, ValueError):
-            return JsonResponse({"success": False, "message": "Product not found or invalid data."})
+        except (Restaurant.DoesNotExist, ValueError):
+            return JsonResponse({"success": False, "message": "Restaurant not found or invalid data."})
+
+    return JsonResponse({"success": False, "message": "Invalid request method."})
 
 
 @login_required(login_url='/login')  # Requires the user to be authenticated

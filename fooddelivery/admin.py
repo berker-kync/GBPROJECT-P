@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Adress, Product, Order, Customer, Menu_Category, Menu
+from .models import Adress, Order, Customer, Menu_Category, Menu
 from restaurants.models import Restaurant, Restaurant_Category
 
 
@@ -22,7 +22,6 @@ class AdressAdmin(admin.ModelAdmin):
 
 admin.site.register(Order, OrderAdmin)
 admin.site.register(Customer, CustomerAdmin)
-admin.site.register(Product)
 admin.site.register(Adress)
 admin.site.register(Restaurant)
 admin.site.register(Restaurant_Category)
