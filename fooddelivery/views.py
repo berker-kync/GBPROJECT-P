@@ -79,31 +79,26 @@ def profile(request):
     context = {'users': users, 'customer_adress': customer_adress, 'order_history': order_history}
     return render(request, 'profile.html', context)
 
-
-# def order_history(request):
-#buraya order item
-#     customer = request.user
-
-#     # Kullanıcının sipariş geçmişini al
-#     order_history = Order.objects.filter(customer=customer).order_by('-created_at')
-
-#     context = {
-#         'order_history': order_history
-#     }
-
-#     return render(request, 'order_history.html', context)
-
     
 @login_required(login_url='/login')  # Requires the user to be authenticated
 def detailRestaurant(request, name_slug):
     if request.method == "POST":
-        return render(request, 'order.html')
+        # Sepetin dolu olup olmadığını kontrol et
+        cart_items = Cart.objects.filter(customer=request.user)
+        if not cart_items.exists():
+            # Eğer sepet boşsa, kullanıcıya hata mesajı göster
+            messages.error(request, 'Your cart is empty.')
+            return redirect('detail-restaurant', name_slug=name_slug)
+        else:
+            # Sepet doluysa, kullanıcıyı 'order' sayfasına yönlendir
+            return redirect('order')
+        
 
     restaurant = Restaurant.objects.get(name_slug=name_slug)
     food_items = Menu.objects.filter(restaurant=restaurant)
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
-    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant)
+    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
     menu_slugs = [category.menu_slug for category in menu_categories]
 
     context = {
@@ -170,10 +165,14 @@ def order(request):
     if request.method == "POST" and form.is_valid():
         cart_items = Cart.objects.filter(customer=request.user)
 
+        if not cart_items.exists():
+            messages.error(request, "You cannot place an order with an empty cart.")
+            return redirect('order')
+
         for item in cart_items:
             if item.menu.quantity < item.quantity:
                 messages.error(request, f"{item.menu.name} doesn't have enough stock.")
-                return redirect('cart')
+                return redirect('order')
 
         try:
             with transaction.atomic():
@@ -230,7 +229,6 @@ def order(request):
     total_price = sum(item.total_price for item in cart_items)
     context = {'cart_items': cart_items, 'total_price': total_price, 'form': form}
     return render(request, 'order.html', context)
-
 
 
 def confirmorder(request):

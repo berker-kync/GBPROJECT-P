@@ -90,8 +90,8 @@ class Menu(models.Model):
     quantity = models.PositiveIntegerField()
     product_image = models.ImageField(upload_to='products/img', null=False, blank=True)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=False)
-    updated_at = models.DateTimeField(auto_now=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         db_table = 'menu'

@@ -34,6 +34,19 @@
 
 	<main>
 
+		{% if messages %}
+		<div class="container mt-3"> <!-- Container to align the messages properly -->
+		  {% for message in messages %}
+			<!-- Display each message in a Bootstrap alert component -->
+			<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+			  {{ message }}
+			  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		  {% endfor %}
+		</div>
+	  {% endif %}
+		
+
 		<div class="hero_in detail_page background-image" data-background="url('{{ restaurant.restaurant_image.url }}')">
 			<div class="wrapper opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">				
 				<div class="container">
@@ -127,12 +140,20 @@
 		                        <ul class="clearfix">
 		                            <li class="total" id="total-price">Toplam<span>₺{{ total_price }}</span></li>
 		                        </ul>
-		                        
+								
+								<form method="post">
+									{% csrf_token %}
+									<!-- Sipariş bilgileri ve diğer gerekli alanlar burada olabilir -->
+									<button type="submit" class="btn_1 gradient full-width mb_5">Sipariş Oluştur</button>
+									<div class="text-center"><small>Bu adımda para alınmaz</small></div>
+								</form>
+								  
+								
 		                    
-		                        <div class="btn_1_mobile">
+		                        <!-- <div class="btn_1_mobile">
 		                            <a href="/order" class="btn_1 gradient full-width mb_5">Sipariş Oluştur</a>
 		                            <div class="text-center"><small>Bu adımlarda para alınmaz</small></div>
-		                        </div>
+		                        </div> -->
 		                    </div>
 		                </div>
 		                <!-- /box_order -->
