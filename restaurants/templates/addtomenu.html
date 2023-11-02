@@ -1,0 +1,112 @@
+{% extends "adminbase.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Yemek Ekleme Paneli</a>
+            </li>
+        </ol>
+        <div class="box_general padding_bottom">
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}  {# Render the form fields #}
+            <button type="submit">Create Menu Item</button>
+        </form>
+        
+
+
+
+
+
+            <div class="header_box version_2">
+                <!-- <h2><i class="fa fa-file"></i>Temel Bilgiler</h2> -->
+            </div>
+            <!-- <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Yemek İsmi</label>
+                        <input type="text" class="form-control" placeholder="Da Alfredo">
+                    </div>
+                    <div class="form-group">
+                        <label>Fiyat</label>
+                        <input type="text" class="form-control" placeholder="">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Adet</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>   
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label>Kısa Açıklama</label>
+                            <input type="text" name="menu_item_description" class="form-control">
+                        </div>
+                    </div>
+                    <label>Menü Kategorisi</label>
+                    <div class="styled-select">
+                        <select>
+                            <option>Başlangıçlar</option>
+                            <option>Ana Yemekler</option>
+                            <option>Tatlılar</option>
+                            <option>İçecekler</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Restoran</label>
+                        <div class="styled-select">
+                            <select>
+                                <option>Restoran İsmi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-6">
+
+                </div>
+                <div class="col-md-6">
+
+                </div>
+            </div>
+            <!-- /row-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div class="editor"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <!-- <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Photos</label>
+                        <form action="/file-upload" class="dropzone"></form>
+                    </div>
+                </div> -->
+            </div>
+            <!-- /row-->
+        </div>
+
+        <!-- <p><a href="#0" class="btn_1 medium">Kaydet</a> <a href="#0" class="btn_1 medium gray">Başka Ürün Ekle</a></p> -->
+
+{% endblock %}

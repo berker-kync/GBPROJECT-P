@@ -1,7 +1,41 @@
-from django.shortcuts import render
-from .models import Restaurant, Restaurant_Category
+from django.shortcuts import render, redirect
+from .models import Restaurant, Restaurant_Category, RestaurantRegistration
 from django.db.models import Count
 from django.http import JsonResponse, HttpResponse
+from .forms import RestaurantRegistrationForm, MenuItemForm
+from django.contrib import messages
+
+
+def partner(request):
+    form = RestaurantRegistrationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, 'Your account has been created.')
+        return redirect('index')
+    
+    return render(request, 'partner.html', {'form': form})
+
+
+def adminmain(request):
+    return render(request, 'adminmain.html')
+
+
+
+
+def addtomenu(request):
+    if request.method == 'POST':
+        form = MenuItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Ürün Eklendi')  
+            form = MenuItemForm()  
+    else:
+        form = MenuItemForm()
+    return render(request, 'addtomenu.html', {'form': form})
+
+
+
 
 
 def panel(request):
@@ -37,10 +71,6 @@ def filter_restaurants(request):
     filtered_data = [{'name': restaurant.name, 'category': restaurant.category.name, 'score': restaurant.score} for restaurant in filtered_restaurants]
 
     return JsonResponse({'filtered_restaurants': filtered_restaurants})
-
-
-
-
 
 
 

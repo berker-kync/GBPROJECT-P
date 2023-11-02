@@ -69,6 +69,7 @@ def privacy(request):
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
+
 @login_required(login_url='/login')
 def profile(request):
     
@@ -105,7 +106,7 @@ def detailRestaurant(request, name_slug):
     total_price = sum(item.total_price for item in cart_items)
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant)
     menu_slugs = [category.menu_slug for category in menu_categories]
-    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant)
+    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
     menu_slugs = [category.menu_slug for category in menu_categories]
 
     context = {

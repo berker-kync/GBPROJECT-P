@@ -47,3 +47,21 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.category}'
+
+
+class RestaurantRegistration(models.Model):
+    email = models.EmailField(null=False, blank=False, unique=True, editable=True)
+    name = models.CharField(max_length=150, null=False, blank=False, editable=True)
+    restaurant_name = models.CharField(max_length=150, null=False, blank=False, unique=True, editable=True)
+    address = models.CharField(max_length=255, null=False, blank=False, editable=True)
+    province = models.CharField(max_length=50, null=False, blank=False, editable=True)
+    postal_code = models.CharField(max_length=5, null=False, blank=False, editable=True)
+
+    class Meta:
+        db_table = 'restaurant_registration'
+        verbose_name = 'RestaurantRegistration'
+        verbose_name_plural = 'RestaurantRegistrations'
+
+    def __str__(self):
+        return f'{self.restaurant_name}'
+       
