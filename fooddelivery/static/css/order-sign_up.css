@@ -165,7 +165,6 @@
 #register figure {
   margin: 0;
   text-align: center;
-  border-bottom: 1px solid #ededed;
   padding: 0 60px 30px 60px;
 }
 @media (max-width: 767px) {

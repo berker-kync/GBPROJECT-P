@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/order-sign_up.css' %}" rel="stylesheet">
+    <link href="{% static 'css/detail-page.css' %}" rel="stylesheet">
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}
+<body>
+
+    <main class="bg_gray padded-main">
+        <div class="container margin_60_20">
+            {% if messages %}
+            <div class="container mt-3">
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="row justify-content-center">
+                <div class="col-xl-6 col-lg-8">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="box_order_form">
+                            <div class="head">
+                                <div class="title">
+                                    <h3>Adres Seçimi</h3>
+                                </div>
+                            </div>
+                            <!-- /head -->
+                            <div class="main">
+                                {% for address in addresses %}
+                                <label class="container_radio">
+                                    {{ address.name }}, {{ address.street }}, {{ address.apartment }}, {{ address.door_number }}, {{ address.city }}, {{ address.postal_code }}
+                                    <input type="radio" name="address" value="{{ address.id }}" {% if forloop.first %}checked{% endif %}>
+                                    <span class="checkmark"></span>
+                                </label>
+                                {% endfor %}                                
+                            </div>
+                        </div>
+                        <!-- /box_order_form -->
+                        <div class="box_order_form">
+                            <div class="head">
+                                <div class="title">
+                                    <h3>Ödeme Yöntemi</h3>
+                                </div>
+                            </div>
+                            <!-- /head -->
+                            <div class="main">
+                                <div class="payment_select">
+                                    <label class="container_radio">Nakit Ödeme
+                                        <input type="radio" value="" name="payment_method">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <i class="icon_wallet"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /box_order_form -->
+                    </div>
+                    <!-- /col -->
+                    <div class="col-xl-4 col-lg-4" id="sidebar_fixed">
+                        <div class="box_order">
+                            <div class="head">
+                                <h3>Sipariş Özeti</h3>
+                                {% for item in current_restaurant %}
+                                    <div>
+                                        {{ item.menu.restaurant.name }}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <!-- /head -->
+                            <div class="main" id="cart-items">
+                              <ul class="clearfix">
+                                    {% for item in cart_items %}
+                                        <li>
+                                            <button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.menu.name }}</button>
+                                            <span>₺{{ item.menu.price }}</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                
+                                <ul class="clearfix">
+                                    <li class="total" id="total-price">Toplam<span>₺{{ total_price }}</span></li>
+                                </ul>
+                                <div class="text-center"><small>Veya Bize Telefon Ulaş <strong>0216 4843254</strong></small></div>
+                                <button type="submit" class="btn_1 gradient full-width mb_5">Sipariş Oluştur</button>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- /box_booking -->
+                </div>
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->  
+    </main>
+    <!-- /main -->
+{% endblock %}

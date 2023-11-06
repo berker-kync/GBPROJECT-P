@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block extra_css %}    
+<!-- SPECIFIC CSS -->
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+
+{% block content %}	
+	
+	<main>
+		<div class="page_header element_to_stick">
+		    <div class="container">
+		    	<div class="row">
+		    		<div class="col-xl-8 col-lg-7 col-md-7 d-none d-md-block">
+		        		<h1>Kaç restoran listelendiyse</h1>
+		        		<!-- <a href="#0">Change address</a> -->
+		    		</div>
+		    		<div class="col-xl-4 col-lg-5 col-md-5">
+
+		    		</div>
+		    	</div>
+		    	<!-- /row -->		       
+		    </div>
+		</div>
+		<!-- /page_header -->
+
+		<div class="container margin_30_20">			
+			<div class="row">
+				<aside class="col-lg-3" id="sidebar_fixed">
+				
+					<a href="#0" class="open_filters btn_filters"><i class="icon_adjust-vert"></i><span>Filters</span></a>
+				
+					<div class="filter_col">
+						<div class="inner_bt clearfix">Filters<a href="#" class="open_filters"><i class="icon_close"></i></a></div>
+
+						<!-- /filter_type -->
+                        <div class="filter_type">
+                            <h4><a href="#filter_2" data-bs-toggle="collapse" class="closed">Kategoriler</a></h4>
+                            <div class="collapse" id="filter_2">
+                                <ul>
+                                    {% for restaurant_category in restaurant_categories %}
+                                    <li>
+                                        <label class="container_check">
+                                            <input type="checkbox" class="category-checkbox" data-category-id="{{ restaurant_category.id }}" data-category-name="{{ restaurant_category.name }}">
+                                            {{ restaurant_category.name }}
+                                            <small>{{ restaurant_category.restaurant_count }}</small>
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>                            
+                        </div>
+                        <p><button id="filter-button">Filtre uygula</button></p>
+						<!-- /filter_type -->
+						<div class="filter_type last">
+                            <h4><a href="#filter_4" data-bs-toggle="collapse" class="closed">Puan</a></h4>
+                            <div class="collapse" id="filter_4">
+                                <ul>
+                                    <li>
+                                        <label class="container_check">Efsane 9+
+                                            <small>{{ highly_rated_restaurants_9plus }}</small>
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Harika 8+
+                                            <small>{{ highly_rated_restaurants_8plus }}</small>
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">İyi 7+
+                                            <small>{{ highly_rated_restaurants_7plus }}</small>
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <label class="container_check">Fena Değil 6+
+                                            <small>{{ highly_rated_restaurants_6plus }}</small>
+                                            <input type="checkbox" class="score-checkbox score-checkmark">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+						<!-- /filter_type -->
+                        <p><button id="" >Tıkla banağh</button></p>
+					</div>
+				</aside>
+
+
+				<div class="col-lg-9">
+					<div class="promo">
+						<h3>İlk 14 gün ücretsiz teslimat fırsatı!</h3>
+						<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip.</p>
+						<i class="icon-food_icon_delivery"></i>
+					</div>
+					<!-- /promo -->
+					
+                    <div class="row" id="restaurant-list">
+                        {% for restaurant in restaurants %}
+                        <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+                            <div class="strip" data-category="{{ restaurant.category }}" data-score="{{ restaurant.score }}">
+                                <figure>
+                                    <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
+                                    <a href="{% url 'detail-restaurant' restaurant.name_slug %}" class="strip_info"> <!-- Update the href attribute here -->
+                                        <small>{{ restaurant.category }}</small>
+                                        <div class="item_title">
+                                            <h3>{{ restaurant.name }}</h3>
+                                            <small>{{ restaurant.address }}</small>
+                                        </div>
+                                    </a>
+                                </figure>
+                                <ul>
+                                    <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
+                                     <li>
+                                         <div class="score"><strong>{{ restaurant.score }}</strong></div>
+                                     </li>
+                                 </ul>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>                    
+						<!-- /strip grid -->
+
+						<!-- /strip grid -->
+
+					</div>
+					<!-- /row -->
+					<div class="pagination_fg">
+					</div>
+				</div>
+				<!-- /col -->
+			</div>		
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+
+{% endblock %}
