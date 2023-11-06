@@ -2,6 +2,7 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from decimal import Decimal
+from django.conf import settings
 
 # from fooddelivery.models import Category
 
@@ -39,6 +40,7 @@ class Restaurant(models.Model):
     is_open = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='managed_restaurants',null=True, blank=True,limit_choices_to={'is_staff': True} )
 
     class Meta:
         db_table = 'restaurant'

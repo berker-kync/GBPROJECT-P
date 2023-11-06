@@ -1,9 +1,11 @@
 from django import forms
 from .models import RestaurantRegistration
-from fooddelivery.models import Menu
+from fooddelivery.models import Menu, Restaurant
 
 
-
+class StaffLoginForm(forms.Form):
+    email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
+    password = forms.CharField(label="", max_length=20, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Şifre'}))
 
 class RestaurantRegistrationForm(forms.ModelForm):
 
@@ -19,9 +21,14 @@ class RestaurantRegistrationForm(forms.ModelForm):
     postal_code = forms.CharField(label='Posta Kodu', min_length=5, max_length=5)
 
 
+
 class MenuItemForm(forms.ModelForm):
     class Meta:
         model = Menu
-        fields = ['restaurant', 'name', 'price', 'description', 'category', 'quantity', 'product_image', 'is_active']
+        exclude = ['restaurant'] 
+
+    def __init__(self, *args, **kwargs):
+        super(MenuItemForm, self).__init__(*args, **kwargs)
+
 
 

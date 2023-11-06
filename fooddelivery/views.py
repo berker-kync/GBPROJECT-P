@@ -21,20 +21,25 @@ def Login(request):
         return redirect('index')
 
     form = LoginForm(request.POST or None)
-    
+
     if request.method == "POST" and form.is_valid():
         email = form.cleaned_data.get('email')
         password = form.cleaned_data.get('password')
 
-        customer = authenticate(request, email=email, password=password)
-        if customer and not customer.is_superuser:
-            login(request, user=customer)
-            messages.success(request, 'You have successfully logged in.')
-            return redirect('index')
+        user = authenticate(request, email=email, password=password)
+        
+        if user is not None and not (user.is_staff or user.is_superuser):
+            if user.is_active:
+                login(request, user)
+                messages.success(request, 'You have successfully logged in.')
+                return redirect('index')
+            else:
+                messages.error(request, 'Your account is inactive.')
         else:
             messages.error(request, 'Invalid email or password.')
 
     return render(request, 'login.html', {'form': form})
+
 
 def user_logout(request):
     logout(request)

@@ -2,8 +2,40 @@ from django.shortcuts import render, redirect
 from .models import Restaurant, Restaurant_Category, RestaurantRegistration
 from django.db.models import Count
 from django.http import JsonResponse, HttpResponse
-from .forms import RestaurantRegistrationForm, MenuItemForm
+from .forms import RestaurantRegistrationForm, MenuItemForm, StaffLoginForm
 from django.contrib import messages
+from django.contrib.auth import authenticate, logout, login as auth_login
+from django.contrib.auth.decorators import login_required
+
+
+
+def stafflogin(request):
+    if request.user.is_authenticated:
+        return redirect('adminmain')
+
+    form = StaffLoginForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        email = form.cleaned_data.get('email')
+        password = form.cleaned_data.get('password')
+
+        # authenticate() fonksiyonu yalnızca email ve password ile çağrılır
+        user = authenticate(request, email=email, password=password)
+        
+        # Kullanıcının kimlik doğrulaması başarılı mı ve kullanıcı personel mi?
+        if user and user.is_staff:
+            auth_login(request, user=user)
+            messages.success(request, 'You have successfully logged in.')
+            return redirect('adminmain')
+        else:
+            messages.error(request, 'Access denied. Only staff members can log in.')
+
+    return render(request, 'stafflogin.html', {'form': form})
+
+def stafflogout(request):
+    logout(request)
+    return redirect('index')
+
 
 
 def partner(request):
@@ -17,22 +49,39 @@ def partner(request):
     return render(request, 'partner.html', {'form': form})
 
 
+
+@login_required
 def adminmain(request):
-    return render(request, 'adminmain.html')
+    restaurants = Restaurant.objects.filter(manager=request.user)
+
+    context = {'restaurants': restaurants}
+    return render(request, 'adminmain.html', context)
 
 
 
 
+@login_required
 def addtomenu(request):
+    restaurant = None
+    if hasattr(request.user, 'managed_restaurants'):
+        restaurant = request.user.managed_restaurants.first()
+
     if request.method == 'POST':
         form = MenuItemForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Ürün Eklendi')  
-            form = MenuItemForm()  
+            menu_item = form.save(commit=False)
+            menu_item.restaurant = restaurant 
+            menu_item.save()
+            messages.success(request, 'Ürün Eklendi')
+            form = MenuItemForm() 
     else:
         form = MenuItemForm()
-    return render(request, 'addtomenu.html', {'form': form})
+
+    return render(request, 'addtomenu.html', {'form': form, 'restaurant': restaurant})
+
+
+
+
 
 
 
