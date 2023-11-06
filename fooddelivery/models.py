@@ -5,39 +5,31 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 from decimal import Decimal
 from .validators import phone_number_validator
 from restaurants.models import Restaurant
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 # customer model
 
 class CustomerManager(BaseUserManager):
-    def create_superuser(self, email, name, password=None):
+    def create_user(self, email, password=None, **extra_fields):
         if not email:
-            raise ValueError("Customers must have an email address")
-        if not password:
-            raise ValueError("Customers must have a password")
-        customer_obj = self.model(
-            email=self.normalize_email(email),
-            name=name
-        )
-        customer_obj.set_password(password)
-        customer_obj.is_superuser = True
-        customer_obj.is_staff = True
-        customer_obj.save(using=self._db)
-        return customer_obj
+            raise ValueError(_('The Email must be set'))
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-    def create_user(self, email, name=None, password=None, is_active=True):
-        if not email:
-            raise ValueError("Customers must have an email address")
-        if not password:
-            raise ValueError("Customers must have a password")
-        customer_obj = self.model(
-            email=self.normalize_email(email),
-            name=name
-        )
-        customer_obj.set_password(password)
-        customer_obj.is_active = is_active
-        customer_obj.save(using=self._db)
-        return customer_obj
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
 
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError(_('Superuser must have is_staff=True.'))
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError(_('Superuser must have is_superuser=True.'))
+
+        return self.create_user(email, password, **extra_fields)
 
 
 class Customer(AbstractBaseUser, PermissionsMixin):
@@ -45,25 +37,24 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(null=False, blank=False, unique=True)
     phone = models.CharField(max_length=10, null=True, blank=False, validators=[phone_number_validator])
     address = models.ManyToManyField('Adress', related_name='customers', blank=True)
+    date_joined = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     objects = CustomerManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
+
     class Meta:
+        ordering = ['email']
         db_table = 'customer'
         verbose_name = 'Customer'
         verbose_name_plural = 'Customers'
+        app_label = 'fooddelivery'
 
-    def has_perm(self, perm, obj=None):
-        return self.is_staff
-    
-    def has_module_perms(self, app_label):
-        return self.is_staff
-
-    def __str__(self):
-        return f'{self.name} - {self.email}'
+    def __str__ (self):
+        return self.email
 
 
 # menu category model
