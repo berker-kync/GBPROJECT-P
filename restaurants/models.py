@@ -2,6 +2,7 @@ from django.db import models
 from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from decimal import Decimal
+from django.conf import settings
 
 # from fooddelivery.models import Category
 
@@ -39,6 +40,7 @@ class Restaurant(models.Model):
     is_open = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='managed_restaurants',null=True, blank=True,limit_choices_to={'is_staff': True} )
 
     class Meta:
         db_table = 'restaurant'
@@ -47,3 +49,21 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return f'{self.name} - {self.category}'
+
+
+class RestaurantRegistration(models.Model):
+    email = models.EmailField(null=False, blank=False, unique=True, editable=True)
+    name = models.CharField(max_length=150, null=False, blank=False, editable=True)
+    restaurant_name = models.CharField(max_length=150, null=False, blank=False, unique=True, editable=True)
+    address = models.CharField(max_length=255, null=False, blank=False, editable=True)
+    province = models.CharField(max_length=50, null=False, blank=False, editable=True)
+    postal_code = models.CharField(max_length=5, null=False, blank=False, editable=True)
+
+    class Meta:
+        db_table = 'restaurant_registration'
+        verbose_name = 'RestaurantRegistration'
+        verbose_name_plural = 'RestaurantRegistrations'
+
+    def __str__(self):
+        return f'{self.restaurant_name}'
+       

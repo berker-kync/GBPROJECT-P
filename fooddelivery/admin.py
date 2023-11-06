@@ -58,3 +58,7 @@ admin.site.register(Restaurant)
 admin.site.register(Restaurant_Category)
 admin.site.register(Menu_Category)
 admin.site.register(Menu)
+
+
+
+
