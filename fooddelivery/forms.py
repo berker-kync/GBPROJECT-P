@@ -11,7 +11,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = Customer
-        fields = ('email', 'name', 'phone', 'address', 'is_active', 'is_staff', 'is_superuser')  # Include all necessary fields
+        fields = ('email', 'name', 'phone', 'address', 'is_active', 'is_staff', 'is_superuser')
 
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
@@ -32,12 +32,11 @@ class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
         model = Customer
-        fields = ('email', 'name', 'phone', 'address', 'is_active', 'is_staff', 'is_superuser')  # Include all necessary fields
+        fields = ('email', 'name', 'phone', 'address', 'is_active', 'is_staff', 'is_superuser')
 
     def save(self, commit=True):
         user = super().save(commit=commit)
         return user
-
 
 
 class CustomerAddressForm(forms.ModelForm):
@@ -69,13 +68,6 @@ class RegisterForm(UserCreationForm):
         'email': forms.EmailInput(attrs={'class': 'form-control'}),
         'phone': forms.TextInput(attrs={'class': 'form-control'}),
     }
-
-    # def clean(self):
-    #     cleaned_data = super().clean()
-    #     address = cleaned_data.get('address')
-    
-    # if not address:
-    #     raise forms.ValidationError("Please provide your address.")
 
 
 class LoginForm(forms.Form):

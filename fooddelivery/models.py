@@ -7,8 +7,6 @@ from .validators import phone_number_validator
 from restaurants.models import Restaurant
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 # customer model
 
@@ -40,9 +38,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=10, null=True, blank=False, validators=[phone_number_validator])
     address = models.ManyToManyField('Adress', related_name='customers', blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
-    date_joined = models.DateTimeField(default=timezone.now)
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
 
     objects = CustomerManager()
@@ -85,8 +81,6 @@ class Menu(models.Model):
     quantity = models.PositiveIntegerField()
     product_image = models.ImageField(upload_to='products/img', null=False, blank=True)
     is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

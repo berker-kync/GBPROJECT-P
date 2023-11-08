@@ -28,7 +28,7 @@ def stafflogin(request):
             messages.success(request, 'You have successfully logged in.')
             return redirect('adminmain')
         else:
-            messages.error(request, 'Access denied. Only staff members can log in.')
+            messages.error(request, 'Access denied. Only staff members can log in.') # acaba burası staff yanlis sifre girerse de ayni mi veriyor. mesajı degistirelim mi
 
     return render(request, 'stafflogin.html', {'form': form})
 

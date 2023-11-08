@@ -1,9 +1,7 @@
-from os import name
 from django.shortcuts import render, redirect
-from .models import Adress, Cart, Order, OrderItem, Customer, Restaurant, Menu, Menu_Category
-from django.http import HttpRequest, JsonResponse
+from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Category
+from django.http import JsonResponse
 from django.db import transaction
-from django.db.utils import IntegrityError
 from django.contrib import messages
 from .forms import CustomerAddressForm, RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
@@ -111,6 +109,7 @@ def profile(request):
     
 @login_required(login_url='/login')  # Requires the user to be authenticated
 def detailRestaurant(request, name_slug):
+    
     if request.method == "POST":
         # Sepetin dolu olup olmadığını kontrol et
         cart_items = Cart.objects.filter(customer=request.user)
@@ -128,8 +127,7 @@ def detailRestaurant(request, name_slug):
     total_price = sum(item.total_price for item in cart_items)
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
     menu_slugs = [category.menu_slug for category in menu_categories]
-    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
-    menu_slugs = [category.menu_slug for category in menu_categories]
+
 
     context = {
         'food_items': food_items,
