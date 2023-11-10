@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render, redirect
 from .models import Restaurant, Restaurant_Category, RestaurantRegistration
 from django.db.models import Count
@@ -50,17 +51,22 @@ def partner(request):
 
 
 
-@login_required
+@login_required(login_url='staff-login')
 def adminmain(request):
-    restaurants = Restaurant.objects.filter(manager=request.user)
+    user = request.user
+
+    if user.is_authenticated and user.is_staff:
+        restaurants = Restaurant.objects.filter(manager=request.user)
+    else:
+        restaurants = Restaurant.objects.none()
+        return HttpResponse('You are not authorized to view this page. if you are a staff member, please log in.')
+
 
     context = {'restaurants': restaurants}
     return render(request, 'adminmain.html', context)
 
 
-
-
-@login_required
+@login_required(login_url='staff-login')
 def addtomenu(request):
     restaurant = None
     if hasattr(request.user, 'managed_restaurants'):
@@ -78,13 +84,6 @@ def addtomenu(request):
         form = MenuItemForm()
 
     return render(request, 'addtomenu.html', {'form': form, 'restaurant': restaurant})
-
-
-
-
-
-
-
 
 
 def panel(request):

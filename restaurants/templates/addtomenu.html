@@ -19,22 +19,23 @@
                 {% endfor %}
             </ul>
             {% endif %}
-            
+        
             <!-- Display the restaurant's name for the logged-in manager -->
             {% if restaurant %}
                 <div class="form-group">
                     <label>Restoran İsmi</label>
                     <textarea class="form-control" readonly>{{ restaurant.name }}</textarea>
                 </div>
+                <div>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}  
+                    <button type="submit" class="btn btn-primary">Menüye Ekle</button>
+                </form>
+                </div>
             {% else %}
-                <p>Yönetici problemi.</p>
+                <p>Yönetici problemi. Destek ile iletisime geciniz.</p>
             {% endif %}
-
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p }}  
-                <button type="submit" class="btn btn-primary">Menüye Ekle</button>
-            </form>
         </div>
         <!-- /box_general -->
     </div>
