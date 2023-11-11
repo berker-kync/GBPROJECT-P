@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, logout, login as auth_login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
+from django.db.models import F
 
 
 
@@ -158,8 +159,14 @@ def update_order_status(request, order_id):
     status = data.get('status')
 
     if status in dict(Order.STATUS).keys():
+        if status == 'rejected' and not order.status == 'rejected':
+            for item in order.orderitems.all():
+                item.menu.quantity = F('quantity') + item.quantity
+                item.menu.save()
+
         order.status = status
         order.save()
         return JsonResponse({'status': 'success'})
     else:
         return JsonResponse({'status': 'error', 'message': 'Geçersiz durum değeri'}, status=400)
+
