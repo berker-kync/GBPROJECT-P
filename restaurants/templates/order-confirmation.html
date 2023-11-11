@@ -1,0 +1,41 @@
+{% extends "adminbase.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Yemek Ekleme Paneli</a>
+            </li>
+        </ol>
+        <div class="box_general padding_bottom">
+
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+            </ul>
+            {% endif %}
+        
+            <!-- Display the restaurant's name for the logged-in manager -->
+            {% if restaurant %}
+                <div class="form-group">
+                    <label>Restoran İsmi</label>
+                    <textarea class="form-control" readonly>{{ restaurant.name }}</textarea>
+                </div>
+                <div>
+                    
+                </div>
+            {% else %}
+                <p>Yönetici problemi. Destek ile iletisime geciniz.</p>
+            {% endif %}
+        </div>
+        <!-- /box_general -->
+    </div>
+    <!-- /container-fluid -->
+</div>
+<!-- /content-wrapper -->
+{% endblock %}

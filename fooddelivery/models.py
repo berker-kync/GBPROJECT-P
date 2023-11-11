@@ -169,7 +169,7 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitems')
-    menu = models.ForeignKey(Menu, on_delete=models.CASCADE)
+    menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='menus')
     quantity = models.PositiveIntegerField()
     shipping = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orderitems_adresses')
 
