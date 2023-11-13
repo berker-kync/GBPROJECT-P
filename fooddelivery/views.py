@@ -1,13 +1,12 @@
-from os import name
-from django.shortcuts import render, redirect
-from .models import Adress, Cart, Order, OrderItem, Customer, Restaurant, Menu, Menu_Category
-from django.http import HttpRequest, JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect
+from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Category
+from django.http import JsonResponse
 from django.db import transaction
-from django.db.utils import IntegrityError
 from django.contrib import messages
 from .forms import CustomerAddressForm, RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 
 def index(request):
@@ -111,6 +110,7 @@ def profile(request):
     
 @login_required(login_url='/login')  # Requires the user to be authenticated
 def detailRestaurant(request, name_slug):
+    
     if request.method == "POST":
         # Sepetin dolu olup olmadığını kontrol et
         cart_items = Cart.objects.filter(customer=request.user)
@@ -128,8 +128,7 @@ def detailRestaurant(request, name_slug):
     total_price = sum(item.total_price for item in cart_items)
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
     menu_slugs = [category.menu_slug for category in menu_categories]
-    menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
-    menu_slugs = [category.menu_slug for category in menu_categories]
+
 
     context = {
         'food_items': food_items,
@@ -144,33 +143,33 @@ def detailRestaurant(request, name_slug):
 
 
 @login_required(login_url='/login')
+@require_POST  # Bu dekoratör fonksiyonun yalnızca POST istekleri ile çağrılmasını sağlar.
 def add_to_cart(request, menu_id):
-    if request.method == "POST":
-        try:
-            menu = Menu.objects.get(id=menu_id)
-            selected_quantity = int(request.POST.get('quantity', 1))
-            name_slug = menu.restaurant.name_slug
-            request.session['restaurant'] = name_slug
+    menu = get_object_or_404(Menu, id=menu_id)
+    selected_quantity = int(request.POST.get('quantity', 1))
 
-            if menu.quantity < selected_quantity:
-                return JsonResponse({"success": False, "message": "Insufficient menu item quantity."})
+    if menu.quantity < selected_quantity:
+        return JsonResponse({"success": False, "message": "Yetersiz menü öğesi miktarı."})
+    
+    # Sepette başka restoranın ürünleri varsa temizle
+    cart_items = Cart.objects.filter(customer=request.user)
+    if cart_items.exists() and cart_items.first().menu.restaurant != menu.restaurant:
+        cart_items.delete()  # Kullanıcının eski sepetini temizle
 
-            cart_item = Cart.objects.filter(customer=request.user, menu=menu).first()
+    # Sepete yeni ürün ekle veya var olanı güncelle
+    cart_item, created = Cart.objects.get_or_create(customer=request.user, menu=menu)
+    if not created:
+        if menu.quantity < (cart_item.quantity + selected_quantity):
+            return JsonResponse({"success": False, "message": "Yetersiz menü öğesi miktarı."})
+        cart_item.quantity += selected_quantity
+        cart_item.save()
+    else:
+        cart_item.quantity = selected_quantity
+        cart_item.save()
 
-            if cart_item:
-                cart_item.quantity += selected_quantity
-                cart_item.save()
-            else:
-                Cart.objects.create(
-                    customer=request.user,
-                    menu=menu,
-                    quantity=selected_quantity
-                )
-            
-            return JsonResponse({"success": True, "message": "Menu item added to cart"})
-        
-        except (Menu.DoesNotExist, ValueError):
-            return JsonResponse({"success": False, "message": "Menu item not found or invalid data."})
+    return JsonResponse({"success": True, "message": "Menü öğesi sepete eklendi"})
+
+
 
 
 @login_required(login_url='/login')  # Requires the user to be authenticated

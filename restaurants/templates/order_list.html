@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Sipariş Listesi</title>
+    <!-- Ek CSS ve JS dosyalarını buraya dahil edin -->
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Müşteri</th>
+                <th>Toplam Fiyat</th>
+                <th>Durum</th>
+                <th>Oluşturulma Tarihi</th>
+                <th>Güncelleme Tarihi</th>
+            </tr>
+        </thead>
+        <!-- order_list.html içinde -->
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.customer.email }}</td>
+                    <td>{{ order.total_price }}</td>
+                    <td>
+                        <select class="status-selector" data-order-id="{{ order.id }}">
+                            {% for status_value, status_name in order.STATUS %}
+                                <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>
+                                    {{ status_name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>{{ order.created_at }}</td>
+                    <td>{{ order.updated_at }}</td>
+                    <td>
+                        <!-- Kaydet butonu -->
+                        <button type="button" class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script src="{% static 'js/order_status.js' %}"></script>
+</body>
+</html>

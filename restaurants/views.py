@@ -1,11 +1,16 @@
-from django.shortcuts import render, redirect
+import json
+import re
+from django.shortcuts import get_object_or_404, render, redirect
+from fooddelivery.models import Order
 from .models import Restaurant, Restaurant_Category, RestaurantRegistration
 from django.db.models import Count
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, QueryDict
 from .forms import RestaurantRegistrationForm, MenuItemForm, StaffLoginForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout, login as auth_login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
+from django.db.models import F
 
 
 
@@ -28,7 +33,7 @@ def stafflogin(request):
             messages.success(request, 'You have successfully logged in.')
             return redirect('adminmain')
         else:
-            messages.error(request, 'Access denied. Only staff members can log in.')
+            messages.error(request, 'Access denied. Only staff members can log in.') # acaba burası staff yanlis sifre girerse de ayni mi veriyor. mesajı degistirelim mi
 
     return render(request, 'stafflogin.html', {'form': form})
 
@@ -50,17 +55,22 @@ def partner(request):
 
 
 
-@login_required
+@login_required(login_url='staff-login')
 def adminmain(request):
-    restaurants = Restaurant.objects.filter(manager=request.user)
+    user = request.user
+
+    if user.is_authenticated and user.is_staff:
+        restaurants = Restaurant.objects.filter(manager=request.user)
+    else:
+        restaurants = Restaurant.objects.none()
+        return HttpResponse('You are not authorized to view this page. if you are a staff member, please log in.')
+
 
     context = {'restaurants': restaurants}
     return render(request, 'adminmain.html', context)
 
 
-
-
-@login_required
+@login_required(login_url='staff-login')
 def addtomenu(request):
     restaurant = None
     if hasattr(request.user, 'managed_restaurants'):
@@ -78,13 +88,6 @@ def addtomenu(request):
         form = MenuItemForm()
 
     return render(request, 'addtomenu.html', {'form': form, 'restaurant': restaurant})
-
-
-
-
-
-
-
 
 
 def panel(request):
@@ -122,4 +125,48 @@ def filter_restaurants(request):
     return JsonResponse({'filtered_restaurants': filtered_restaurants})
 
 
+
+# def OrderConfirmation(request):
+#     restaurant = None
+#     if hasattr(request.user, 'managed_restaurants'):
+#         restaurant = request.user.managed_restaurants.first()
+    
+
+#     return render(request, 'order-confirmation.html', {'restaurant': restaurant})
+
+@login_required
+def order_list(request):
+    # Kullanıcının yönettiği restoranlara ait siparişleri alın
+    orders = Order.objects.filter(orderitems__menu__restaurant__manager=request.user).distinct()
+    return render(request, 'order_list.html', {'orders': orders})
+
+
+@login_required
+@require_http_methods(["PATCH"])
+def update_order_status(request, order_id):
+    if not request.user.is_staff:
+        return JsonResponse({'status': 'error', 'message': 'Yetkiniz yok'}, status=403)
+
+    order = get_object_or_404(Order, id=order_id)
+
+    # Kullanıcının yönettiği restoranlardan birine ait sipariş mi diye kontrol et
+    if not request.user.managed_restaurants.filter(
+    menus__order=order).exists():
+        return JsonResponse({'status': 'error', 'message': 'Bu işlem için yetkiniz yok'}, status=403)
+
+    # PATCH verisini JSON olarak oku
+    data = json.loads(request.body.decode('utf-8'))
+    status = data.get('status')
+
+    if status in dict(Order.STATUS).keys():
+        if status == 'rejected' and not order.status == 'rejected':
+            for item in order.orderitems.all():
+                item.menu.quantity = F('quantity') + item.quantity
+                item.menu.save()
+
+        order.status = status
+        order.save()
+        return JsonResponse({'status': 'success'})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Geçersiz durum değeri'}, status=400)
 

@@ -10,4 +10,6 @@ urlpatterns = [
     path('addtomenu/', views.addtomenu, name='addtomenu'),
     path('stafflogin/', views.stafflogin, name='staff-login'),
     path('stafflogout/', views.stafflogout, name='staff-logout'),
+    path('orders/', views.order_list, name='order-list'),
+    path('update-order-status/<int:order_id>/', views.update_order_status, name='update-order-status'),
 ]

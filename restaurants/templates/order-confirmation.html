@@ -15,7 +15,7 @@
             {% if messages %}
             <ul class="messages">
                 {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {{ message }}
                 {% endfor %}
             </ul>
             {% endif %}
@@ -27,11 +27,7 @@
                     <textarea class="form-control" readonly>{{ restaurant.name }}</textarea>
                 </div>
                 <div>
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form.as_p }}  
-                    <button type="submit" class="btn btn-primary">Menüye Ekle</button>
-                </form>
+                    
                 </div>
             {% else %}
                 <p>Yönetici problemi. Destek ile iletisime geciniz.</p>

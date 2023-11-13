@@ -12,7 +12,7 @@
     <meta name="author" content="Ansonika">
     <title>TencereKapak - Admin Paneli</title>
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'admincss/img/favicon.ico' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/TencereKapak.svg' %}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'admincss/img/apple-touch-icon-57x57-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'admincss/img/apple-touch-icon-72x72-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'admincss/img/apple-touch-icon-114x114-precomposed.png' %}">
@@ -32,7 +32,7 @@
 <body class="fixed-nav sticky-footer" id="page-top">
     <!-- Navigation-->
     <nav class="navbar navbar-expand-lg navbar-dark bg-default fixed-top" id="mainNav">
-        <a class="navbar-brand" href="/adminmain"><img src="img/logo.svg" alt="" width="167" height="36"></a>
+        <a class="navbar-brand" href="/adminmain"><img src="{% static 'img/TencereKapak.svg' %}" alt="" width="167" height="36"></a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -52,12 +52,13 @@
                     </a>
                 </li>
 
-                <!-- <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Orders Page">
-                    <a class="nav-link" href="orders.html">
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Orders Page">
+                    <a class="nav-link" href="/orders">
                         <i class="fa fa-fw fa-shopping-basket"></i>
                         <span class="nav-link-text">Sipariş Sayfası</span>
                     </a>
                 </li>
+                <!-- 
                 <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Edit Order">
                     <a class="nav-link" href="edit-order.html">
                         <i class="fa fa-fw fa-pencil"></i>
