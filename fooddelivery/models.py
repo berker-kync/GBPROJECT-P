@@ -173,6 +173,7 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
     shipping = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orderitems_adresses')
 
+
     class Meta:
         db_table = 'order_item'
         verbose_name = 'Order Item'
