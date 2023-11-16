@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 });
             }
 
-            restaurantStrip.style.display = showRestaurant ? 'block' : 'none';
+            restaurantStrip.parentElement.style.display = showRestaurant ? 'block' : 'none';
         });
     });
 });
