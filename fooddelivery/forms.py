@@ -73,3 +73,22 @@ class RegisterForm(UserCreationForm):
 class LoginForm(forms.Form):
     email = forms.EmailField(label="",widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
     password = forms.CharField(label="", max_length=20, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Şifre'}))
+
+class ChangeUserForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['name', 'email', 'phone']
+
+    name = forms.CharField(label="Ad Soyad", min_length=3, max_length=50)
+    email = forms.EmailField(label="Email", max_length=100, disabled=True)
+    phone = forms.CharField(label="Telefon" ,max_length=10, validators=[phone_number_validator])
+    
+    widgets = {
+        'name': forms.TextInput(attrs={'class': 'form-control'}),
+        'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        'phone': forms.TextInput(attrs={'class': 'form-control'}),
+    }
+
+# class ChangePasswordForm(forms.Form):
+#     new_password = forms.CharField(label="", max_length=20, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Yeni Şifre'}))
+#     new_password2 = forms.CharField(label="", max_length=20, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Yeni Şifre Tekrar'}))

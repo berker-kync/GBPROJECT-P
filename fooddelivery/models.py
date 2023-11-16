@@ -150,6 +150,7 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     status = models.CharField(max_length=10, choices=STATUS, default='pending')
     # is_paid = models.BooleanField(default=False)  # Ödeme durumu
+    payment_method = models.CharField(max_length=10, default='nakit')  # Ödeme yöntemi
     shipping_address = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orders_adresses')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

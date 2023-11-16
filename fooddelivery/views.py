@@ -3,7 +3,7 @@ from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Categ
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib import messages
-from .forms import CustomerAddressForm, RegisterForm, LoginForm
+from .forms import ChangeUserForm, CustomerAddressForm, RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -55,7 +55,7 @@ def register(request):
         form.save()
         messages.success(request, 'Your account has been created.')
         return redirect('login')
-
+    
     return render(request, 'register.html', {'form': form})
 
 
@@ -81,6 +81,17 @@ def profile(request):
     customer = request.user
     customer_email = request.user.email
 
+    # Kullanıcı bilgileri isim ve telefon
+    customer_name = customer.name
+    customer_phone = customer.phone
+
+    # customer isim ve telefon değiştirme
+    user_form = ChangeUserForm(request.POST or None, instance=request.user)
+    if request.method == "POST" and user_form.is_valid():
+        user_form.save()
+        messages.success(request, 'Your account has been updated.')
+        return redirect('profile')
+
     # Kullanıcının adresleri ve sipariş geçmişi
     customer_adress = Adress.objects.filter(customer=request.user)
     address_count = customer.customer_addresses.count()
@@ -100,17 +111,21 @@ def profile(request):
     # Formun gösterilip gösterilmeyeceğine dair mesaj
     if not can_add_more_addresses:
         messages.warning(request, 'You can only add up to 5 addresses.')
+
     
     context = {
         'customer_email': customer_email, 'customer_adress': customer_adress, 'order_history': order_history, 
-        'form': form, 'can_add_more_addresses': can_add_more_addresses, 'address_count': address_count
+        'form': form, 'can_add_more_addresses': can_add_more_addresses, 'address_count': address_count, 'user_form': user_form,
         }
     return render(request, 'profile.html', context)
 
     
 @login_required(login_url='/login')  # Requires the user to be authenticated
 def detailRestaurant(request, name_slug):
-    
+    # is_staff sipariş veremesin
+    if request.user.is_staff:
+        return redirect('index')
+
     if request.method == "POST":
         # Sepetin dolu olup olmadığını kontrol et
         cart_items = Cart.objects.filter(customer=request.user)

@@ -11,6 +11,28 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Profil Bilgileri</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ user_form|crispy }}
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Şifre Değiştirme</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ change_password_form|crispy }}
+                <button type="submit" class="btn btn-primary">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
     {% if can_add_more_addresses %}
         <div class="row">
             <div class="col-lg-6">
