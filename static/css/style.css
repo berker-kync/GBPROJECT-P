@@ -1881,7 +1881,6 @@ header.sticky a.open_close:hover,
   #logo img {
     width: auto;
     height: 28px;
-    fill: #689C98;
   }
 }
 
@@ -2447,7 +2446,7 @@ ul#top_menu li a.login:before {
 }
 .hero_single.version_2 {
   height: 620px;
-  background: #faf3cc url(../img/background-restoran.jpg) center center no-repeat;
+  background: #faf3cc url(../img/home_section_2.jpg) center center no-repeat;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

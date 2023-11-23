@@ -46,48 +46,49 @@
 //     return cookieValue;
 // }
 
-// Kaydet butonları için event listener ekleyin
-document.querySelectorAll('.save-status').forEach(function(button) {
-    button.addEventListener('click', function(event) {
-        // Butonun data-order-id attributünden sipariş ID'sini alın
-        var orderId = this.dataset.orderId;
-        // Aynı sipariş ID'sine sahip durum seçiciyi bulun
-        var selectElement = document.querySelector('.status-selector[data-order-id="' + orderId + '"]');
-        // Seçilen durumu alın
-        var status = selectElement.value;
 
-        // AJAX isteğini PATCH metodu ile başlatın
+document.querySelectorAll('.save-status').forEach(function (button) {
+    button.addEventListener('click', function (event) {
+   
+        var orderId = this.dataset.orderId;
+        console.log('Clicked on save button for order:', orderId);
+
+   
+        var selectElement = document.querySelector('.status-selector[data-order-id="' + orderId + '"]');
+
+        var status = selectElement.value;
+        console.log('Selected status:', status);
+
+
         fetch('/update-order-status/' + orderId + '/', {
-            method: 'PATCH', // RESTful API prensiplerine göre PATCH kullanılır
+            method: 'PATCH', 
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken') // CSRF token'ı al
+                'X-CSRFToken': getCookie('csrftoken') 
             },
-            body: JSON.stringify({ status: status }) // Durum bilgisini JSON olarak gönderin
+            body: JSON.stringify({ status: status })
         })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json(); // JSON yanıtını döndür
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Durum güncellendi');
-                // Burada başarı mesajı gösterebilirsiniz.
-            } else {
-                console.error('Bir hata oluştu: ' + data.message);
-                // Burada hata mesajı gösterebilirsiniz.
-            }
-        })
-        .catch(error => {
-            console.error('Hata:', error);
-            // Burada ağ hatası mesajı gösterebilirsiniz.
-        });
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); 
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Durum güncellendi');
+                    location.reload();
+                } else {
+                    console.error('Bir hata oluştu: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+            });
     });
 });
 
-// CSRF token almak için yardımcı fonksiyon
+
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -102,4 +103,24 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const statusSelectors = document.querySelectorAll('.status-selector');
+
+    statusSelectors.forEach(selector => {
+        selector.addEventListener('change', function () {
+            const orderId = this.dataset.orderId;
+            const selectedStatus = this.value;
+            console.log(`Order ${orderId} status changed to ${selectedStatus}`);
+
+            const orderRow = document.querySelector(`tr[data-order-id="${orderId}"]`);
+            console.log('Order row:', orderRow);
+
+            const statusSection = document.querySelector(`#${selectedStatus.toLowerCase()}-section .status-table`);
+            console.log('Status section:', statusSection);
+            statusSection.appendChild(orderRow);
+        });
+    });
+});
+
 
