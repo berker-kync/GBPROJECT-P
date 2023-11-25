@@ -1,7 +1,7 @@
 from django import forms
 from .models import Adress, Customer
 from .validators import phone_number_validator
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm,PasswordChangeForm
 from django.contrib.auth.models import Group
 from django.utils.translation import gettext_lazy as _
 
@@ -89,6 +89,6 @@ class ChangeUserForm(forms.ModelForm):
         'phone': forms.TextInput(attrs={'class': 'form-control'}),
     }
 
-# class ChangePasswordForm(forms.Form):
-#     new_password = forms.CharField(label="", max_length=20, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Yeni Şifre'}))
-#     new_password2 = forms.CharField(label="", max_length=20, widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Yeni Şifre Tekrar'}))
+class ChangePasswordForm(PasswordChangeForm):
+    model = Customer
+    fields = ['password1', 'password2']

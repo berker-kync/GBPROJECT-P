@@ -2,7 +2,12 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block extra_css %} 
+    <link href="{% static 'css/detail-page.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
+
 <div class="container py-4">
     <div class="row mb-4">
         <div class="col">
@@ -11,7 +16,32 @@
         </div>
     </div>
 
-    <div class="row mb-4">
+    {% if messages %}
+        <div class="container mt-3"> <!-- Container to align the messages properly -->
+        {% for message in messages %}
+            <!-- Display each message in a Bootstrap alert component -->
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    <nav class="secondary_nav sticky_horizontal">
+        <div class="container">
+            <ul id="secondary_nav">
+                <li><a href="#section-1">Şifre Değirme</a></li>
+                <li><a href="#section-2">Adres Ekle</a></li>
+                <li><a href="#section-3">Adreslerim</a></li>
+                <li><a href="#section-4">Sipariş Geçmişi</a></li>
+            </ul>
+        </div>
+        <span></span>
+    </nav>
+
+
+    <div class="row mb-4 mt-4">
         <div class="col">
             <h2>Profil Bilgileri</h2>
             <form method="post">
@@ -24,24 +54,30 @@
 
     <div class="row mb-4">
         <div class="col">
-            <h2>Şifre Değiştirme</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ change_password_form|crispy }}
-                <button type="submit" class="btn btn-primary">Kaydet</button>
-            </form>
+            <section id="section-1">
+                <h2>Şifre Değiştirme</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ user_password_form|crispy }}
+                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                </form>
+            </section>
         </div>
     </div>
 
     {% if can_add_more_addresses %}
         <div class="row">
             <div class="col-lg-6">
-                <h2>Adres Ekle</h2>
-                <form method="post">
-                    {% csrf_token %}
-                    {{ form|crispy }}
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
-                </form>
+                <section id="section-2">
+                    <h2>Adres Ekle <button id="toggleAddressForm" class="btn btn-link" title="Adres eklemek için tıklayın">▼</button></h2>
+                    <div id="addressForm" style="display: none;">
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                        </form>
+                    </div>
+                </section>
             </div>
         </div>
     {% else %}
@@ -52,61 +88,113 @@
 
     <div class="row mt-4">
         <div class="col">
-            <h2>Adreslerim</h2>
-            {% for address in customer_adress %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ address.name }}</h5>
-                        <p class="card-text">
-                            {{ address.street }},
-                            {{ address.apartment }},
-                            {{ address.door_number }},
-                            {{ address.city }},
-                            {{ address.postal_code }}
-                        </p>
-                        <p class="card-text"><small class="text-muted">Telefon: {{ address.phone }}</small></p>
+            <section id="section-3">
+                <h2>Adreslerim</h2>
+                {% for address in customer_adress %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ address.name }}</h5>
+                            <p class="card-text">
+                                {{ address.street }},
+                                {{ address.apartment }},
+                                {{ address.door_number }},
+                                {{ address.city }},
+                                {{ address.postal_code }}
+                            </p>
+                            <p class="card-text"><small class="text-muted">Telefon: {{ address.phone }}</small></p>
+                            <a href="{% url 'edit_address' address.id %}" class="btn btn-primary btn-sm">Düzenle</a>
+                            <button class="btn btn-danger btn-sm" data-id="{{ address.id }}" onclick="deleteAddress('{{ address.id }}')">Sil</button>
+                        </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </section>
         </div>
     </div>
 
     <div class="row mt-4">
         <div class="col">
-            <h2>Order History</h2>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Total Price</th>
-                        <th>Status</th>
-                        <th>Shipping Address</th>
-                        <th>Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in order_history %}
-                        <tr>
-                            <td>{{ order.created_at|date:"F d, Y H:i" }}</td>
-                            <td>{{ order.total_price }}</td>
-                            <td>{{ order.get_status_display }}</td>
-                            <td>
-                                {{ order.shipping_address.street }},
-                                {{ order.shipping_address.apartment }},
-                                {{ order.shipping_address.door_number }},
-                                {{ order.shipping_address.city }},
-                                {{ order.shipping_address.postal_code }}
-                            </td>
-                            <td>
-                                {% for orderitem in order.orderitems.all %}
-                                    {{ orderitem.menu.restaurant }} {{ orderitem.menu.name }} ({{ orderitem.quantity }})<br>
-                                {% endfor %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <section id="section-4">
+                <h2>Sipariş Geçmişi<button id="toggleOrderHistory" class="btn btn-link" title="Geçiş siparişleriniz için tıklayın">▼</button></h2>
+                <div id="orderHistory" style="display: none;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Toplam Fiyat</th>
+                                <th>Sipariş Durumu</th>
+                                <th>Sipariş Adresi</th>
+                                <th>Sipariş Detayları</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in order_history %}
+                                <tr>
+                                    <td>{{ order.created_at|date:"F d, Y H:i" }}</td>
+                                    <td>{{ order.total_price }}</td>
+                                    <td>{{ order.get_status_display }}</td>
+                                    <td>
+                                        {{ order.shipping_address.street }},
+                                        {{ order.shipping_address.apartment }},
+                                        {{ order.shipping_address.door_number }},
+                                        {{ order.shipping_address.city }},
+                                        {{ order.shipping_address.postal_code }}
+                                    </td>
+                                    <td>
+                                        {% for orderitem in order.orderitems.all %}
+                                            {{ orderitem.menu.restaurant }} | {{ orderitem.menu.name }} | {{ orderitem.quantity }} Adet <br>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('toggleAddressForm').addEventListener('click', function() {
+        var form = document.getElementById('addressForm');
+        if (form.style.display === 'none') {
+            form.style.display = 'block';
+            this.textContent = '▲'; // Ok ikonunu yukarı yönlü yap
+        } else {
+            form.style.display = 'none';
+            this.textContent = '▼'; // Ok ikonunu aşağı yönlü yap
+        }
+    });
+    document.getElementById('toggleOrderHistory').addEventListener('click', function() {
+        var history = document.getElementById('orderHistory');
+        if (history.style.display === 'none') {
+            history.style.display = 'block';
+            this.textContent = '▲';
+        } else {
+            history.style.display = 'none';
+            this.textContent = '▼';
+        }
+    });
+    function deleteAddress(addressId) {
+        if(confirm('Bu adresi silmek istediğinizden emin misiniz?')) {
+            window.location.href = '/delete-address/' + addressId + '/';
+        }
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var formChanged = false;
+        var form = document.querySelector('form');
+        
+        form.addEventListener('change', function () {
+            formChanged = true;
+        });
+    
+        form.addEventListener('submit', function (event) {
+            if (!formChanged) {
+                event.preventDefault(); // Form gönderimini engelle
+                alert('Formda değişiklik yapılmadı.');
+            }
+        });
+    });
+    
+</script>
 {% endblock %}

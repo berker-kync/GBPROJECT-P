@@ -3,7 +3,7 @@ from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Categ
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib import messages
-from .forms import ChangeUserForm, CustomerAddressForm, RegisterForm, LoginForm
+from .forms import ChangePasswordForm, ChangeUserForm, CustomerAddressForm, RegisterForm, LoginForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -74,6 +74,29 @@ def privacy(request):
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
+def delete_address(request, address_id):
+    address = get_object_or_404(Adress, id=address_id)
+    address.delete()
+    messages.success(request, 'Adresiniz silinmiştir.')
+    return redirect('profile')
+
+def edit_address(request, address_id):
+    address = get_object_or_404(Adress, id=address_id)
+
+    if request.method == "POST":
+        address_form = CustomerAddressForm(request.POST, instance=address)
+        if address_form.is_valid():
+            if address_form.has_changed():
+                address_form.save()
+                messages.success(request, 'Adresiniz güncellenmiştir.')
+                return redirect('profile')
+            else:
+                messages.info(request, 'Hiçbir değişiklik yapılmadı.')
+                return redirect('profile')
+    else:
+        address_form = CustomerAddressForm(instance=address)
+
+    return render(request, 'change_address.html', {'address_form': address_form})
 
 @login_required(login_url='/login')
 def profile(request):
@@ -88,8 +111,20 @@ def profile(request):
     # customer isim ve telefon değiştirme
     user_form = ChangeUserForm(request.POST or None, instance=request.user)
     if request.method == "POST" and user_form.is_valid():
-        user_form.save()
-        messages.success(request, 'Your account has been updated.')
+        if user_form.has_changed():
+            user_form.save()
+            messages.success(request, 'Profil bilgileriniz güncellenmiştir.')
+            return redirect('profile')
+        else:
+            messages.info(request, 'Hiçbir değişiklik yapılmadı.')
+        return redirect('profile')
+        
+    
+    # customer password değiştirme
+    user_password_form = ChangePasswordForm(request.user, request.POST or None)
+    if request.method == "POST" and user_password_form.is_valid():
+        user_password_form.save()
+        messages.success(request, 'Şifreniz güncellenmiştir.')
         return redirect('profile')
 
     # Kullanıcının adresleri ve sipariş geçmişi
@@ -115,6 +150,7 @@ def profile(request):
     context = {
         'customer_email': customer_email, 'customer_adress': customer_adress, 'order_history': order_history, 
         'form': form, 'can_add_more_addresses': can_add_more_addresses, 'address_count': address_count, 'user_form': user_form,
+        'user_password_form': user_password_form,
         }
     return render(request, 'profile.html', context)
 
