@@ -11,7 +11,7 @@ def name_validator(value):
     if len(value) < 3:
         raise ValidationError('En az 3 karakterden oluşmalı.')
 
-    if not re.match("^[a-zA-Z\s]*$", value):
+    if not re.match("^[a-zA-Z]*$", value):
         raise ValidationError('Rakam ya da özel karakter kullanılamaz.')
     
 def postcode_validator(value):    
@@ -22,5 +22,5 @@ def postcode_validator(value):
         raise ValidationError('Posta kodu yalnızca rakamlardan oluşur.')
     
 def city_validator(value):      
-    if not re.match("^[a-zA-Z\s]*$", value):
+    if not re.match("^[a-zA-Z]*$", value):
         raise ValidationError('Rakam ya da özel karakter kullanılamaz.')
