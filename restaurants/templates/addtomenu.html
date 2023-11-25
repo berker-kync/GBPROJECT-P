@@ -38,6 +38,32 @@
             {% endif %}
         </div>
         <!-- /box_general -->
+        <div>
+            <h2>Restoran menü öğeleri</h2>
+            <ul>
+                {% for item in existing_menu_items %}
+                <li>
+                    <strong>{{ item.name }}</strong> - {{ item.price }}
+                    {% if item.description %}
+                        <p>{{ item.description }}</p>
+                    {% endif %}
+                    {% if item.product_image %}
+                        <img src="{{ item.product_image.url }}" alt="{{ item.name }}" height="50">
+                    {% endif %}                    
+                    <div>
+                        <span>Menü durumu: {% if item.is_active %}Görünür{% else %}Gizli{% endif %}</span>
+                        <button onclick="toggleVisibility('{{ item.id }}')">Toggle Visibility</button>
+                        <button onclick="deleteItem('{{ item.id }}')">Delete Item</button>
+                    </div>
+                </li>
+                <br>
+            {% endfor %}
+            </ul>
+        </div>
+        
+
+
+        
     </div>
     <!-- /container-fluid -->
 </div>

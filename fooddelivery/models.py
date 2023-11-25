@@ -153,6 +153,7 @@ class Order(models.Model):
     shipping_address = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orders_adresses')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    # restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders') confirm sayfasında restoran ismi göstermek için gerekebilir
 
     class Meta:
         db_table = 'order'

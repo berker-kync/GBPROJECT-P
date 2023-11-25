@@ -1,13 +1,164 @@
+
+{% extends "adminbase.html" %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <title>Sipariş Listesi</title>
-    <!-- Ek CSS ve JS dosyalarını buraya dahil edin -->
-</head>
-<body>
-    <table>
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">Sipariş Yönetim Paneli</a>
+            </li>
+        </ol>
+
+
+<!-- Pending Orderlar -->
+        <div class="status-section" id="pending-section">
+            <h2>Onay Bekleyen Siparişler</h2>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Müşteri</th>
+                        <th>Toplam Fiyat</th>
+                        <th>Durum</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    {% if order.status == 'pending' %}
+                        <tr data-order-id="{{ order.id }}">
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.customer.name }}</td>
+                            <td>{{ order.total_price }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>{{ order.updated_at }}</td>
+                            <td>
+                                <select class="status-selector" data-order-id="{{ order.id }}">
+                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                    <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                    <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                </select>
+                                <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No pending orders found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+
+
+<!-- Approved Orderlar -->
+        <div class="status-section" id="approved-section">
+            <h2>Onaylanan Siparişler</h2>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Müşteri</th>
+                        <th>Toplam Fiyat</th>
+                        <th>Durum</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    {% if order.status == 'approved' %}
+                        <tr data-order-id="{{ order.id }}">
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.customer.name }}</td>
+                            <td>{{ order.total_price }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>{{ order.updated_at }}</td>
+                            <td>
+                                <select class="status-selector" data-order-id="{{ order.id }}">
+                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                    <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                    <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                </select>
+                                <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No pending orders found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+<br>
+
+<!-- Rejected Orderlar -->
+        <div class="status-section" id="rejected-section">
+            <h2>İptal Edilen Siparişler</h2>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Müşteri</th>
+                        <th>Toplam Fiyat</th>
+                        <th>Durum</th>
+                        <th>Oluşturulma Tarihi</th>
+                        <th>Güncelleme Tarihi</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    {% if order.status == 'rejected' %}
+                        <tr data-order-id="{{ order.id }}">
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.customer.name }}</td>
+                            <td>{{ order.total_price }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.created_at }}</td>
+                            <td>{{ order.updated_at }}</td>
+                            <td>
+                                <select class="status-selector" data-order-id="{{ order.id }}">
+                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                    <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                    <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                </select>
+                                <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td colspan="7">No pending orders found.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+<br>
+
+<!-- Delivered Orderlar -->
+
+<div class="status-section" id="delivered-section">
+    <h2>Teslim Edilen Siparişler</h2>
+    <table class="status-table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -16,34 +167,45 @@
                 <th>Durum</th>
                 <th>Oluşturulma Tarihi</th>
                 <th>Güncelleme Tarihi</th>
+                <th></th>
             </tr>
         </thead>
-        <!-- order_list.html içinde -->
         <tbody>
             {% for order in orders %}
-                <tr>
+            {% if order.status == 'delivered' %}
+                <tr data-order-id="{{ order.id }}">
                     <td>{{ order.id }}</td>
-                    <td>{{ order.customer.email }}</td>
+                    <td>{{ order.customer.name }}</td>
                     <td>{{ order.total_price }}</td>
-                    <td>
-                        <select class="status-selector" data-order-id="{{ order.id }}">
-                            {% for status_value, status_name in order.STATUS %}
-                                <option value="{{ status_value }}" {% if order.status == status_value %}selected{% endif %}>
-                                    {{ status_name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </td>
+                    <td>{{ order.get_status_display }}</td>
                     <td>{{ order.created_at }}</td>
                     <td>{{ order.updated_at }}</td>
                     <td>
-                        <!-- Kaydet butonu -->
-                        <button type="button" class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                        <select class="status-selector" data-order-id="{{ order.id }}">
+                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                            <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                            <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                        </select>
+                        <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
                     </td>
+                </tr>
+                {% endif %}
+            {% empty %}
+                <tr>
+                    <td colspan="7">No pending orders found.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
-    <script src="{% static 'js/order_status.js' %}"></script>
-</body>
-</html>
+</div>
+
+
+<script src="{% static 'js/order_status.js' %}"></script>
+</div>
+<!-- /box_general -->
+</div>
+<!-- /container-fluid -->
+</div>
+<!-- /content-wrapper -->
+{% endblock %}
