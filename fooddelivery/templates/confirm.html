@@ -34,7 +34,7 @@
                                         {{ item.menu.name }} (Adet: {{ item.quantity }}),
                                     {% endfor %}
 								</p>
-                                <p>Toplam tutar: ${{ latest_order.total_price }}</p>
+                                <p>Toplam tutar: ₺{{ latest_order.total_price }}</p>
                                 <p>Teslimat adresi: {{ latest_order.shipping_address.street }}, {{ latest_order.shipping_address.city }}, {{ latest_order.shipping_address.postal_code }}</p>
                             </ul>
                         </div>

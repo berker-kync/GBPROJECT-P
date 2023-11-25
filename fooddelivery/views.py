@@ -130,7 +130,7 @@ def detailRestaurant(request, name_slug):
         cart_items = Cart.objects.filter(customer=request.user)
         if not cart_items.exists():
             # Eğer sepet boşsa, kullanıcıya hata mesajı göster
-            messages.error(request, 'Your cart is empty.')
+            messages.error(request, 'Sepetiniz boş.')
             return redirect('detail-restaurant', name_slug=name_slug)
         else:
             # Sepet doluysa, kullanıcıyı 'order' sayfasına yönlendir
@@ -213,6 +213,7 @@ def order(request):
     current_restaurant = Cart.objects.filter(customer=request.user).select_related('menu__restaurant')
     total_price = sum(item.total_price for item in cart_items)
     addresses = Adress.objects.filter(customer=customer)
+    payment_method = request.POST.get('payment_method', 'nakit')
     context = {
         'addresses': addresses,
         'cart_items': cart_items,
@@ -230,7 +231,7 @@ def order(request):
 
         cart_items = Cart.objects.filter(customer=customer)
         if not cart_items.exists():
-            messages.error(request, "Your cart is empty.")
+            messages.error(request, "Sepetiz boş.")
             return redirect('restaurant-list')
 
         for item in cart_items:
@@ -243,7 +244,9 @@ def order(request):
                 customer=customer,
                 shipping_address=shipping_address,
                 total_price=sum(item.total_price for item in cart_items),
-                status='pending'
+                status='pending',
+                payment_method=payment_method,
+
             )
 
             for item in cart_items:

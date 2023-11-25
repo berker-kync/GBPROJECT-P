@@ -32,3 +32,31 @@
 .asteriskField {
     display: none;
 }
+
+
+@keyframes slideInRight {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  .messages li {
+    animation: slideInRight 0.5s forwards, fadeOut 0.5s 2.5s forwards;
+    position: fixed; /* Sabit pozisyon */
+    right: 20px; /* Sağ taraftan 20px uzaklık */
+    top: 20px; /* Üstten 20px uzaklık */
+    z-index: 1000; /* Diğer elementlerin üzerinde görünmesini sağlar */
+  }
+  

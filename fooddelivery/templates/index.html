@@ -9,7 +9,7 @@
     <title>TencereKapak - Yemekte kalite</title>
 
     <!-- Favicons-->
-    <link rel="shortcut icon" href="{% static 'img/TencereKapak.svg' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/TencereKapak_icon.png' %}" type="image/x-icon">
     <link rel="apple-touch-icon" type="image/x-icon" href="{% static 'img/apple-touch-icon-57x57-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{% static 'img/apple-touch-icon-72x72-precomposed.png' %}">
     <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{% static 'img/apple-touch-icon-114x114-precomposed.png' %}">
@@ -28,6 +28,7 @@
     <!-- SPECIFIC CSS -->
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
 
+
 </head>
 
 <body data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75" data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75">
@@ -36,15 +37,18 @@
         <div class="container">
             <div id="logo">
                 <a href="/">
-                    <img src="{% static 'img/TencereKapak_sticky.svg' %}" width="162" height="35" alt="" class="logo_normal">
-                    <img src="{% static 'img/TencereKapak.svg' %}" width="162" height="35" alt="" class="logo_sticky">
+                    <img src="{% static 'img/TencereKapak_sticky.png' %}" width="162" height="35" alt="" class="logo_normal">
+                    <img src="{% static 'img/TencereKapak.png' %}" width="162" height="35" alt="" class="logo_sticky">
                 </a>
             </div>
             <div class="layer"></div><!-- Opacity Mask Menu Mobile -->
-            <ul id="top_menu">
-                <!-- <li><a href="#sign-in-dialog" id="sign-in" class="login">Sign In</a></li> -->
-                <li><a href="/restaurant-list" class="cart_bt" title="Sepetim">Sepetim</a></li>
-            </ul>
+	        <ul id="top_menu">
+                <li class="submenu">
+					<a href="/order" class="show-submenu">
+						<img class="mt-1 bi bi-cart" src="{% static 'img/cart.svg' %}" width="27px">
+					</a>
+				</li>
+	        </ul>
             <!-- /top_menu -->
             <a href="#0" class="open_close">
                 <i class="icon_menu"></i><span>Menü</span>

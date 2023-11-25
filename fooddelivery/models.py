@@ -151,6 +151,7 @@ class Order(models.Model):
     status = models.CharField(max_length=10, choices=STATUS, default='pending')
     # is_paid = models.BooleanField(default=False)  # Ödeme durumu
     shipping_address = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orders_adresses')
+    payment_method = models.CharField(max_length=100, null=False, blank=False, default='nakit')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders') confirm sayfasında restoran ismi göstermek için gerekebilir

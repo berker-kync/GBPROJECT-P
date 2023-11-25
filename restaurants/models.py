@@ -48,7 +48,7 @@ class Restaurant(models.Model):
         verbose_name_plural = 'Restaurants'
 
     def __str__(self):
-        return f'{self.name} - {self.category}'
+        return f'{self.name}'
 
 
 class RestaurantRegistration(models.Model):
