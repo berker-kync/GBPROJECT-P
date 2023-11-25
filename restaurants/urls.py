@@ -12,4 +12,6 @@ urlpatterns = [
     path('stafflogout/', views.stafflogout, name='staff-logout'),
     path('orders/', views.order_list, name='order-list'),
     path('update-order-status/<int:order_id>/', views.update_order_status, name='update-order-status'),
+    path('delete-item/<int:menu_id>/', views.delete_item, name='delete-item'),
+    path('toggle-visibility/<int:item_id>/', views.toggle_visibility, name='toggle-visibility'),
 ]

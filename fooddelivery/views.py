@@ -94,12 +94,12 @@ def profile(request):
         address = form.save(commit=False)
         address.customer = customer
         address.save()
-        messages.success(request, 'Your address has been created.')
+        messages.success(request, 'Adresiniz eklendi.')
         return redirect('profile')
 
     # Formun gösterilip gösterilmeyeceğine dair mesaj
     if not can_add_more_addresses:
-        messages.warning(request, 'You can only add up to 5 addresses.')
+        messages.warning(request, 'En fazla 5 adres ekleyebilirsiniz.')
     
     context = {
         'customer_email': customer_email, 'customer_adress': customer_adress, 'order_history': order_history, 
@@ -108,7 +108,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
     
-@login_required(login_url='/login')  # Requires the user to be authenticated
+@login_required(login_url='/login') 
 def detailRestaurant(request, name_slug):
     
     if request.method == "POST":
@@ -181,12 +181,12 @@ def remove_from_cart(request, id):
         if cart_item:
             # Remove the cart item
             cart_item.delete()
-            return JsonResponse({"success": True, "message": "Product removed from cart."})
+            return JsonResponse({"success": True, "message": "Ürün sepetten silindi."})
         else:
-            return JsonResponse({"success": False, "message": "Product not found in the cart."})
+            return JsonResponse({"success": False, "message": "Ürün sepette bulunamadı."})
 
     except (Cart.DoesNotExist, ValueError):
-        return JsonResponse({"success": False, "message": "Cart item not found or invalid data."})
+        return JsonResponse({"success": False, "message": "Sepet ürünü bulunamadı."})
 
 
 # order verdikten sonra rejected olursa database deki quantity'yi geri almak için ne yapacağız?
@@ -211,7 +211,7 @@ def order(request):
         shipping_address = Adress.objects.filter(id=selected_address_id).first()
 
         if not shipping_address:
-            messages.error(request, "Please select a valid address.")
+            messages.error(request, "Lütfen gerçerli bir adres seçiniz.")
             return redirect('restaurant-list')
 
         cart_items = Cart.objects.filter(customer=customer)
@@ -221,7 +221,7 @@ def order(request):
 
         for item in cart_items:
             if item.menu.quantity < item.quantity and item.menu.quantity != None:
-                messages.error(request, f"{item.menu.name} doesn't have enough stock.")
+                messages.error(request, f"{item.menu.name} için yeterli stok miktarı bulunmamaktadır.")
                 return render(request, 'order.html', context)
 
         with transaction.atomic():
@@ -243,17 +243,25 @@ def order(request):
                 item.menu.save()
 
             cart_items.delete()
-            messages.success(request, 'Your order has been placed successfully.')
+            messages.success(request, 'Siparişiniz başarıyla gerçekleştirildi.')
             return redirect('confirm')
     
     cart_items = Cart.objects.filter(customer=customer)
     if not cart_items.exists():
-        messages.error(request, "Your cart is empty.")
+        messages.error(request, "Sepetiniz boş.")
         return redirect('restaurant-list')
 
     return render(request, 'order.html', context)
 
 
 
+@login_required(login_url='/login')
 def confirmorder(request):
-    return render(request, 'confirm.html')
+    latest_order = Order.objects.filter(customer=request.user).order_by('-created_at').first()
+
+    context = {
+        'latest_order': latest_order,
+    }
+
+    return render(request, 'confirm.html', context)
+
