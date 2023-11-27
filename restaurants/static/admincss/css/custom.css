@@ -1,1 +1,8 @@
 /* YOUR CUSTOM CSS */
+
+.menu-item-image {
+    max-width: 100px;
+    height: auto; 
+    display: block;
+    margin-bottom: 10px; 
+}
