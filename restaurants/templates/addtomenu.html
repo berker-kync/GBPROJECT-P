@@ -39,27 +39,37 @@
         </div>
         <!-- /box_general -->
         <div>
-            <h2>Restoran menü öğeleri</h2>
-            <ul>
+            <h2 class="my-4">Restoran Menü Öğeleri</h2>
+            <ul class="list-unstyled">
                 {% for item in existing_menu_items %}
-                <li>
-                    <strong>{{ item.name }}</strong> - {{ item.price }}
-                    {% if item.description %}
-                        <p>{{ item.description }}</p>
-                    {% endif %}
-                    {% if item.product_image %}
-                        <img src="{{ item.product_image.url }}" alt="{{ item.name }}" height="50">
-                    {% endif %}                    
-                    <div>
-                        <span>Menü durumu: {% if item.is_active %}Görünür{% else %}Gizli{% endif %}</span>
-                        <button onclick="toggleVisibility('{{ item.id }}')">Toggle Visibility</button>
-                        <button onclick="deleteItem('{{ item.id }}')">Delete Item</button>
-                    </div>
-                </li>
-                <br>
-            {% endfor %}
-            </ul>
+                    <li class="mb-3 p-3 border rounded">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>{{ item.name }}</strong> - {{ item.price }} TL
+                                {% if item.description %}
+                                    <p class="mb-2">{{ item.description }}</p>
+                                {% endif %}
+                                {% if item.product_image %}
+                                    <img src="{{ item.product_image.url }}" alt="{{ item.name }}" class="menu-item-image img-thumbnail">
+                                    <span class="badge {% if item.is_active %}badge-success{% else %}badge-secondary{% endif %} mt-2">
+                                        {% if item.is_active %}Görünür{% else %}Gizli{% endif %}
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="item-actions mt-3">
+                                <button class="btn btn-outline-secondary btn-sm" onclick="toggleVisibility('{{ item.id }}')">
+                                    <i class="bi bi-eye{% if not item.is_active %}-slash{% endif %}"></i> Toggle Visibility
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteItem('{{ item.id }}')">
+                                    <i class="bi bi-trash"></i> Delete Item
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>            
         </div>
+        
         
 
 
