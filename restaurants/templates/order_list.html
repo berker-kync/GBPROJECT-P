@@ -15,190 +15,199 @@
 
 <!-- Pending Orderlar -->
         <div class="status-section" id="pending-section">
-            <h2>Onay Bekleyen Siparişler</h2>
-            <table class="status-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Müşteri</th>
-                        <th>Toplam Fiyat</th>
-                        <th>Durum</th>
-                        <th>Oluşturulma Tarihi</th>
-                        <th>Güncelleme Tarihi</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    {% if order.status == 'pending' %}
-                        <tr data-order-id="{{ order.id }}">
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.customer.name }}</td>
-                            <td>{{ order.total_price }}</td>
-                            <td>{{ order.get_status_display }}</td>
-                            <td>{{ order.created_at }}</td>
-                            <td>{{ order.updated_at }}</td>
-                            <td>
-                                <select class="status-selector" data-order-id="{{ order.id }}">
-                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
-                                    <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
-                                    <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
-                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
-                                </select>
-                                <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% empty %}
+            <h2 class="text-center">Onay Bekleyen Siparişler</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
                         <tr>
-                            <td colspan="7">No pending orders found.</td>
+                            <th>ID</th>
+                            <th>Müşteri</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Güncelleme Tarihi</th>
+                            <th>Aksiyonlar</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        {% if order.status == 'pending' %}
+                            <tr data-order-id="{{ order.id }}">
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer.name }}</td>
+                                <td>{{ order.total_price }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>{{ order.created_at }}</td>
+                                <td>{{ order.updated_at }}</td>
+                                <td>
+                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                        <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                        <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm mt-1 save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">Onay bekleyen sipariş bulunamadı.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
+
 
 
 
 <!-- Approved Orderlar -->
         <div class="status-section" id="approved-section">
-            <h2>Onaylanan Siparişler</h2>
-            <table class="status-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Müşteri</th>
-                        <th>Toplam Fiyat</th>
-                        <th>Durum</th>
-                        <th>Oluşturulma Tarihi</th>
-                        <th>Güncelleme Tarihi</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    {% if order.status == 'approved' %}
-                        <tr data-order-id="{{ order.id }}">
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.customer.name }}</td>
-                            <td>{{ order.total_price }}</td>
-                            <td>{{ order.get_status_display }}</td>
-                            <td>{{ order.created_at }}</td>
-                            <td>{{ order.updated_at }}</td>
-                            <td>
-                                <select class="status-selector" data-order-id="{{ order.id }}">
-                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
-                                    <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
-                                    <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
-                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
-                                </select>
-                                <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% empty %}
+            <h2 class="text-center">Onaylanan Siparişler</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
                         <tr>
-                            <td colspan="7">No pending orders found.</td>
+                            <th>ID</th>
+                            <th>Müşteri</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Güncelleme Tarihi</th>
+                            <th>Aksiyonlar</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        {% if order.status == 'approved' %}
+                            <tr data-order-id="{{ order.id }}">
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer.name }}</td>
+                                <td>{{ order.total_price }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>{{ order.created_at }}</td>
+                                <td>{{ order.updated_at }}</td>
+                                <td>
+                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                        <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                        <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm mt-1 save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">Onay bekleyen sipariş bulunamadı.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 <br>
 
 <!-- Rejected Orderlar -->
         <div class="status-section" id="rejected-section">
-            <h2>İptal Edilen Siparişler</h2>
-            <table class="status-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Müşteri</th>
-                        <th>Toplam Fiyat</th>
-                        <th>Durum</th>
-                        <th>Oluşturulma Tarihi</th>
-                        <th>Güncelleme Tarihi</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in orders %}
-                    {% if order.status == 'rejected' %}
-                        <tr data-order-id="{{ order.id }}">
-                            <td>{{ order.id }}</td>
-                            <td>{{ order.customer.name }}</td>
-                            <td>{{ order.total_price }}</td>
-                            <td>{{ order.get_status_display }}</td>
-                            <td>{{ order.created_at }}</td>
-                            <td>{{ order.updated_at }}</td>
-                            <td>
-                                <select class="status-selector" data-order-id="{{ order.id }}">
-                                    <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
-                                    <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
-                                    <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
-                                    <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
-                                </select>
-                                <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% empty %}
+            <h2 class="text-center">İptal Edilen Siparişler</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
                         <tr>
-                            <td colspan="7">No pending orders found.</td>
+                            <th>ID</th>
+                            <th>Müşteri</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Güncelleme Tarihi</th>
+                            <th>Aksiyonlar</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        {% if order.status == 'rejected' %}
+                            <tr data-order-id="{{ order.id }}">
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer.name }}</td>
+                                <td>{{ order.total_price }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>{{ order.created_at }}</td>
+                                <td>{{ order.updated_at }}</td>
+                                <td>
+                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                        <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                        <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm mt-1 save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">Onay bekleyen sipariş bulunamadı.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
 <br>
 
 <!-- Delivered Orderlar -->
 
-<div class="status-section" id="delivered-section">
-    <h2>Teslim Edilen Siparişler</h2>
-    <table class="status-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Müşteri</th>
-                <th>Toplam Fiyat</th>
-                <th>Durum</th>
-                <th>Oluşturulma Tarihi</th>
-                <th>Güncelleme Tarihi</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            {% if order.status == 'delivered' %}
-                <tr data-order-id="{{ order.id }}">
-                    <td>{{ order.id }}</td>
-                    <td>{{ order.customer.name }}</td>
-                    <td>{{ order.total_price }}</td>
-                    <td>{{ order.get_status_display }}</td>
-                    <td>{{ order.created_at }}</td>
-                    <td>{{ order.updated_at }}</td>
-                    <td>
-                        <select class="status-selector" data-order-id="{{ order.id }}">
-                            <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
-                            <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
-                            <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
-                            <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
-                        </select>
-                        <button class="save-status" data-order-id="{{ order.id }}">Kaydet</button>
-                    </td>
-                </tr>
-                {% endif %}
-            {% empty %}
-                <tr>
-                    <td colspan="7">No pending orders found.</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+        <div class="status-section" id="delivered-section">
+            <h2 class="text-center">Teslim Edilen Siparişler</h2>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Müşteri</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                            <th>Güncelleme Tarihi</th>
+                            <th>Aksiyonlar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        {% if order.status == 'delivered' %}
+                            <tr data-order-id="{{ order.id }}">
+                                <td>{{ order.id }}</td>
+                                <td>{{ order.customer.name }}</td>
+                                <td>{{ order.total_price }}</td>
+                                <td>{{ order.get_status_display }}</td>
+                                <td>{{ order.created_at }}</td>
+                                <td>{{ order.updated_at }}</td>
+                                <td>
+                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}">
+                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
+                                        <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
+                                        <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
+                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-sm mt-1 save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center">Onay bekleyen sipariş bulunamadı.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
 
 <script src="{% static 'js/order_status.js' %}"></script>
