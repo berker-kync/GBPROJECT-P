@@ -1,5 +1,5 @@
 from django import forms
-from .models import Adress, Customer
+from .models import Adress, Customer, Province
 from .validators import phone_number_validator
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,PasswordChangeForm
 from django.contrib.auth.models import Group
@@ -42,13 +42,14 @@ class CustomUserChangeForm(UserChangeForm):
 class CustomerAddressForm(forms.ModelForm):
     class Meta:
         model = Adress
-        fields = ['name', 'phone', 'street', 'apartment', 'door_number', 'city', 'postal_code']
+        fields = ['name', 'phone', 'street', 'apartment', 'door_number', 'city', 'province' , 'postal_code']
 
     name = forms.CharField(label="Adres İsmi", min_length=2, max_length=50)
     phone = forms.CharField(label="Telefon", max_length=10, validators=[phone_number_validator])
     street = forms.CharField(label="Sokak", min_length=5, max_length=60)
     apartment = forms.CharField(label="Apartman ve Apt. No", max_length=20)
     door_number = forms.CharField(label="İç Kapı No", max_length=3)
+    province = forms.ModelChoiceField(label="İlçe", queryset=Province.objects.all())
     city = forms.CharField(label="Şehir", max_length=20)
     postal_code = forms.CharField(label='Posta Kodu', min_length=5, max_length=5)
 
