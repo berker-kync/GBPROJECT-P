@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Category
+from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Category, Province
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib import messages
@@ -13,7 +13,9 @@ def index(request):
       
     restaurants = Restaurant.objects.all()[:10]
 
-    return render(request, 'index.html', {'restaurants': restaurants})
+    provinces = Province.objects.all()
+
+    return render(request, 'index.html', {'restaurants': restaurants, 'provinces': provinces})
 
 def Login(request):
     if request.user.is_authenticated:
@@ -100,60 +102,60 @@ def edit_address(request, address_id):
 
 @login_required(login_url='/login')
 def profile(request):
-    # Login olan kullanici
     customer = request.user
-    customer_email = request.user.email
+    customer_email = customer.email
 
-    # Kullanıcı bilgileri isim ve telefon
-    customer_name = customer.name
-    customer_phone = customer.phone
-
-    # customer isim ve telefon değiştirme
+    # Formlarınızın tanımlanması
     user_form = ChangeUserForm(request.POST or None, instance=request.user)
-    if request.method == "POST" and user_form.is_valid():
-        if user_form.has_changed():
+    user_password_form = ChangePasswordForm(request.user, request.POST or None)
+    customer_adress = Adress.objects.filter(customer=request.user)
+    address_count = customer.customer_addresses.count()
+    can_add_more_addresses = address_count < 5
+    address_form = CustomerAddressForm(request.POST or None) if can_add_more_addresses else None
+
+    # Profil Bilgileri Formu Kontrolü
+    if 'profile_form' in request.POST:
+        if user_form.is_valid():
             user_form.save()
             messages.success(request, 'Profil bilgileriniz güncellenmiştir.')
             return redirect('profile')
-        else:
-            messages.info(request, 'Hiçbir değişiklik yapılmadı.')
-        return redirect('profile')
-        
-    
-    # customer password değiştirme
-    user_password_form = ChangePasswordForm(request.user, request.POST or None)
-    if request.method == "POST" and user_password_form.is_valid():
-        user_password_form.save()
-        messages.success(request, 'Şifreniz güncellenmiştir.')
-        return redirect('profile')
 
-    # Kullanıcının adresleri ve sipariş geçmişi
-    customer_adress = Adress.objects.filter(customer=request.user)
-    address_count = customer.customer_addresses.count()
+    # Şifre Değiştirme Formu Kontrolü
+    elif 'password_form' in request.POST:
+        if user_password_form.is_valid():
+            user_password_form.save()
+            messages.success(request, 'Şifreniz güncellenmiştir.')
+            return redirect('profile')
+
+    # Adres Ekleme Formu Kontrolü
+    elif 'address_form' in request.POST and can_add_more_addresses:
+        if address_form.is_valid():
+            address = address_form.save(commit=False)
+            address.customer = customer
+            address.save()
+            messages.success(request, 'Adresiniz eklendi.')
+            return redirect('profile')
+
     order_history = Order.objects.filter(customer=customer).prefetch_related('orderitems__menu').order_by('-created_at')
-    
-    # Kullanıcı 5'ten az adrese sahipse formu göster
-    can_add_more_addresses = address_count < 5
-    form = CustomerAddressForm(request.POST or None) if can_add_more_addresses else None
 
-    if request.method == "POST" and form and form.is_valid():
-        address = form.save(commit=False)
-        address.customer = customer
-        address.save()
-        messages.success(request, 'Adresiniz eklendi.')
-        return redirect('profile')
-
-    # Formun gösterilip gösterilmeyeceğine dair mesaj
-    if not can_add_more_addresses:
-        messages.warning(request, 'En fazla 5 adres ekleyebilirsiniz.')
-    
     context = {
-        'customer_email': customer_email, 'customer_adress': customer_adress, 'order_history': order_history, 
-        'form': form, 'can_add_more_addresses': can_add_more_addresses, 'address_count': address_count, 'user_form': user_form,
+        'customer_email': customer_email, 
+        'customer_adress': customer_adress, 
+        'order_history': order_history, 
+        'form': address_form, 
+        'can_add_more_addresses': can_add_more_addresses, 
+        'address_count': address_count, 
+        'user_form': user_form,
         'user_password_form': user_password_form,
-        }
+    }
+
     return render(request, 'profile.html', context)
 
+
+def get_province(request, province_slug):
+    province = get_object_or_404(Province, province_slug=province_slug)
+    restaurants = Restaurant.objects.filter(province=province)
+    return render(request, 'province.html', {'restaurants': restaurants, 'province': province})
     
 @login_required(login_url='/login') 
 def detailRestaurant(request, name_slug):

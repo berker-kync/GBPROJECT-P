@@ -6,6 +6,7 @@ from django.conf import settings
 
 class Province(models.Model):
     province = models.CharField(max_length=100, null=False, blank=False)
+    province_slug = AutoSlugField(populate_from='province', unique=True, editable=True, blank=True)
 
     class Meta:
         db_table = 'province'

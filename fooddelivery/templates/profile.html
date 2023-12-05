@@ -44,10 +44,10 @@
     <div class="row mb-4 mt-4">
         <div class="col">
             <h2>Profil Bilgileri</h2>
-            <form method="post">
+            <form method="post" id="profileForm">
                 {% csrf_token %}
                 {{ user_form|crispy }}
-                <button type="submit" class="btn btn-primary">Kaydet</button>
+                <button type="submit" name="profile_form" class="btn btn-primary">Kaydet</button>
             </form>
         </div>
     </div>
@@ -59,7 +59,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ user_password_form|crispy }}
-                    <button type="submit" class="btn btn-primary">Kaydet</button>
+                    <button type="submit"name="password_form" class="btn btn-primary">Kaydet</button>
                 </form>
             </section>
         </div>
@@ -74,7 +74,7 @@
                         <form method="post">
                             {% csrf_token %}
                             {{ form|crispy }}
-                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                            <button type="submit" name="address_form" class="btn btn-primary">Kaydet</button>
                         </form>
                     </div>
                 </section>
@@ -181,20 +181,21 @@
         }
     }
     document.addEventListener('DOMContentLoaded', function () {
+        var profileForm = document.getElementById('profileForm');
         var formChanged = false;
-        var form = document.querySelector('form');
-        
-        form.addEventListener('change', function () {
+    
+        profileForm.addEventListener('change', function () {
             formChanged = true;
         });
     
-        form.addEventListener('submit', function (event) {
+        profileForm.addEventListener('submit', function (event) {
             if (!formChanged) {
                 event.preventDefault(); // Form gönderimini engelle
-                alert('Formda değişiklik yapılmadı.');
+                alert('Profil bilgilerinde değişiklik yapılmadı.');
             }
         });
     });
+    
     
 </script>
 {% endblock %}
