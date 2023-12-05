@@ -92,11 +92,11 @@
                         <p>Restoranınızı sistemimize eklemek için bilgilerinizi girin.</p>
                     </div>
                     <div id="message-register"></div>
-                    <form method="post">
-                        <h6>Bilgiler</h6>
-                            {% csrf_token %}
-                            {{ form|crispy }}
-                            <button type="submit">Gönder</button>
+
+                    <form method="post" id="partnerForm">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" >Gönder</button>
 
     
                         <!-- <div class="form-group text-center"><input type="submit" class="btn_1 gradient" value="Gönder" id="submit-register"></div> -->
@@ -114,11 +114,22 @@
 
 {% endblock %}
 
+
+
 {% block extra_js %} 
     <!-- SPECIFIC SCRIPTS -->
     <script src="{% static 'js/sticky_sidebar.min.js' %}"></script>
     <script src="{% static 'js/sticky-kit.min.js' %}"></script>
     <script src="{% static 'js/specific_detail.js' %}"></script>
+
+    <!-- <script>
+        document.getElementById('partnerForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the default form submission
+            alert('Başvurunuzla ilgili kısa süre içerisinde bir mail alacaksınız.');
+            this.submit();  // Submit the form after the alert
+        });
+    </script> -->
+
 {% endblock %}
 
 

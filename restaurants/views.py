@@ -14,6 +14,58 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.db.models import F
 from django.views.decorators.http import require_POST
+import requests
+from django.conf import settings
+
+
+
+
+def send_email(subject, text, to_email):
+    response = requests.post(
+        settings.MAILGUN_SEND_URL,
+        auth=("api", settings.MAILGUN_API_KEY),
+        data={"from": "TencereKapak <noreply@mail.berkerkoyuncu.xyz>",
+              "to": [to_email],
+              "subject": subject,
+              "text": text})
+    
+    return response
+
+
+def partner(request):
+    form = RestaurantRegistrationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        new_restaurant = form.save()
+
+        form_data_str = "\n".join(f"{key.title()}: {value}" for key, value in form.cleaned_data.items())
+
+        user_email = form.cleaned_data['email']
+        user_name = form.cleaned_data['name']
+
+        # Bu bana gelecek kayıt bilgisi
+        subject1 = "Yeni Partner Restoran Kayıt Bilgisi"
+        message1 = f"Yeni bir kayıt formu geldi. İşte detaylar:\n\n{form_data_str}"
+        to_email1 = "berkerkoyuncu@gmail.com"  
+
+        # Kayıt olmak isteyen restorana gitsin
+        subject2 = "Restoran Kaydınız Alındı"
+        message2 = f"Sayın {user_name}, restoran kaydınız başarıyla alınmıştır. En kısa sürede sizinle iletişime geçeceğiz."
+        to_email2 = user_email  
+
+        # ilk mail
+        send_email(subject1, message1, to_email1)
+
+        # ikinci mail
+        send_email(subject2, message2, to_email2)
+
+        return redirect('index')
+    
+    return render(request, 'partner.html', {'form': form})
+
+
+
+
 
 
 
@@ -45,16 +97,6 @@ def stafflogout(request):
     return redirect('index')
 
 
-
-def partner(request):
-    form = RestaurantRegistrationForm(request.POST or None)
-
-    if request.method == "POST" and form.is_valid():
-        form.save()
-        messages.success(request, 'Your account has been created.')
-        return redirect('index')
-    
-    return render(request, 'partner.html', {'form': form})
 
 
 
