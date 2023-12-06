@@ -152,10 +152,10 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
-def get_province(request, province_slug):
-    province = get_object_or_404(Province, province_slug=province_slug)
-    restaurants = Restaurant.objects.filter(province=province)
-    return render(request, 'province.html', {'restaurants': restaurants, 'province': province})
+# def get_province(request, province_slug):
+#     province = get_object_or_404(Province, province_slug=province_slug)
+#     restaurants = Restaurant.objects.filter(province=province)
+#     return render(request, 'province.html', {'restaurants': restaurants, 'province': province})
     
 @login_required(login_url='/login') 
 def detailRestaurant(request, name_slug):
