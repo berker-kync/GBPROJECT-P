@@ -32,6 +32,7 @@ def send_email(subject, text, to_email):
     return response
 
 
+
 def partner(request):
     form = RestaurantRegistrationForm(request.POST or None)
 
@@ -39,29 +40,26 @@ def partner(request):
         new_restaurant = form.save()
 
         form_data_str = "\n".join(f"{key.title()}: {value}" for key, value in form.cleaned_data.items())
-
         user_email = form.cleaned_data['email']
         user_name = form.cleaned_data['name']
 
-        # Bu bana gelecek kayıt bilgisi
+        # Email to admin or specified email address
         subject1 = "Yeni Partner Restoran Kayıt Bilgisi"
         message1 = f"Yeni bir kayıt formu geldi. İşte detaylar:\n\n{form_data_str}"
         to_email1 = "berkerkoyuncu@gmail.com"  
+        send_email(subject1, message1, to_email1)
 
-        # Kayıt olmak isteyen restorana gitsin
+        # Email to the user who filled the form
         subject2 = "Restoran Kaydınız Alındı"
         message2 = f"Sayın {user_name}, restoran kaydınız başarıyla alınmıştır. En kısa sürede sizinle iletişime geçeceğiz."
         to_email2 = user_email  
-
-        # ilk mail
-        send_email(subject1, message1, to_email1)
-
-        # ikinci mail
         send_email(subject2, message2, to_email2)
 
-        return redirect('index')
-    
+        messages.success(request, 'Bilgileriniz bize ulaştı. Sizinle çok yakında iletişim kuracağız :).')
+        return redirect(request.path)  
+
     return render(request, 'partner.html', {'form': form})
+
 
 
 
