@@ -151,11 +151,6 @@ def profile(request):
 
     return render(request, 'profile.html', context)
 
-
-# def get_province(request, province_slug):
-#     province = get_object_or_404(Province, province_slug=province_slug)
-#     restaurants = Restaurant.objects.filter(province=province)
-#     return render(request, 'province.html', {'restaurants': restaurants, 'province': province})
     
 @login_required(login_url='/login') 
 def detailRestaurant(request, name_slug):
@@ -247,11 +242,22 @@ def remove_from_cart(request, id):
 @login_required(login_url='/login')
 def order(request):
     customer = request.user
-    cart_items = Cart.objects.filter(customer=request.user)
-    current_restaurant = Cart.objects.filter(customer=request.user).select_related('menu__restaurant')
-    total_price = sum(item.total_price for item in cart_items)
-    addresses = Adress.objects.filter(customer=customer)
+    cart_items = Cart.objects.filter(customer=customer)
+
+    # Cart items kontrolü
+    if cart_items.exists():
+        current_restaurant = cart_items.first().menu.restaurant
+        restaurant_province = current_restaurant.province
+        addresses = Adress.objects.filter(customer=customer, province=restaurant_province)
+    else:
+        current_restaurant = None
+        addresses = Adress.objects.none()
+        messages.error(request, "Sepetiniz boş.")
+        return redirect('index')  # Sepet boşsa, başka bir sayfaya yönlendir
+
+    total_price = sum(item.total_price for item in cart_items) if cart_items.exists() else 0
     payment_method = request.POST.get('payment_method', 'nakit')
+
     context = {
         'addresses': addresses,
         'cart_items': cart_items,
@@ -264,13 +270,8 @@ def order(request):
         shipping_address = Adress.objects.filter(id=selected_address_id).first()
 
         if not shipping_address:
-            messages.error(request, "Lütfen gerçerli bir adres seçiniz.")
-            return redirect('restaurant-list')
-
-        cart_items = Cart.objects.filter(customer=customer)
-        if not cart_items.exists():
-            messages.error(request, "Sepetiz boş.")
-            return redirect('restaurant-list')
+            messages.error(request, "Lütfen geçerli bir adres seçiniz.")
+            return render(request, 'order.html', context)
 
         for item in cart_items:
             if item.menu.quantity < item.quantity and item.menu.quantity != None:
@@ -278,18 +279,17 @@ def order(request):
                 return render(request, 'order.html', context)
 
         with transaction.atomic():
-            order = Order.objects.create(
+            new_order = Order.objects.create(
                 customer=customer,
                 shipping_address=shipping_address,
-                total_price=sum(item.total_price for item in cart_items),
+                total_price=total_price,
                 status='pending',
                 payment_method=payment_method,
-
             )
 
             for item in cart_items:
                 OrderItem.objects.create(
-                    order=order,
+                    order=new_order,
                     menu=item.menu,
                     quantity=item.quantity,
                     shipping=shipping_address,
@@ -300,11 +300,6 @@ def order(request):
             cart_items.delete()
             messages.success(request, 'Siparişiniz başarıyla gerçekleştirildi.')
             return redirect('confirm')
-    
-    cart_items = Cart.objects.filter(customer=customer)
-    if not cart_items.exists():
-        messages.error(request, "Sepetiniz boş.")
-        return redirect('restaurant-list')
 
     return render(request, 'order.html', context)
 
