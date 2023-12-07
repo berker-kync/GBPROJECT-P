@@ -1,5 +1,5 @@
 from django import forms
-from .models import Adress, Customer
+from .models import Adress, Customer, Review
 from .validators import phone_number_validator
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm,PasswordChangeForm
 from django.contrib.auth.models import Group
@@ -92,3 +92,22 @@ class ChangeUserForm(forms.ModelForm):
 class ChangePasswordForm(PasswordChangeForm):
     model = Customer
     fields = ['password1', 'password2']
+
+
+# REVIEW İÇİN
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        fields = ['title', 'content', 'score']
+        widgets = {
+            'score': forms.NumberInput(attrs={'type': 'range', 'min': 0, 'max': 10, 'step': 1.0}),
+            'title': forms.TextInput(attrs={'placeholder': 'Deneyiminizi bir cümle ile özetleyiniz.'}),
+            'content': forms.Textarea(attrs={'placeholder': 'Restoranı ve siparişinizi ifade ediniz.', 'rows': 10}),  # Increase rows here
+        }
+        labels = {
+            'score': 'Score (0-10)',
+            'title': 'Başlık',
+            'content': 'Yorum',
+        }
+
+
