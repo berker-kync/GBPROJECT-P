@@ -146,10 +146,12 @@
                                         {% endfor %}
                                     </td>
                                     <td>
-                                        {% if order.reviewed %}
-                                            <span class="badge badge-reviewed">Reviewed</span>
+                                        {% if order.status != 'delivered' %}
+                                            <span class="badge bg-secondary">Henüz yorumlanamaz</span>
+                                        {% elif order.reviewed %}
+                                            <span class="badge bg-success">Yorumlandı</span>
                                         {% else %}
-                                            <a href="{% url 'review' order.id %}" class="btn btn-primary btn-sm">Review</a>
+                                            <a href="{% url 'review' order.id %}" class="btn btn-primary btn-sm">Yorumla</a>
                                         {% endif %}
                                     </td>
                                 </tr>

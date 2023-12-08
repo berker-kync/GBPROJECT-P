@@ -7,6 +7,7 @@ from .forms import ChangePasswordForm, ChangeUserForm, CustomerAddressForm, Regi
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.db.models import Avg
 
 
 def index(request):
@@ -179,6 +180,7 @@ def detailRestaurant(request, name_slug):
             return redirect('order')
     
     restaurant = Restaurant.objects.get(name_slug=name_slug)
+    reviews = restaurant.reviews.all().order_by('-created_at')[:5]
     food_items = Menu.objects.filter(restaurant=restaurant)
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
@@ -186,9 +188,17 @@ def detailRestaurant(request, name_slug):
     menu_slugs = [category.menu_slug for category in menu_categories]
 
 
+#ortalama skor için
+
+    average_score = reviews.aggregate(Avg('score'))['score__avg'] if reviews else 0
+    review_count = reviews.count()
+
     context = {
         'food_items': food_items,
         'restaurant': restaurant,
+        'reviews': reviews,
+        'average_score': round(average_score, 1) if average_score else 'No Score',
+        'review_count': review_count,
         'cart_items': cart_items,
         'total_price': total_price,
         'menu_categories': menu_categories,
