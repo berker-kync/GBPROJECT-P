@@ -36,13 +36,23 @@
                             </div>
                             <!-- /head -->
                             <div class="main">
-                                {% for address in addresses %}
-                                <label class="container_radio">
-                                    {{ address.name }}, {{ address.street }}, {{ address.apartment }}, {{ address.door_number }}, {{ address.city }}, {{ address.postal_code }}
-                                    <input type="radio" name="address" value="{{ address.id }}" {% if forloop.first %}checked{% endif %}>
-                                    <span class="checkmark"></span>
-                                </label>
-                                {% endfor %}                                
+                                {% if addresses.count == 0 %}
+                                <div class="text-center">
+                                    <p>Henüz <strong class="text-danger">adres</strong> eklememişsiniz.</p>
+                                    <p>veya</p>
+                                    <p>Restoranımız ile aynı <strong class="text-danger">ilçede</strong> değilsiniz.</p>
+                                    <p>Restoranlarımız şuan sadece bulundukları bölgeye hizmet vermektedir.</p>
+                                    <p>Restoranımız ile aynı <strong class="text-danger">ilçe</strong> içerisindeyseniz ilgili <strong class="text-danger">adresinizi</strong> ekleyiniz.</p>
+                                </div>
+                                {% else %}
+                                    {% for address in addresses %}
+                                    <label class="container_radio">
+                                        {{ address.name }}, {{ address.street }}, {{ address.apartment }}, {{ address.door_number }}, {{ address.city }}, {{ address.postal_code }}
+                                        <input type="radio" name="address" value="{{ address.id }}" {% if forloop.first %}checked{% endif %}>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    {% endfor %}
+                                {% endif %}                             
                             </div>
                             <div class="text-end me-2">
                                 <a href="/profile#section-2">Adres Ekle</a>
@@ -120,11 +130,9 @@
                         <div class="box_order">
                             <div class="head">
                                 <h3>Sipariş Özeti</h3>
-                                {% for item in current_restaurant %}
-                                    <div>
-                                        {{ item.menu.restaurant.name }}
-                                    </div>
-                                {% endfor %}
+                                <div class="mt-2">
+                                    {{ current_restaurant.name }}
+                                </div>                                
                             </div>
                             <!-- /head -->
                             <div class="main" id="cart-items">

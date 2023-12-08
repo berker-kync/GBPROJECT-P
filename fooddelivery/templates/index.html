@@ -90,6 +90,11 @@
                         <div class="col-xl-7 col-lg-8">
                             <h1>Sipariş veya Gel-Al</h1>
                             <p>En iyi restoran, En iyi fiyat</p>
+                            <div>
+                                {% for province in provinces %}
+                                    <a href="{% url 'restaurant-list' province.province_slug %}">{{ province.province }}</a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                     <!-- /row -->
@@ -125,6 +130,7 @@
             
             <!-- /carousel -->
         </div>
+
 
         <div class="shape_element_2">
             <div class="container margin_60_0">

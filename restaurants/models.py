@@ -4,9 +4,17 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 from decimal import Decimal
 from django.conf import settings
 
-# from fooddelivery.models import Category
+class Province(models.Model):
+    province = models.CharField(max_length=100, null=False, blank=False)
+    province_slug = AutoSlugField(populate_from='province', unique=True, editable=True, blank=True)
 
+    class Meta:
+        db_table = 'province'
+        verbose_name = 'Province'
+        verbose_name_plural = 'Provinces'
 
+    def __str__(self):
+        return f'{self.province}'
 
 class Restaurant_Category (models.Model):
     name = models.CharField(max_length=150, unique=True)
@@ -30,8 +38,8 @@ class Restaurant(models.Model):
     score = models.DecimalField(max_digits=3, decimal_places=1, validators=[MinValueValidator(Decimal('0.1')), MaxValueValidator(Decimal('10.0'))])
     restaurant_image = models.ImageField(upload_to='restaurant/img')
     address = models.CharField(max_length=255)
-    province = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=10, validators=[RegexValidator(regex='^\d{10}$')])
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name='restaurants')
+    phone_number = models.CharField(max_length=10, validators=[RegexValidator(regex=r'^\+?1?\d{10}$')])
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     payment_methods = models.CharField(max_length=255)
     opening_hour = models.TimeField()
@@ -56,7 +64,7 @@ class RestaurantRegistration(models.Model):
     name = models.CharField(max_length=150, null=False, blank=False, editable=True)
     restaurant_name = models.CharField(max_length=150, null=False, blank=False, unique=True, editable=True)
     address = models.CharField(max_length=255, null=False, blank=False, editable=True)
-    province = models.CharField(max_length=50, null=False, blank=False, editable=True)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name='restaurant_registrations', editable=True)
     postal_code = models.CharField(max_length=5, null=False, blank=False, editable=True)
 
     class Meta:

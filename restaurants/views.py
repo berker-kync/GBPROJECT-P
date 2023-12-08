@@ -1,12 +1,11 @@
 import json
-import re
+from unicodedata import category
 from django.shortcuts import get_object_or_404, render, redirect
-from fooddelivery.models import Order
-from .models import Restaurant, Restaurant_Category, RestaurantRegistration
-from fooddelivery.models import Menu, Menu_Category
+from .models import Restaurant, Restaurant_Category, RestaurantRegistration, Province
+from fooddelivery.models import Menu, Menu_Category, Order
 from restaurants.models import Restaurant
 from django.db.models import Count
-from django.http import JsonResponse, HttpResponse, QueryDict
+from django.http import JsonResponse, HttpResponse
 from .forms import RestaurantRegistrationForm, MenuItemForm, StaffLoginForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout, login as auth_login
@@ -158,18 +157,15 @@ def toggle_visibility(request, item_id):
     return JsonResponse({'message': 'Visibility toggled successfully.'})
 
 
-
-
-
-
-
 def panel(request):
     return render(request, 'restaurants-panel.html')
 
 
-def RestaurantList(request):
-    restaurants = Restaurant.objects.all()
-    restaurant_categories = Restaurant_Category.objects.annotate(restaurant_count=Count('restaurants'))
+def RestaurantList(request, province_slug):
+
+    province = get_object_or_404(Province, province_slug=province_slug)
+    restaurants = Restaurant.objects.filter(province=province)
+    restaurant_categories = Restaurant_Category.objects.filter(restaurants__province=province).annotate(restaurant_count=Count('restaurants'))
 
     highly_rated_restaurants_9plus = restaurants.filter(score__gte=9.0).count()
     highly_rated_restaurants_8plus = restaurants.filter(score__gte=8.0).count()
@@ -177,6 +173,7 @@ def RestaurantList(request):
     highly_rated_restaurants_6plus = restaurants.filter(score__gte=6.0).count()
 
     context = {
+        'province': province,
         'restaurants': restaurants,
         'restaurant_categories': restaurant_categories,
         'highly_rated_restaurants_9plus': highly_rated_restaurants_9plus,
@@ -196,8 +193,6 @@ def filter_restaurants(request):
     filtered_data = [{'name': restaurant.name, 'category': restaurant.category.name, 'score': restaurant.score} for restaurant in filtered_restaurants]
 
     return JsonResponse({'filtered_restaurants': filtered_restaurants})
-
-
 
 
 @login_required

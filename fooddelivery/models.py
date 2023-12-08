@@ -4,7 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from decimal import Decimal
 from .validators import phone_number_validator
-from restaurants.models import Restaurant
+from restaurants.models import Restaurant, Province
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -115,6 +115,7 @@ class Cart(models.Model):
     def total_price(self):
         return self.menu.price * self.quantity
 
+
 class Adress(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_addresses')
     name = models.CharField(max_length=100, null=False, blank=False)
@@ -123,6 +124,7 @@ class Adress(models.Model):
     apartment = models.TextField(null=False, blank=False)
     door_number = models.TextField(null=False, blank=False)
     city = models.CharField(max_length=100, null=False, blank=False)
+    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name='province_addresses')
     postal_code = models.CharField(max_length=10, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
