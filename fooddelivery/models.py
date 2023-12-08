@@ -1,6 +1,6 @@
 from django.db import models
 from autoslug import AutoSlugField
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from decimal import Decimal
 from .validators import phone_number_validator
@@ -154,6 +154,7 @@ class Order(models.Model):
     # is_paid = models.BooleanField(default=False)  # Ödeme durumu
     shipping_address = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orders_adresses')
     payment_method = models.CharField(max_length=100, null=False, blank=False, default='nakit')
+    reviewed = models.BooleanField(default=False) 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='orders') confirm sayfasında restoran ismi göstermek için gerekebilir
@@ -192,4 +193,24 @@ class OrderItem(models.Model):
     
 
 
+
+# REVIEW DENEMESİ
+
+class Review(models.Model):
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='reviews', null="True")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='reviews')
+    title = models.CharField(max_length=255, null=True, blank=True)
+    content = models.TextField()
+    score = models.DecimalField(max_digits=2, decimal_places=1, validators=[MinValueValidator(Decimal('0.1')), MaxValueValidator(Decimal('10.0'))])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'review'
+        verbose_name = 'Review'
+        verbose_name_plural = 'Reviews'
+
+    def __str__(self):
+        return f' {self.restaurant.name} restoranı için {self.customer.name} yorumu'
 

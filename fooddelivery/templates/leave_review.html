@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %} 
+    <link href="{% static 'css/review.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<main class="bg_gray">
+    <div class="container margin_60_20">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="box_general write_review">
+                    <form method="post" action="{% url 'review' order.id %}">
+                        {% csrf_token %}
+                        <h1 class="add_bottom_15">{{ restaurant.name }} siparişinizi değerlendirin.</h1>
+                        
+                        <div class="form-group">
+                            <select class="form-control" name="score" id="score">
+                                <option value="">Tıklayın ve puanlayın:</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.title|as_crispy_field }}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.content|as_crispy_field }}
+                        </div>
+                        
+                        <button type="submit" class="btn_1">Yorumunu paylaş</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/specific_review.js' %}"></script>
+{% endblock %}

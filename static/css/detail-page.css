@@ -1099,3 +1099,17 @@ a.menu_item:hover h3 {
 .numbers-row .inc {
   right: 0;
 }
+
+.badge-reviewed {
+  background-color: #28a745; /* Green color */
+  color: white;
+  padding: .25em .4em;
+  font-size: 75%;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: .25rem;
+  display: inline-block;
+}

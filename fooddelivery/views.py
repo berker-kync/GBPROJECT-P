@@ -3,10 +3,11 @@ from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Categ
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib import messages
-from .forms import ChangePasswordForm, ChangeUserForm, CustomerAddressForm, RegisterForm, LoginForm
+from .forms import ChangePasswordForm, ChangeUserForm, CustomerAddressForm, RegisterForm, LoginForm, ReviewForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.db.models import Avg
 
 
 def index(request):
@@ -73,6 +74,11 @@ def termsconditions(request):
 def privacy(request):
     return render(request, 'privacy.html')
 
+
+
+def reviewconfirm(request):
+    return render(request, 'review_confirm.html')
+
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
 
@@ -99,6 +105,7 @@ def edit_address(request, address_id):
         address_form = CustomerAddressForm(instance=address)
 
     return render(request, 'change_address.html', {'address_form': address_form})
+
 
 @login_required(login_url='/login')
 def profile(request):
@@ -170,6 +177,7 @@ def detailRestaurant(request, name_slug):
             return redirect('order')
     
     restaurant = Restaurant.objects.get(name_slug=name_slug)
+    reviews = restaurant.reviews.all().order_by('-created_at')[:5]
     food_items = Menu.objects.filter(restaurant=restaurant)
     cart_items = Cart.objects.filter(customer=request.user)
     total_price = sum(item.total_price for item in cart_items)
@@ -177,9 +185,17 @@ def detailRestaurant(request, name_slug):
     menu_slugs = [category.menu_slug for category in menu_categories]
 
 
+#ortalama skor için
+
+    average_score = reviews.aggregate(Avg('score'))['score__avg'] if reviews else 0
+    review_count = reviews.count()
+
     context = {
         'food_items': food_items,
         'restaurant': restaurant,
+        'reviews': reviews,
+        'average_score': round(average_score, 1) if average_score else 'No Score',
+        'review_count': review_count,
         'cart_items': cart_items,
         'total_price': total_price,
         'menu_categories': menu_categories,
@@ -314,4 +330,39 @@ def confirmorder(request):
     }
 
     return render(request, 'confirm.html', context)
+
+
+
+
+@login_required(login_url='/login') 
+def review(request, order_id):
+    order = get_object_or_404(Order, id=order_id, customer=request.user)
+
+    # Check if the order has already been reviewed
+    if order.reviewed:
+        messages.error(request, "You have already reviewed this order.")
+        return redirect('profile')
+
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.customer = request.user
+            # Assuming we are taking the restaurant from the first menu item of the order
+            review.restaurant = order.menu.first().restaurant
+            review.order = order
+            review.save()
+
+            # Set the order as reviewed
+            order.reviewed = True
+            order.save()
+
+            messages.success(request, "Thank you for your review.")
+            return redirect('profile')
+    else:
+        form = ReviewForm()
+
+    restaurant = order.menu.first().restaurant if order.menu.exists() else None
+
+    return render(request, 'leave_review.html', {'form': form, 'order': order, 'restaurant': restaurant})
 

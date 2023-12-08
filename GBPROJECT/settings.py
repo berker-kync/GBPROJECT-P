@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -147,3 +148,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
+# Mailgun settings
+
+MAILGUN_API_KEY = config('MAILGUN_API_KEY')
+MAILGUN_DOMAIN = config('MAILGUN_DOMAIN')
+MAILGUN_SEND_URL = 'https://api.eu.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN)

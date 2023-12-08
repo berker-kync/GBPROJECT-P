@@ -114,7 +114,7 @@
     <div class="row mt-4">
         <div class="col">
             <section id="section-4">
-                <h2>Sipariş Geçmişi<button id="toggleOrderHistory" class="btn btn-link" title="Geçiş siparişleriniz için tıklayın">▼</button></h2>
+                <h2>Sipariş Geçmişi<button id="toggleOrderHistory" class="btn btn-link" title="Geçmiş siparişleriniz için tıklayın">▼</button></h2>
                 <div id="orderHistory" style="display: none;">
                     <table class="table table-striped">
                         <thead>
@@ -124,6 +124,7 @@
                                 <th>Sipariş Durumu</th>
                                 <th>Sipariş Adresi</th>
                                 <th>Sipariş Detayları</th>
+                                <th>Review</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,6 +144,15 @@
                                         {% for orderitem in order.orderitems.all %}
                                             {{ orderitem.menu.restaurant }} | {{ orderitem.menu.name }} | {{ orderitem.quantity }} Adet <br>
                                         {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% if order.status != 'delivered' %}
+                                            <span class="badge bg-secondary">Henüz yorumlanamaz</span>
+                                        {% elif order.reviewed %}
+                                            <span class="badge bg-success">Yorumlandı</span>
+                                        {% else %}
+                                            <a href="{% url 'review' order.id %}" class="btn btn-primary btn-sm">Yorumla</a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
