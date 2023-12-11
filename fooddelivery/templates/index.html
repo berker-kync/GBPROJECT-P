@@ -65,7 +65,7 @@
                         <a href="/" class="show-submenu">Anasayfa</a>
                     </li>
                     <li class="submenu">
-                        <a href="/restaurant-list" class="show-submenu">Restoranlar</a>
+                        <a href="/restaurants" class="show-submenu">Restoranlar</a>
                     </li>
                     <li class="submenu">
                         <a href="/about" class="show-submenu">Hakkımızda</a> 
@@ -90,11 +90,6 @@
                         <div class="col-xl-7 col-lg-8">
                             <h1>Sipariş veya Gel-Al</h1>
                             <p>En iyi restoran, En iyi fiyat</p>
-                            <div>
-                                {% for province in provinces %}
-                                    <a href="{% url 'restaurant-list' province.province_slug %}">{{ province.province }}</a>
-                                {% endfor %}
-                            </div>
                         </div>
                     </div>
                     <!-- /row -->

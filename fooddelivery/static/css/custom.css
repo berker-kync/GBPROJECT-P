@@ -33,3 +33,29 @@
 #addressForm {
     display: none;
 }
+
+.image-container {
+    text-align: center; /* Resmi ve metni sayfanın ortasına hizala */
+}
+
+.province-container {
+    position: relative;
+    display: inline-block;
+    margin: 10px;
+}
+
+.province-container img {
+    max-width: 100%; /* Resmin taşmaması için */
+    height: auto;
+}
+
+.province-name {
+    position: absolute;
+    top: 50%; /* Resmin ortasına yerleştir */
+    left: 50%;
+    transform: translate(-50%, -50%); /* Tam ortalanmasını sağla */
+    background-color: rgba(0, 0, 0, 0.5); /* Yarı saydam siyah arka plan */
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+}

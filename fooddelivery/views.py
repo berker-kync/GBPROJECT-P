@@ -14,9 +14,7 @@ def index(request):
       
     restaurants = Restaurant.objects.all()[:10]
 
-    provinces = Province.objects.all()
-
-    return render(request, 'index.html', {'restaurants': restaurants, 'provinces': provinces})
+    return render(request, 'index.html', {'restaurants': restaurants})
 
 def Login(request):
     if request.user.is_authenticated:
@@ -61,6 +59,10 @@ def register(request):
     
     return render(request, 'register.html', {'form': form})
 
+def restaurants(request):
+    restaurants = Restaurant.objects.all()
+    provinces = Province.objects.all()
+    return render(request, 'restoranlar.html', {'restaurants': restaurants, 'provinces': provinces})
 
 def about(request):
     return render(request, 'about.html')
@@ -104,7 +106,7 @@ def edit_address(request, address_id):
     else:
         address_form = CustomerAddressForm(instance=address)
 
-    return render(request, 'change_address.html', {'address_form': address_form})
+    return render(request, 'change-address.html', {'address_form': address_form})
 
 
 @login_required(login_url='/login')
