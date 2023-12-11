@@ -3,6 +3,7 @@ from autoslug import AutoSlugField
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from decimal import Decimal
 from django.conf import settings
+from django.db.models import Avg
 
 class Province(models.Model):
     province = models.CharField(max_length=100, null=False, blank=False)
@@ -34,11 +35,10 @@ class Restaurant_Category (models.Model):
 class Restaurant(models.Model):
     name = models.CharField(max_length=150)
     name_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
-    category = models.ForeignKey(Restaurant_Category, on_delete=models.CASCADE, related_name='restaurants')
-    score = models.DecimalField(max_digits=3, decimal_places=1, validators=[MinValueValidator(Decimal('0.1')), MaxValueValidator(Decimal('10.0'))])
+    category = models.ForeignKey('Restaurant_Category', on_delete=models.CASCADE, related_name='restaurants')
     restaurant_image = models.ImageField(upload_to='restaurant/img')
     address = models.CharField(max_length=255)
-    province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name='restaurants')
+    province = models.ForeignKey('Province', on_delete=models.CASCADE, related_name='restaurants')
     phone_number = models.CharField(max_length=10, validators=[RegexValidator(regex=r'^\+?1?\d{10}$')])
     delivery_fee = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     payment_methods = models.CharField(max_length=255)
@@ -48,7 +48,7 @@ class Restaurant(models.Model):
     is_open = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='managed_restaurants',null=True, blank=True,limit_choices_to={'is_staff': True} )
+    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, related_name='managed_restaurants', null=True, blank=True, limit_choices_to={'is_staff': True})
 
     class Meta:
         db_table = 'restaurant'
@@ -57,6 +57,10 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+    @property
+    def average_score(self):
+        return self.reviews.aggregate(average=Avg('score'))['average'] or 0
 
 
 class RestaurantRegistration(models.Model):

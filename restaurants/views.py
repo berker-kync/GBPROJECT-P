@@ -15,6 +15,7 @@ from django.db.models import F
 from django.views.decorators.http import require_POST
 import requests
 from django.conf import settings
+from django.db.models import Avg
 
 
 
@@ -42,16 +43,16 @@ def partner(request):
         user_email = form.cleaned_data['email']
         user_name = form.cleaned_data['name']
 
-        # Email to admin or specified email address
+
         subject1 = "Yeni Partner Restoran Kayıt Bilgisi"
         message1 = f"Yeni bir kayıt formu geldi. İşte detaylar:\n\n{form_data_str}"
         to_email1 = "berkerkoyuncu@gmail.com"  
         send_email(subject1, message1, to_email1)
 
-        # Email to the user who filled the form
+
         subject2 = "Restoran Kaydınız Alındı"
         message2 = f"Sayın {user_name}, restoran kaydınız başarıyla alınmıştır. En kısa sürede sizinle iletişime geçeceğiz."
-        to_email2 = user_email  
+        to_email2 = "lunarbeta@yandex.com"  
         send_email(subject2, message2, to_email2)
 
         messages.success(request, 'Bilgileriniz bize ulaştı. Sizinle çok yakında iletişim kuracağız :).')
@@ -82,10 +83,10 @@ def stafflogin(request):
         # Kullanıcının kimlik doğrulaması başarılı mı ve kullanıcı personel mi?
         if user and user.is_staff:
             auth_login(request, user=user)
-            messages.success(request, 'You have successfully logged in.')
+            messages.success(request, 'Başarılı bir şekilde giriş yapıldı.')
             return redirect('adminmain')
         else:
-            messages.error(request, 'Access denied. Only staff members can log in.') # acaba burası staff yanlis sifre girerse de ayni mi veriyor. mesajı degistirelim mi
+            messages.error(request, 'Erişim reddedildi. Yalnızca .') # acaba burası staff yanlis sifre girerse de ayni mi veriyor. mesajı degistirelim mi
 
     return render(request, 'stafflogin.html', {'form': form})
 
@@ -143,7 +144,7 @@ def addtomenu(request):
 def delete_item(request, menu_id):
     menu_item = get_object_or_404(Menu, id=menu_id)
     menu_item.delete()
-    return JsonResponse({'success': True, 'message': 'Menu item deleted successfully.'})
+    return JsonResponse({'success': True, 'message': 'Ürün başarıyla silindi.'})
 
 
 @login_required
@@ -162,15 +163,17 @@ def panel(request):
 
 
 def RestaurantList(request, province_slug):
-
     province = get_object_or_404(Province, province_slug=province_slug)
     restaurants = Restaurant.objects.filter(province=province)
+
+    restaurants = restaurants.annotate(avg_score=Avg('reviews__score'))
+
     restaurant_categories = Restaurant_Category.objects.filter(restaurants__province=province).annotate(restaurant_count=Count('restaurants'))
 
-    highly_rated_restaurants_9plus = restaurants.filter(score__gte=9.0).count()
-    highly_rated_restaurants_8plus = restaurants.filter(score__gte=8.0).count()
-    highly_rated_restaurants_7plus = restaurants.filter(score__gte=7.0).count()
-    highly_rated_restaurants_6plus = restaurants.filter(score__gte=6.0).count()
+    highly_rated_restaurants_9plus = restaurants.filter(avg_score__gte=9.0).count()
+    highly_rated_restaurants_8plus = restaurants.filter(avg_score__gte=8.0).count()
+    highly_rated_restaurants_7plus = restaurants.filter(avg_score__gte=7.0).count()
+    highly_rated_restaurants_6plus = restaurants.filter(avg_score__gte=6.0).count()
 
     context = {
         'province': province,

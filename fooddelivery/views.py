@@ -194,7 +194,7 @@ def detailRestaurant(request, name_slug):
         'food_items': food_items,
         'restaurant': restaurant,
         'reviews': reviews,
-        'average_score': round(average_score, 1) if average_score else 'No Score',
+        'average_score': round(average_score, 1) if average_score else 'Skor Yok',
         'review_count': review_count,
         'cart_items': cart_items,
         'total_price': total_price,

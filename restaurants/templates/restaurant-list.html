@@ -124,10 +124,10 @@
                     <div class="row" id="restaurant-list">
                         {% for restaurant in restaurants %}
                         <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
-                            <div class="strip" data-category="{{ restaurant.category }}" data-score="{{ restaurant.score }}">
+                            <div class="strip" data-category="{{ restaurant.category }}" data-score="{{ restaurant.avg_score }}">
                                 <figure>
                                     <img src="{{ restaurant.restaurant_image.url }}" class="img-fluid lazy" alt="{{ restaurant.name }}">
-                                    <a href="{% url 'detail-restaurant' restaurant.name_slug %}" class="strip_info"> <!-- Update the href attribute here -->
+                                    <a href="{% url 'detail-restaurant' restaurant.name_slug %}" class="strip_info">
                                         <small>{{ restaurant.category }}</small>
                                         <div class="item_title">
                                             <h3>{{ restaurant.name }}</h3>
@@ -137,14 +137,14 @@
                                 </figure>
                                 <ul>
                                     <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
-                                     <li>
-                                         <div class="score"><strong>{{ restaurant.score }}</strong></div>
-                                     </li>
-                                 </ul>
+                                    <li>
+                                        <div class="score"><strong>{{ restaurant.avg_score|default_if_none:"0.0" }}</strong></div>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         {% endfor %}
-                    </div>                    
+                    </div>                 
 						<!-- /strip grid -->
 
 						<!-- /strip grid -->
