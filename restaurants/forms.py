@@ -1,5 +1,5 @@
 from django import forms
-from .models import RestaurantRegistration
+from .models import Province, RestaurantRegistration
 from fooddelivery.models import Menu, Restaurant
 
 
@@ -17,7 +17,7 @@ class RestaurantRegistrationForm(forms.ModelForm):
     name = forms.CharField(label="Ad Soyad", min_length=2, max_length=50)
     restaurant_name = forms.CharField(label="Restoran İsmi", min_length=5, max_length=60)
     address = forms.CharField(label="Adres", max_length=50)
-    province = forms.CharField(label="İlçe", max_length=15)
+    province = forms.ModelChoiceField(label="İlçe", queryset=Province.objects.all())
     postal_code = forms.CharField(label='Posta Kodu', min_length=5, max_length=5)
 
 

@@ -33,6 +33,34 @@
     display: none;
 }
 
+.image-container {
+  text-align: center; /* Resmi ve metni sayfanın ortasına hizala */
+}
+
+.province-container {
+  position: relative;
+  display: inline-block;
+  width: 20%;
+  margin: 5px;
+}
+
+.province-container img {
+  width: 100%; /* Resmin genişliğini konteyner genişliğine eşit yap */
+  height: auto;
+}
+
+.province-name {
+  position: absolute;
+  top: 50%; /* Metni resmin ortasına yerleştir */
+  left: 50%;
+  transform: translate(-50%, -50%); /* Metni doğru konumlandır */
+  background-color: rgba(0, 0, 0, 0.5); /* Yarı saydam siyah arka plan */
+  color: white;
+  font-size: 1.2em; /* Metin boyutunu büyüt */
+  padding: 5px;
+  display: inline; /* Sadece metin alanını kaplayacak şekilde arka planı ayarla */
+}
+
 
 @keyframes slideInRight {
     from {

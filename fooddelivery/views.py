@@ -17,9 +17,7 @@ def index(request):
       
     restaurants = Restaurant.objects.all()[:10]
 
-    provinces = Province.objects.all()
-
-    return render(request, 'index.html', {'restaurants': restaurants, 'provinces': provinces})
+    return render(request, 'index.html', {'restaurants': restaurants})
 
 def Login(request):
     if request.user.is_authenticated:
@@ -64,6 +62,10 @@ def register(request):
     
     return render(request, 'register.html', {'form': form})
 
+def restaurants(request):
+    restaurants = Restaurant.objects.all()
+    provinces = Province.objects.all()
+    return render(request, 'restoranlar.html', {'restaurants': restaurants, 'provinces': provinces})
 
 def about(request):
     return render(request, 'about.html')
@@ -231,6 +233,25 @@ def add_to_cart(request, menu_id):
 
     return JsonResponse({"success": True, "message": "Menü öğesi sepete eklendi"})
 
+@login_required
+@require_POST
+def update_cart_quantity(request):
+    item_id = request.POST.get('itemId')
+    new_quantity = int(request.POST.get('quantity'))
+
+    try:
+        cart_item = Cart.objects.get(id=item_id, customer=request.user)
+        cart_item.quantity = new_quantity
+        cart_item.save()
+
+        # Toplam fiyatı hesapla ve JSON yanıtında döndür
+        total_price = cart_item.total_price
+        total_cart_price = sum(item.total_price for item in Cart.objects.filter(customer=request.user))
+        return JsonResponse({'success': True, 'total_price': float(total_price), 'total_cart_price': float(total_cart_price)})
+    except Cart.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Sepet öğesi bulunamadı.'})
+    except ValueError:
+        return JsonResponse({'success': False, 'error': 'Geçersiz miktar.'})
 
 
 

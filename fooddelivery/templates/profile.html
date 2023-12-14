@@ -142,7 +142,7 @@
                                     </td>
                                     <td>
                                         {% for orderitem in order.orderitems.all %}
-                                            {{ orderitem.menu.restaurant }} | {{ orderitem.menu.name }} | {{ orderitem.quantity }} Adet <br>
+                                        <a href="{% url 'detail-restaurant' name_slug=orderitem.menu.restaurant.name_slug %}">{{ orderitem.menu.restaurant }}</a> | {{ orderitem.menu.name }} | {{ orderitem.quantity }} Adet <br>
                                         {% endfor %}
                                     </td>
                                     <td>

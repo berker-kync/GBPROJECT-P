@@ -118,18 +118,26 @@
 		                        <a href="#0" class="close_panel_mobile"><i class="icon_close"></i></a>
 		                    </div>
 		                    <!-- /head -->
-		                    <div class="main" id="cart-items">
-		                        <ul class="clearfix">
+							<div class="main" id="cart-items">
+								<ul class="list-unstyled">
 									{% for item in cart_items %}
-										{% csrf_token %}
-										<li>						
-											<button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.menu.name }}</button>
-											<span>₺{{ item.menu.price }}</span>
+										<li id="cart-item-{{ item.id }}" class="d-flex align-items-center mb-2">
+											<div class="item-details flex-grow-1 me-2">
+												<strong>{{ item.menu }}</strong>
+											</div>
+											<div class="quantity_control d-flex align-items-center me-2">
+												<button class="decrease-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">-</button>
+												<button class="remove-item-btn btn btn-danger btn-sm" data-id="{{ item.id }}" style="display: none;">X</button>
+												<strong id="qty_{{ item.id }}" class="mx-2">{{ item.quantity }}</strong>
+												<button class="increase-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">+</button>
+											</div>
+											<span id="item-total-price-{{ item.id }}" class="me-2">₺{{ item.total_price }}</span>
+											<button class="remove-item-btn btn btn-danger btn-sm" data-id="{{ item.id }}" style="display: none;">Remove</button>
 										</li>
 									{% endfor %}
 		                        </ul>
 		                        <ul class="clearfix">
-		                            <li class="total" id="total-price">Toplam<span>₺{{ total_price }}</span></li>
+		                            <li class="total" id="total-price">Toplam <span>₺{{ total_price }}</span></li>
 		                        </ul>
 								
 								<form method="post">

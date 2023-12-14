@@ -91,7 +91,7 @@ class Menu(models.Model):
 
 
     def __str__(self):
-        return f"{self.category} - {self.name}"
+        return f"{self.name}"
 
 
 # cart model
