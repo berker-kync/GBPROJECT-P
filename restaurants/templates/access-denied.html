@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <!-- SPECIFIC CSS -->
+    <link href="{% static 'css/blog.css' %}" rel="stylesheet">
+{% endblock extra_css %}
+
+{% block content %}	
+	<main>
+
+		<!-- /page_header -->
+
+		<div class="container margin_60_20">			
+			<div class="row">
+				<div class="col-lg-9">
+					<div class="singlepost">
+						<figure><img alt="" class="img-fluid" src="{% static 'img/access-denied.png' %}"></figure>
+						<h1>Erişim Reddedildi</h1>
+						<div class="postmeta">
+						</div>
+						<!-- /post meta -->
+						<div class="post-content">
+                            <h5></h5>
+							<p>Bu sayfayı görüntüleme yetkiniz bulunmamaktadır. Eğer restoran yöneticisiyseniz, yönetici hesabınızla giriş yapınız. </p>
+							<a href="{% url 'logout' %}" class="btn btn-primary">Yönetici Girişi Yap</a>
+							<div></div>
+
+						</div>
+						<!-- /post -->
+					</div>
+					<!-- /single-post -->
+
+
+					<hr>
+
+				
+
+				</div>
+				<!-- /col -->
+
+
+			</div>
+			<!-- /row -->	
+		</div>
+		<!-- /container -->
+		
+	</main>
+	<!-- /main -->
+{% endblock %}

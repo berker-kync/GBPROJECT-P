@@ -8,6 +8,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.db.models import Avg
+from django.core.mail import send_mail
+from django.conf import settings
+from restaurants.views import send_email
 
 
 def index(request):
@@ -33,12 +36,12 @@ def Login(request):
         if user is not None and not (user.is_staff or user.is_superuser):
             if user.is_active:
                 login(request, user)
-                messages.success(request, 'You have successfully logged in.')
+                messages.success(request, 'Başarıyla giriş yaptınız.')
                 return redirect('index')
             else:
-                messages.error(request, 'Your account is inactive.')
+                messages.error(request, 'Üyeliğiniz aktif değil.')
         else:
-            messages.error(request, 'Invalid email or password.')
+            messages.error(request, 'Geçersiz mail ya da şifre.')
             return redirect('login')
 
     return render(request, 'login.html', {'form': form})
@@ -56,7 +59,7 @@ def register(request):
 
     if request.method == "POST" and form.is_valid():
         form.save()
-        messages.success(request, 'Your account has been created.')
+        messages.success(request, 'Üyeliğiniz oluşturuldu.')
         return redirect('login')
     
     return render(request, 'register.html', {'form': form})
@@ -74,10 +77,6 @@ def termsconditions(request):
 def privacy(request):
     return render(request, 'privacy.html')
 
-
-
-def reviewconfirm(request):
-    return render(request, 'review_confirm.html')
 
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
@@ -104,7 +103,7 @@ def edit_address(request, address_id):
     else:
         address_form = CustomerAddressForm(instance=address)
 
-    return render(request, 'change_address.html', {'address_form': address_form})
+    return render(request, 'change-address.html', {'address_form': address_form})
 
 
 @login_required(login_url='/login')
@@ -256,11 +255,12 @@ def remove_from_cart(request, id):
 # ödeme yöntemlerini modellere eklemek gerekiyor.
 
 @login_required(login_url='/login')
+@login_required(login_url='/login')
 def order(request):
     customer = request.user
     cart_items = Cart.objects.filter(customer=customer)
 
-    # Cart items kontrolü
+    # Check cart items
     if cart_items.exists():
         current_restaurant = cart_items.first().menu.restaurant
         restaurant_province = current_restaurant.province
@@ -269,7 +269,7 @@ def order(request):
         current_restaurant = None
         addresses = Adress.objects.none()
         messages.error(request, "Sepetiniz boş.")
-        return redirect('index')  # Sepet boşsa, başka bir sayfaya yönlendir
+        return redirect('index')
 
     total_price = sum(item.total_price for item in cart_items) if cart_items.exists() else 0
     payment_method = request.POST.get('payment_method', 'nakit')
@@ -303,6 +303,7 @@ def order(request):
                 payment_method=payment_method,
             )
 
+            order_details = ""
             for item in cart_items:
                 OrderItem.objects.create(
                     order=new_order,
@@ -310,8 +311,17 @@ def order(request):
                     quantity=item.quantity,
                     shipping=shipping_address,
                 )
+                item_detail = f"Ürün: {item.menu.name}, Adet: {item.quantity}, Ücret: {item.menu.price} (adet fiyatı)\n"
+                order_details += item_detail
                 item.menu.quantity -= item.quantity
                 item.menu.save()
+
+            # Email sending logic
+            subject = 'Sipariş Onay'
+            message = f'Sevgili {customer.name},\n\nSiparişin restorana ulaştı:\n\nOrder ID: {new_order.id}\n\n{order_details}\nToplam Tutar: {total_price}\n\nBizi tercih ettiğiniz için teşekkür ederiz.'
+            to_email = customer.email
+
+            send_email(subject, message, to_email)
 
             cart_items.delete()
             messages.success(request, 'Siparişiniz başarıyla gerçekleştirildi.')
@@ -338,7 +348,7 @@ def confirmorder(request):
 def review(request, order_id):
     order = get_object_or_404(Order, id=order_id, customer=request.user)
 
-    # Check if the order has already been reviewed
+    # review edilmiş mi
     if order.reviewed:
         messages.error(request, "You have already reviewed this order.")
         return redirect('profile')
@@ -348,12 +358,12 @@ def review(request, order_id):
         if form.is_valid():
             review = form.save(commit=False)
             review.customer = request.user
-            # Assuming we are taking the restaurant from the first menu item of the order
+    
             review.restaurant = order.menu.first().restaurant
             review.order = order
             review.save()
 
-            # Set the order as reviewed
+            # review edildi diye kaydet
             order.reviewed = True
             order.save()
 
@@ -364,5 +374,5 @@ def review(request, order_id):
 
     restaurant = order.menu.first().restaurant if order.menu.exists() else None
 
-    return render(request, 'leave_review.html', {'form': form, 'order': order, 'restaurant': restaurant})
+    return render(request, 'leave-review.html', {'form': form, 'order': order, 'restaurant': restaurant})
 

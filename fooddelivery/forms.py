@@ -27,7 +27,7 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
-# Custom User Change Form for Admin
+
 class CustomUserChangeForm(UserChangeForm):
 
     class Meta:
@@ -42,7 +42,7 @@ class CustomUserChangeForm(UserChangeForm):
 class CustomerAddressForm(forms.ModelForm):
     class Meta:
         model = Adress
-        fields = ['name', 'phone', 'street', 'apartment', 'door_number', 'city', 'province' , 'postal_code']
+        fields = ['name', 'phone', 'street', 'apartment', 'door_number', 'city', 'province', 'postal_code']
 
     name = forms.CharField(label="Adres İsmi", min_length=2, max_length=50)
     phone = forms.CharField(label="Telefon", max_length=10, validators=[phone_number_validator])
@@ -50,7 +50,7 @@ class CustomerAddressForm(forms.ModelForm):
     apartment = forms.CharField(label="Apartman ve Apt. No", max_length=20)
     door_number = forms.CharField(label="İç Kapı No", max_length=3)
     province = forms.ModelChoiceField(label="İlçe", queryset=Province.objects.all())
-    city = forms.CharField(label="Şehir", max_length=20)
+    city = forms.ChoiceField(label="Şehir", choices=Adress.CITY_CHOICES)
     postal_code = forms.CharField(label='Posta Kodu', min_length=5, max_length=5)
 
 
@@ -103,7 +103,7 @@ class ReviewForm(forms.ModelForm):
         widgets = {
             'score': forms.NumberInput(attrs={'type': 'range', 'min': 0, 'max': 10, 'step': 1.0}),
             'title': forms.TextInput(attrs={'placeholder': 'Deneyiminizi bir cümle ile özetleyiniz.'}),
-            'content': forms.Textarea(attrs={'placeholder': 'Restoranı ve siparişinizi ifade ediniz.', 'rows': 10}),  # Increase rows here
+            'content': forms.Textarea(attrs={'placeholder': 'Restoranı ve siparişinizi ifade ediniz.', 'rows': 10}),  
         }
         labels = {
             'score': 'Score (0-10)',

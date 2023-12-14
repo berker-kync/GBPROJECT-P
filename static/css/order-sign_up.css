@@ -304,3 +304,24 @@ a.social_bt:hover {
   background: #48B448;
   color: #CDFFCD;
 }
+
+.order-summary {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.order-summary ul {
+  list-style: none;
+  padding: 0;
+}
+.order-summary ul li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+.order-summary ul li:last-child {
+  border-bottom: none;
+}
+.order-summary strong {
+  color: #333;
+}

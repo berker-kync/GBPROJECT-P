@@ -14,4 +14,7 @@ urlpatterns = [
     path('update-order-status/<int:order_id>/', views.update_order_status, name='update-order-status'),
     path('delete-item/<int:menu_id>/', views.delete_item, name='delete-item'),
     path('toggle-visibility/<int:item_id>/', views.toggle_visibility, name='toggle-visibility'),
+    path('access-denied/', views.access_denied, name='access-denied'),
+    path('logout', views.access_denied_logout, name="logout"),
+
 ]

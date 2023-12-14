@@ -19,24 +19,21 @@
                     <div class="main">
                         <div id="confirm">
                             <div class="icon icon--order-success svg add_bottom_15">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="72" height="72">
-                                    <g fill="none" stroke="#8EC343" stroke-width="2">
-                                        <circle cx="36" cy="36" r="35" style="stroke-dasharray:240px, 240px; stroke-dashoffset: 480px;"></circle>
-                                        <path d="M17.417,37.778l9.93,9.909l25.444-25.393" style="stroke-dasharray:50px, 50px; stroke-dashoffset: 0px;"></path>
-                                    </g>
-                                </svg>
+                                <!-- SVG icon here -->
                             </div>
                             <h3>Sipariş Tamamlandı!</h3>
                             <p>{{ latest_order.menu.restaurant.name }} siparişiniz için teşekkür eder.</p>
-                            <ul>
-                                <p>Sipariş özeti: 
-                                    {% for item in latest_order.orderitems.all %}
-                                        {{ item.menu.name }} (Adet: {{ item.quantity }}),
-                                    {% endfor %}
-								</p>
-                                <p>Toplam tutar: ₺{{ latest_order.total_price }}</p>
-                                <p>Teslimat adresi: {{ latest_order.shipping_address.street }}, {{ latest_order.shipping_address.city }}, {{ latest_order.shipping_address.postal_code }}</p>
-                            </ul>
+                            <div class="order-summary">
+                                <ul>
+                                    <li><strong>Sipariş Özeti:</strong>
+                                        {% for item in latest_order.orderitems.all %}
+                                            <br>{{ item.menu.name }} (Adet: {{ item.quantity }})
+                                        {% endfor %}
+                                    </li>
+                                    <li><strong>Toplam Tutar:</strong> ₺{{ latest_order.total_price }}</li>
+                                    <li><strong>Teslimat Adresi:</strong> {{ latest_order.shipping_address.street }}, {{ latest_order.shipping_address.city }}, {{ latest_order.shipping_address.postal_code }}</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>

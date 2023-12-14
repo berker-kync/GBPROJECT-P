@@ -92,10 +92,16 @@ def stafflogin(request):
 
 def stafflogout(request):
     logout(request)
-    return redirect('index')
+    return redirect('stafflogin.html')
 
 
+def access_denied(request):
+    return redirect(request, 'access-denied.html')
 
+
+def access_denied_logout(request):
+    logout(request)
+    return redirect('staff_login') 
 
 
 @login_required(login_url='staff-login')
@@ -106,7 +112,7 @@ def adminmain(request):
         restaurants = Restaurant.objects.filter(manager=request.user)
     else:
         restaurants = Restaurant.objects.none()
-        return HttpResponse('Bu sayfayı görüntüleme yetkiniz bulunmamaktadır. Eğer restoran görevlisiyseniz, giriş yapınız.')
+        return render(request, 'access-denied.html')
 
 
     context = {'restaurants': restaurants}

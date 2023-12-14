@@ -117,17 +117,23 @@ class Cart(models.Model):
 
 
 class Adress(models.Model):
+
+    CITY_CHOICES = [
+        ('İstanbul', 'İstanbul'),
+    ]
+        
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='customer_addresses')
     name = models.CharField(max_length=100, null=False, blank=False)
     phone = models.CharField(max_length=10, null=True, blank=False, validators=[phone_number_validator])
     street = models.TextField(null=False, blank=False)
     apartment = models.TextField(null=False, blank=False)
     door_number = models.TextField(null=False, blank=False)
-    city = models.CharField(max_length=100, null=False, blank=False)
+    city = models.CharField(max_length=100, choices=CITY_CHOICES, default=None, null=False, blank=False)
     province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name='province_addresses')
     postal_code = models.CharField(max_length=10, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
 
     class Meta:
         db_table = 'adress'
