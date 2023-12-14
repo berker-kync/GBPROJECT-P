@@ -127,12 +127,11 @@
 											</div>
 											<div class="quantity_control d-flex align-items-center me-2">
 												<button class="decrease-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">-</button>
-												<button class="remove-item-btn btn btn-danger btn-sm" data-id="{{ item.id }}" style="display: none;">X</button>
+												<button class="remove-item-btn btn btn-outline-secondary btn-sm" data-id="{{ item.id }}" style="display: none;">X</button>
 												<strong id="qty_{{ item.id }}" class="mx-2">{{ item.quantity }}</strong>
 												<button class="increase-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">+</button>
 											</div>
 											<span id="item-total-price-{{ item.id }}" class="me-2">₺{{ item.total_price }}</span>
-											<button class="remove-item-btn btn btn-danger btn-sm" data-id="{{ item.id }}" style="display: none;">Remove</button>
 										</li>
 									{% endfor %}
 		                        </ul>

@@ -266,16 +266,30 @@ $.ajaxSetup({
 		let pricePerItem = $(this).data('price');
 		let quantitySpan = $('#qty_' + itemId);
 		let currentQuantity = parseInt(quantitySpan.text(), 10);
+		let decreaseButton = $(`#cart-item-${itemId} .decrease-quantity`);
+		let removeButton = $(`#cart-item-${itemId} .remove-item-btn`);
 	
 		if ($(this).hasClass('increase-quantity')) {
 			currentQuantity++;
 		} else if (currentQuantity > 1) {
 			currentQuantity--;
+		} else {
+			decreaseButton.hide();
+			removeButton.show();
+			return;
 		}
 	
 		quantitySpan.text(currentQuantity);  // Miktarı güncelle
 		$('#item-total-price-' + itemId).text('₺' + (currentQuantity * pricePerItem).toFixed(2));  // Toplam fiyatı güncelle
-	
+		
+		if (currentQuantity === 1) {
+			decreaseButton.hide();
+			removeButton.show();
+		} else {
+			decreaseButton.show();
+			removeButton.hide();
+		}
+
 		// AJAX isteği ile sunucuya güncelleme gönder
 		$.ajax({
 			url: '/update_cart_quantity/',  // Bu URL Django view'unuza karşılık gelmelidir
