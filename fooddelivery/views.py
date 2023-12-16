@@ -113,7 +113,7 @@ def profile(request):
     customer = request.user
     customer_email = customer.email
 
-    # Formlarınızın tanımlanması
+    # Formların tanımlanması
     user_form = ChangeUserForm(request.POST or None, instance=request.user)
     user_password_form = ChangePasswordForm(request.user, request.POST or None)
     customer_adress = Adress.objects.filter(customer=request.user)
@@ -160,34 +160,37 @@ def profile(request):
     return render(request, 'profile.html', context)
 
     
-@login_required(login_url='/login') 
 def detailRestaurant(request, name_slug):
-    # is_staff sipariş veremesin
-    if request.user.is_staff:
-        return redirect('index')
-
-    if request.method == "POST":
-        # Sepetin dolu olup olmadığını kontrol et
-        cart_items = Cart.objects.filter(customer=request.user)
-        if not cart_items.exists():
-            # Eğer sepet boşsa, kullanıcıya hata mesajı göster
-            messages.error(request, 'Sepetiniz boş.')
-            return redirect('detail-restaurant', name_slug=name_slug)
-        else:
-            # Sepet doluysa, kullanıcıyı 'order' sayfasına yönlendir
-            return redirect('order')
-    
     restaurant = Restaurant.objects.get(name_slug=name_slug)
     reviews = restaurant.reviews.all().order_by('-created_at')[:5]
     food_items = Menu.objects.filter(restaurant=restaurant)
-    cart_items = Cart.objects.filter(customer=request.user)
-    total_price = sum(item.total_price for item in cart_items)
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
     menu_slugs = [category.menu_slug for category in menu_categories]
 
+    # Kullanıcı giriş yapmışsa ek işlemler
+    if request.user.is_authenticated:
+        # is_staff sipariş veremesin
+        if request.user.is_staff:
+            return redirect('index')
 
-#ortalama skor için
+        if request.method == "POST":
+            # Sepetin dolu olup olmadığını kontrol et
+            cart_items = Cart.objects.filter(customer=request.user)
+            if not cart_items.exists():
+                # Eğer sepet boşsa, kullanıcıya hata mesajı göster
+                messages.error(request, 'Sepetiniz boş.')
+                return redirect('detail-restaurant', name_slug=name_slug)
+            else:
+                # Sepet doluysa, kullanıcıyı 'order' sayfasına yönlendir
+                return redirect('order')
 
+        cart_items = Cart.objects.filter(customer=request.user)
+        total_price = sum(item.total_price for item in cart_items)
+    else:
+        cart_items = None
+        total_price = 0
+
+    # Ortalama skor ve yorum sayısı hesaplamaları
     average_score = reviews.aggregate(Avg('score'))['score__avg'] if reviews else 0
     review_count = reviews.count()
 
@@ -201,6 +204,8 @@ def detailRestaurant(request, name_slug):
         'total_price': total_price,
         'menu_categories': menu_categories,
         'menu_slugs': menu_slugs,
+        # Kullanıcı giriş yapmış mı kontrolü
+        'is_user_authenticated': request.user.is_authenticated,
     }
     return render(request, 'detail-restaurant.html', context)
 
@@ -272,10 +277,6 @@ def remove_from_cart(request, id):
         return JsonResponse({"success": False, "message": "Sepet ürünü bulunamadı."})
 
 
-# order verdikten sonra rejected olursa database deki quantity'yi geri almak için ne yapacağız?
-# ödeme yöntemlerini modellere eklemek gerekiyor.
-
-@login_required(login_url='/login')
 @login_required(login_url='/login')
 def order(request):
     customer = request.user

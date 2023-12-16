@@ -390,9 +390,15 @@
                     <!-- <div class="col-md-4">
                         <button type="button" class="btn_1 outline full-width mb-mobile" data-bs-dismiss="modal">İptal Et</button>
                     </div> -->
+					{% if is_user_authenticated %}
                     <div class="col-md">
                         <button type="submit" class="btn_1 full-width" id="add-to-cart-btn">Sepete Ekle</button>
                     </div>
+					{% else %}
+					<div class="col-md">
+						<a href="/login" class="btn_1 full-width">Sepete Ekle</a>
+					</div>
+					{% endif %}
                 </div>
                 <!-- /Row -->
             </div>
