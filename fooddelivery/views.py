@@ -14,6 +14,9 @@ from restaurants.views import send_email
 
 
 def index(request):
+        
+    if request.user.is_staff:
+        return user_logout(request)
       
     restaurants = Restaurant.objects.all()[:10]
 
@@ -171,7 +174,7 @@ def detailRestaurant(request, name_slug):
     if request.user.is_authenticated:
         # is_staff sipariş veremesin
         if request.user.is_staff:
-            return redirect('index')
+            return user_logout(request)
 
         if request.method == "POST":
             # Sepetin dolu olup olmadığını kontrol et

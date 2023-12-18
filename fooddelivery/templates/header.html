@@ -38,11 +38,13 @@
 						 <a href="/about" class="show-submenu">Hakkımızda</a> 
 					 </li>
 					 {% if user.is_authenticated %}
-					 <li class="submenu"><a href="/profile" class="show-submenu">Hesabım</a></li>
-					 <li class="submenu"><a href="/logout" class="show-submenu">Çıkış Yap</a></li>
-					 {% else %}
-					 <li class="submenu"><a href="/login" class="show-submenu">Giriş Yap</a></li>
-					 {% endif %}
+						{% if not user.is_staff %}
+							<li class="submenu"><a href="/profile" class="show-submenu">Hesabım</a></li>
+						{% endif %}
+						<li class="submenu"><a href="/logout" class="show-submenu">Çıkış Yap</a></li>
+					{% else %}
+						<li class="submenu"><a href="/login" class="show-submenu">Giriş Yap</a></li>
+					{% endif %}
 				 </ul>
 	        </nav>
 	    </div>
