@@ -8,7 +8,7 @@
         <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#">Sipariş Yönetim Paneli</a>
+                <a>Sipariş Yönetim Paneli</a>
             </li>
         </ol>
 
@@ -112,7 +112,7 @@
 
 <br>
 
-<!-- Rejected Orderlar -->
+<!-- cancelled Orderlar -->
         <div class="status-section" id="rejected-section">
             <h2 class="text-center">İptal Edilen Siparişler</h2>
             <div class="table-responsive">
@@ -139,25 +139,27 @@
                                 <td>{{ order.created_at }}</td>
                                 <td>{{ order.updated_at }}</td>
                                 <td>
-                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}">
-                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
-                                        <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
-                                        <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
-                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                    <!-- Status dropdown disabled for rejected orders -->
+                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}" disabled>
+                                        <option value="pending">Onay Bekliyor</option>
+                                        <option value="approved">Onaylandı</option>
+                                        <option value="rejected" selected>İptal Edildi</option>
+                                        <option value="delivered">Teslim Edildi</option>
                                     </select>
-                                    <button class="btn btn-primary btn-sm mt-1 save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                                    <!-- Save button hidden for rejected orders -->
                                 </td>
                             </tr>
                         {% endif %}
                         {% empty %}
                             <tr>
-                                <td colspan="7" class="text-center">Onay bekleyen sipariş bulunamadı.</td>
+                                <td colspan="7" class="text-center">İptal edilen sipariş bulunamadı.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
+
 
 <br>
 
@@ -189,25 +191,27 @@
                                 <td>{{ order.created_at }}</td>
                                 <td>{{ order.updated_at }}</td>
                                 <td>
-                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}">
-                                        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>Onay Bekliyor</option>
-                                        <option value="approved" {% if order.status == 'approved' %}selected{% endif %}>Onaylandı</option>
-                                        <option value="rejected" {% if order.status == 'rejected' %}selected{% endif %}>İptal Edildi</option>
-                                        <option value="delivered" {% if order.status == 'delivered' %}selected{% endif %}>Teslim Edildi</option>
+                                    <!-- Status dropdown disabled for delivered orders -->
+                                    <select class="form-control form-control-sm status-selector" data-order-id="{{ order.id }}" disabled>
+                                        <option value="pending">Onay Bekliyor</option>
+                                        <option value="approved">Onaylandı</option>
+                                        <option value="rejected">İptal Edildi</option>
+                                        <option value="delivered" selected>Teslim Edildi</option>
                                     </select>
-                                    <button class="btn btn-primary btn-sm mt-1 save-status" data-order-id="{{ order.id }}">Kaydet</button>
+                                    <!-- Save button hidden for delivered orders -->
                                 </td>
                             </tr>
                         {% endif %}
                         {% empty %}
                             <tr>
-                                <td colspan="7" class="text-center">Onay bekleyen sipariş bulunamadı.</td>
+                                <td colspan="7" class="text-center">Teslim edilen sipariş bulunamadı.</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
+
 
 
 <script src="{% static 'js/order_status.js' %}"></script>

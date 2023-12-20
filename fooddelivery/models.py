@@ -70,7 +70,7 @@ class Menu_Category (models.Model):
         app_label = 'fooddelivery'
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 class Menu(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menus')

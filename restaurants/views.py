@@ -39,7 +39,11 @@ def partner(request):
     if request.method == "POST" and form.is_valid():
         new_restaurant = form.save()
 
-        form_data_str = "\n".join(f"{key.title()}: {value}" for key, value in form.cleaned_data.items())
+        labels = form.fields.keys()
+
+        form_data_str = "\n".join(
+            f"{form.fields[key].label.title()}: {value}" for key, value in form.cleaned_data.items()
+        )
         user_email = form.cleaned_data['email']
         user_name = form.cleaned_data['name']
 
@@ -51,18 +55,14 @@ def partner(request):
 
 
         subject2 = "Restoran Kaydınız Alındı"
-        message2 = f"Sayın {user_name}, restoran kaydınız başarıyla alınmıştır. En kısa sürede sizinle iletişime geçeceğiz."
-        to_email2 = "lunarbeta@yandex.com"  
+        message2 = f"Sayın {user_name}, restoran kaydınız başarıyla alınmıştır. En kısa sürede sizinle iletişime geçeceğiz.\n\nTencereKapak"
+        to_email2 = user_email
         send_email(subject2, message2, to_email2)
 
         messages.success(request, 'Bilgileriniz bize ulaştı. Sizinle çok yakında iletişim kuracağız :).')
         return redirect(request.path)  
 
     return render(request, 'partner.html', {'form': form})
-
-
-
-
 
 
 
@@ -90,18 +90,15 @@ def stafflogin(request):
 
     return render(request, 'stafflogin.html', {'form': form})
 
+
 def stafflogout(request):
     logout(request)
-    return redirect('stafflogin.html')
+    return redirect('staff-login')
 
 
 def access_denied(request):
-    return redirect(request, 'access-denied.html')
+    return redirect(request, 'access-denied')
 
-
-def access_denied_logout(request):
-    logout(request)
-    return redirect('staff_login') 
 
 
 @login_required(login_url='staff-login')
@@ -120,28 +117,34 @@ def adminmain(request):
 
 
 
-
 @login_required(login_url='staff-login')
-def addtomenu(request):
+def addtomenu(request, item_id=None):
     restaurant = None
-    existing_menu_items = None 
+    existing_menu_items = None
 
     if hasattr(request.user, 'managed_restaurants'):
         restaurant = request.user.managed_restaurants.first()
         existing_menu_items = Menu.objects.filter(restaurant=restaurant)
 
-    if request.method == 'POST':
-        form = MenuItemForm(request.POST, request.FILES)
-        if form.is_valid():
-            menu_item = form.save(commit=False)
-            menu_item.restaurant = restaurant 
-            menu_item.save()
-            messages.success(request, 'Ürün Eklendi')
-            form = MenuItemForm() 
+    if item_id:
+        menu_item = get_object_or_404(Menu, id=item_id)
+        form = MenuItemForm(request.POST or None, request.FILES or None, instance=menu_item)
+        if request.method == 'POST' and form.is_valid():
+            form.save()
+            messages.success(request, 'Menü öğesi güncellendi.')
+            return redirect('addtomenu')
     else:
-        form = MenuItemForm()
+        form = MenuItemForm(request.POST or None, request.FILES or None)
+        if request.method == 'POST' and form.is_valid():
+            new_item = form.save(commit=False)
+            new_item.restaurant = restaurant
+            new_item.save()
+            messages.success(request, 'Ürün eklendi')
+            return redirect('addtomenu')
 
     return render(request, 'addtomenu.html', {'form': form, 'restaurant': restaurant, 'existing_menu_items': existing_menu_items})
+
+
 
 
 
@@ -161,7 +164,7 @@ def toggle_visibility(request, item_id):
     item.is_active = not item.is_active
     item.save()
     
-    return JsonResponse({'message': 'Visibility toggled successfully.'})
+    return JsonResponse({'message': 'Ürün görünürlüğü değiştirildi.'})
 
 
 def panel(request):
@@ -214,20 +217,24 @@ def order_list(request):
 @require_http_methods(["PATCH"])
 def update_order_status(request, order_id):
     if not request.user.is_staff:
-        return JsonResponse({'status': 'error', 'message': 'Yetkiniz yok'}, status=403)
+        return JsonResponse({'status': 'error', 'message': 'Unauthorized access'}, status=403)
 
     order = get_object_or_404(Order, id=order_id)
 
-
-    if not request.user.managed_restaurants.filter(
-    menus__order=order).exists():
-        return JsonResponse({'status': 'error', 'message': 'Bu işlem için yetkiniz yok'}, status=403)
-
+    # Ensure the user manages the restaurant related to the order
+    if not request.user.managed_restaurants.filter(menus__order=order).exists():
+        return JsonResponse({'status': 'error', 'message': 'You do not have permission for this action'}, status=403)
 
     data = json.loads(request.body.decode('utf-8'))
     status = data.get('status')
 
+    # Check if the order status is already 'delivered' or 'rejected'
+    if order.status in ['delivered', 'rejected']:
+        return JsonResponse({'status': 'error', 'message': 'Order status cannot be changed once delivered or rejected'}, status=400)
+
+    # Update the order status if it's a valid status and not 'delivered' or 'rejected'
     if status in dict(Order.STATUS).keys():
+        # Revert menu item quantities if the order is being rejected
         if status == 'rejected' and not order.status == 'rejected':
             for item in order.orderitems.all():
                 item.menu.quantity = F('quantity') + item.quantity
@@ -237,5 +244,5 @@ def update_order_status(request, order_id):
         order.save()
         return JsonResponse({'status': 'success'})
     else:
-        return JsonResponse({'status': 'error', 'message': 'Geçersiz durum değeri'}, status=400)
+        return JsonResponse({'status': 'error', 'message': 'Invalid status value'}, status=400)
 

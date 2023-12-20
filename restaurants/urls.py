@@ -8,13 +8,13 @@ urlpatterns = [
     path('partner/', views.partner, name='partner'),
     path('adminmain/', views.adminmain, name='adminmain'),
     path('addtomenu/', views.addtomenu, name='addtomenu'),
+    path('addtomenu/<int:item_id>/', views.addtomenu, name='edit_menu_item'),
     path('stafflogin/', views.stafflogin, name='staff-login'),
     path('stafflogout/', views.stafflogout, name='staff-logout'),
-    path('orders/', views.order_list, name='order-list'),
+    path('order-list/', views.order_list, name='order-list'),
     path('update-order-status/<int:order_id>/', views.update_order_status, name='update-order-status'),
     path('delete-item/<int:menu_id>/', views.delete_item, name='delete-item'),
     path('toggle-visibility/<int:item_id>/', views.toggle_visibility, name='toggle-visibility'),
     path('access-denied/', views.access_denied, name='access-denied'),
-    path('logout', views.access_denied_logout, name="logout"),
 
 ]

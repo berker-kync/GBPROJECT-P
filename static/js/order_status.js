@@ -47,46 +47,51 @@
 // }
 
 
-document.querySelectorAll('.save-status').forEach(function (button) {
-    button.addEventListener('click', function (event) {
-   
+document.querySelectorAll('.save-status').forEach(function(button) {
+    button.addEventListener('click', function(event) {
         var orderId = this.dataset.orderId;
         console.log('Clicked on save button for order:', orderId);
 
-   
         var selectElement = document.querySelector('.status-selector[data-order-id="' + orderId + '"]');
+
+        // Check if the dropdown is disabled
+        if (selectElement.disabled) {
+            console.log('Status dropdown is disabled. No changes allowed.');
+            return; // Do not proceed further
+        }
 
         var status = selectElement.value;
         console.log('Selected status:', status);
 
-
         fetch('/update-order-status/' + orderId + '/', {
-            method: 'PATCH', 
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken') 
+                'X-CSRFToken': getCookie('csrftoken')
             },
             body: JSON.stringify({ status: status })
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); 
-            })
-            .then(data => {
-                if (data.status === 'success') {
-                    console.log('Durum güncellendi');
-                    location.reload();
-                } else {
-                    console.error('Bir hata oluştu: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Hata:', error);
-            });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Durum güncellendi');
+                location.reload();
+            } else {
+                console.error('Bir hata oluştu: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Hata:', error);
+        });
     });
 });
+
+
 
 
 function getCookie(name) {

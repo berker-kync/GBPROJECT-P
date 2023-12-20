@@ -1,81 +1,94 @@
 {% extends "adminbase.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %}
+    <link href="{% static 'admincss/css/addtomenu.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 <div class="content-wrapper">
     <div class="container-fluid">
-        <!-- Breadcrumbs-->
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <a href="#">Yemek Ekleme Paneli</a>
+                <a>Menü Düzenleme Paneli</a>
             </li>
         </ol>
-        <div class="box_general padding_bottom">
 
+        <div class="box_general padding_bottom">
             {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        
-            <!-- Display the restaurant's name for the logged-in manager -->
-            {% if restaurant %}
-                <div class="form-group">
-                    <label>Restoran İsmi</label>
-                    <textarea class="form-control" readonly>{{ restaurant.name }}</textarea>
+                <div class="alert-container">
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
                 </div>
-                <div>
-                <form method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{ form.as_p }}  
-                    <button type="submit" class="btn btn-primary">Menüye Ekle</button>
-                </form>
+            {% endif %}
+
+            {% if restaurant %}
+                <div class="restaurant-info mb-4 d-flex align-items-center">
+                    <div class="restaurant-image mr-3">
+                        {% if restaurant.restaurant_image %}
+                            <img src="{{ restaurant.restaurant_image.url }}" alt="{{ restaurant.name }}" class="img-thumbnail" style="width: 100px; height: 100px;">
+                        {% else %}
+                            <img src="{% static 'img/defaultrestaurant.jpg' %}" alt="Default Image" class="img-thumbnail" style="width: 100px; height: 100px;">
+                        {% endif %}
+                    </div>
+                    <div class="restaurant-name">
+                        <h4 class="mb-3">Restoran İsmi</h4>
+                        <input type="text" class="form-control-plaintext" readonly value="{{ restaurant.name }}">
+                    </div>
+                </div>
+
+                <div class="menu-form mt-4">
+                    <h4 class="mb-3">Yeni Menü Öğesi Ekle</h4>
+                    <form method="post" enctype="multipart/form-data" class="p-3 border rounded">
+                        {% csrf_token %}
+                        {% crispy form %}
+                        <!-- <button type="submit" class="btn btn-primary mt-3">Menüye Ekle</button> -->
+                    </form>
                 </div>
             {% else %}
-                <p>Yönetici problemi. Destek ile iletisime geciniz.</p>
+                <p class="alert alert-warning">Yönetici problemi. Destek ile iletisime geciniz.</p>
             {% endif %}
-        </div>
-        <!-- /box_general -->
-        <div>
-            <h2 class="my-4">Restoran Menü Öğeleri</h2>
-            <ul class="list-unstyled">
-                {% for item in existing_menu_items %}
-                    <li class="mb-3 p-3 border rounded">
-                        <div class="d-flex justify-content-between align-items-start">
-                            <div>
-                                <strong>{{ item.name }}</strong> - {{ item.price }} TL
-                                {% if item.description %}
-                                    <p class="mb-2">{{ item.description }}</p>
-                                {% endif %}
-                                {% if item.product_image %}
-                                    <img src="{{ item.product_image.url }}" alt="{{ item.name }}" class="menu-item-image img-thumbnail">
+
+            <div class="menu-items-list mt-5">
+                <h2 class="mb-4">Restoran Menü Öğeleri</h2>
+                <ul class="list-unstyled">
+                    {% for item in existing_menu_items %}
+                        <li class="mb-3 p-3 border rounded">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <strong>{{ item.name }}</strong> - {{ item.price }} TL
+                                    {% if item.description %}
+                                        <p class="mb-2">{{ item.description }}</p>
+                                    {% endif %}
+                                    {% if item.product_image %}
+                                        <img src="{{ item.product_image.url }}" alt="{{ item.name }}" class="menu-item-image img-thumbnail">
+                                    {% endif %}
                                     <span class="badge {% if item.is_active %}badge-success{% else %}badge-secondary{% endif %} mt-2">
                                         {% if item.is_active %}Görünür{% else %}Gizli{% endif %}
                                     </span>
-                                {% endif %}
-                            </div>
-                            <div class="item-actions mt-3">
-                                <button class="btn btn-outline-secondary btn-sm" onclick="toggleVisibility('{{ item.id }}')">
-                                    <i class="bi bi-eye{% if not item.is_active %}-slash{% endif %}"></i> Toggle Visibility
+                                </div>
+                                <div class="item-actions mt-3">
+                                    <button class="btn btn-outline-secondary btn-sm" onclick="toggleVisibility('{{ item.id }}')">
+                                    <i class="bi bi-eye{% if not item.is_active %}-slash{% endif %}"></i> Menüden Gizle
                                 </button>
+                                <a href="{% url 'edit_menu_item' item.id %}" class="btn btn-primary btn-sm">
+                                    Düzenle
+                                </a>
                                 <button class="btn btn-danger btn-sm" onclick="deleteItem('{{ item.id }}')">
-                                    <i class="bi bi-trash"></i> Delete Item
+                                    <i class="bi bi-trash"></i> Ürünü Sil
                                 </button>
                             </div>
                         </div>
                     </li>
                 {% endfor %}
-            </ul>            
+            </ul>
         </div>
-        
-        
-
-
-        
     </div>
     <!-- /container-fluid -->
 </div>
 <!-- /content-wrapper -->
+
+
 {% endblock %}
