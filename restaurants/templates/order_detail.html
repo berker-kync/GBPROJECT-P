@@ -1,0 +1,73 @@
+{% extends "adminbase.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/orders">Geri</a>
+            </li>
+        </ol>
+
+        <!-- Order Details -->
+        <div class="order-details">
+            <h2 class="text-center">Sipariş #{{ order.id }} Detayları</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Müşteri</th>
+                            <th>Toplam Fiyat</th>
+                            <th>Durum</th>
+                            <th>Oluşturulma Tarihi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{ order.customer.name }}</td>
+                            <td>{{ order.total_price }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.created_at }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="mt-4">Sipariş Edilen Ürünler</h3>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ürün Adı</th>
+                            <th>Miktar</th>
+                            <th>Porsiyon</th>
+                            <th>Ekstralar</th>
+                            <th>Fiyat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in order_items %}
+                            <tr>
+                                <td>{{ item.menu.name }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.portion }}</td>
+                                <td>
+                                    {% for extra in item.extras.all %}
+                                        {{ extra.name }}<br>
+                                    {% endfor %}
+                                </td>
+                                <td>₺{{ item.total_item_price }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <!-- /container-fluid -->
+</div>
+<!-- /content-wrapper -->
+{% endblock %}

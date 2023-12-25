@@ -13,17 +13,6 @@
 
 
     <main class="bg_gray padded-main">
-        <div class="container margin_60_20">
-            {% if messages %}
-            <div class="container mt-3">
-                {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                {% endfor %}
-            </div>
-            {% endif %}
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8">
                     <form method="post">
@@ -69,14 +58,14 @@
                             <div class="main">
                                 <div class="payment_select">
                                     <label class="container_radio">Nakit Ödeme veya Kredi Kartı (Kapıda Ödeme)
-                                        <input type="radio" value="nakit" name="payment_method">
+                                        <input type="radio" value="nakit" checked name="payment_method">
                                         <span class="checkmark"></span>
                                     </label>
                                     <i class="icon_wallet"></i>
                                 </div>
                                 <div class="payment_select">
                                     <label class="container_radio">Kredi Kartı
-                                        <input type="radio" value="kredi_kart" checked name="payment_method">
+                                        <input type="radio" value="kredi_kart" name="payment_method">
                                         <span class="checkmark"></span>
                                     </label>
                                     <i class="icon_creditcard"></i>
@@ -131,7 +120,7 @@
                             <div class="head">
                                 <h3>Sipariş Özeti</h3>
                                 <div class="mt-2">
-                                    {{ current_restaurant.name }}
+                                    <a href="{% url 'detail-restaurant' name_slug=current_restaurant.name_slug %}">{{ current_restaurant.name }}</a>
                                 </div>                                
                             </div>
                             <!-- /head -->
@@ -139,7 +128,19 @@
                               <ul class="clearfix">
                                     {% for item in cart_items %}
                                         <li>
-                                            <button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.menu.name }}</button>
+                                            <button class="remove-item-btn" data-id="{{ item.id }}">x</button>
+                                            <strong>{{ item.quantity }} Adet {{ item.menu.name }}, 
+                                                {% if item.portion or item.extras.all %}
+                                                    {% if item.portion %}
+                                                        {{ item.portion.name }},
+                                                    {% endif %}
+                                                    {% for extra in item.extras.all %}
+                                                        {{ extra.name }} =
+                                                    {% endfor %}
+                                                {% else %}
+                                                    Normal
+                                                {% endif %}
+                                            </strong>
                                             <span>₺{{ item.total_price }}</span>
                                         </li>
                                     {% endfor %}

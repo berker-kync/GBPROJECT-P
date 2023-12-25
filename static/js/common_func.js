@@ -230,14 +230,16 @@ $.ajaxSetup({
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
+					toastr.success(data.message); // Show success message
 					$('#qty_1').val(1); // Reset the quantity to 1
 					$('#total-price').text(data.total_price); // Update the total price in the navbar
 
 					$.magnificPopup.close(); // Close the modal
-					// reload the page
 					location.reload();
 				} else {
-					alert(data.message); // Show error message
+					toastr.error(data.message); // Show error message
+					$.magnificPopup.close(); // Close the modal
+
 				}
 			},
 			error: function(err) {
@@ -245,6 +247,7 @@ $.ajaxSetup({
 			}
 		});
 	});
+
 
 	// remove from cart
 	$('.remove-item-btn').click(function(e) {

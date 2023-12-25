@@ -8,8 +8,6 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.db.models import Avg
-from django.core.mail import send_mail
-from django.conf import settings
 from restaurants.views import send_email
 
 
@@ -38,7 +36,9 @@ def Login(request):
             if user.is_active:
                 login(request, user)
                 messages.success(request, 'Başarıyla giriş yaptınız.')
-                return redirect('index')
+                
+                next_url = request.GET.get('next', 'index')
+                return redirect(next_url)
             else:
                 messages.error(request, 'Üyeliğiniz aktif değil.')
         else:
@@ -47,9 +47,30 @@ def Login(request):
 
     return render(request, 'login.html', {'form': form})
 
+# def user_forget_password(request):
+#     form = ForgetPasswordForm(request.POST or None)
+#     if request.method == "POST" and form.is_valid():
+#         email = form.cleaned_data.get('email')
+#         user = User.objects.filter(email=email).first()
+#         if user:
+#             subject = "Şifre Sıfırlama"
+#             message = f"Merhaba {user.name},\n\nŞifrenizi sıfırlamak için aşağıdaki linke tıklayınız:\n\n{request.build_absolute_uri('/reset-password/')}"
+#             to_email = user.email
+
+#             send_email(subject, message, to_email)
+
+#             messages.success(request, 'Şifre sıfırlama linki mail adresinize gönderildi.')
+#             return redirect('login')
+#         else:
+#             messages.error(request, 'Böyle bir mail adresi bulunamadı.')
+#             return redirect('forget-password')
+
+
+#     return render(request, 'forget-password.html')
 
 def user_logout(request):
     logout(request)
+    messages.success(request, 'Başarıyla çıkış yaptınız.')
     return redirect('index')
 
 def register(request):
@@ -136,6 +157,9 @@ def profile(request):
         if user_password_form.is_valid():
             user_password_form.save()
             messages.success(request, 'Şifreniz güncellenmiştir.')
+            return redirect('profile')
+        else:
+            messages.error(request, 'Lütfen formu doğru şekilde doldurunuz.')
             return redirect('profile')
 
     # Adres Ekleme Formu Kontrolü
@@ -224,6 +248,14 @@ def add_to_cart(request, menu_id):
     extras = request.POST.getlist('extras')
     quantity = int(request.POST.get('quantity'))
 
+    if menu.quantity < quantity:
+        return JsonResponse({"success": False, "message": "Yetersiz menü öğesi miktarı.", "toastr_type": "error"})
+
+    # Sepette başka restoranın ürünleri varsa temizle
+    cart_items = Cart.objects.filter(customer=request.user)
+    if cart_items.exists() and cart_items.first().menu.restaurant != menu.restaurant:
+        cart_items.delete()  # Kullanıcının eski sepetini temizle
+
     portion_instance = Portion.objects.get(id=portion) if portion else None
 
     # Sepeti oluştur veya güncelle
@@ -249,7 +281,7 @@ def add_to_cart(request, menu_id):
 
     cart_item.save()
     
-    return JsonResponse({"success": True, "message": "Menü öğesi sepete eklendi", "cart_item_id": cart_item.id})
+    return JsonResponse({"success": True, "message": "Menü öğesi sepete eklendi", "toastr_type": "success", "cart_item_id": cart_item.id})
 
 
 @login_required
@@ -268,9 +300,9 @@ def update_cart_quantity(request):
         total_cart_price = sum(item.total_price for item in Cart.objects.filter(customer=request.user))
         return JsonResponse({'success': True, 'total_price': float(total_price), 'total_cart_price': float(total_cart_price)})
     except Cart.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Sepet öğesi bulunamadı.'})
+        return JsonResponse({'success': False, 'error': 'Sepet öğesi bulunamadı.', "toastr_type": "error"})
     except ValueError:
-        return JsonResponse({'success': False, 'error': 'Geçersiz miktar.'})
+        return JsonResponse({'success': False, 'error': 'Geçersiz miktar.', "toastr_type": "error"})
 
 
 
@@ -283,12 +315,12 @@ def remove_from_cart(request, id):
         if cart_item:
             # Remove the cart item
             cart_item.delete()
-            return JsonResponse({"success": True, "message": "Ürün sepetten silindi."})
+            return JsonResponse({"success": True, "message": "Ürün sepetten silindi.", "toastr_type": "success"})
         else:
-            return JsonResponse({"success": False, "message": "Ürün sepette bulunamadı."})
+            return JsonResponse({"success": False, "message": "Ürün sepette bulunamadı.", "toastr_type": "error"})
 
     except (Cart.DoesNotExist, ValueError):
-        return JsonResponse({"success": False, "message": "Sepet ürünü bulunamadı."})
+        return JsonResponse({"success": False, "message": "Sepet ürünü bulunamadı.", "toastr_type": "success"})
 
 
 @login_required(login_url='/login')
