@@ -59,3 +59,6 @@ function deleteItem(itemId) {
     }
     return cookieValue;
   }
+
+
+  

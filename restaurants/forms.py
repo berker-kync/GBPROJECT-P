@@ -29,11 +29,16 @@ class RestaurantRegistrationForm(forms.ModelForm):
 
 
 
-
 class MenuItemForm(forms.ModelForm):
     category = forms.ModelChoiceField(
         queryset=Menu_Category.objects.all(),
-        label='Kategori'
+        label='Kategori',
+        widget=forms.Select(attrs={'class': 'form-control custom-select'})
+    )
+
+    product_image = forms.ImageField(
+        label='Ürün Görseli',
+        widget=forms.ClearableFileInput(attrs={'class': 'custom-file-input'})
     )
 
     class Meta:
@@ -52,17 +57,20 @@ class MenuItemForm(forms.ModelForm):
         super(MenuItemForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            Field('name'),
-            Field('price', type='number'),
-            Field('description', rows=3),
+            Field('name', css_class='form-control mb-3'),
+            Field('price', css_class='form-control mb-3', type='number', min='0'),
+            Field('description', css_class='form-control mb-3', rows=3),
+            Field('category', css_class='form-control custom-select mb-3'),
             Div(
-                Field('product_image'),  # Remove custom class here
-                HTML('<label for="id_product_image" class="form-label"></label>'),  # Use Bootstrap 5 classes
-                css_class='mb-4'  # Add spacing for visual clarity
+                HTML('<label class="custom-file-label" for="id_product_image">Choose file</label>'),
+                Field('product_image', css_class='custom-file-input'),
+                css_class='custom-file mb-3'
             ),
-            Field('quantity', type='number'),
-            # Field('product_image', css_class='custom-file-input'),
-            Submit('save', 'Menüye Ekle', css_class='btn btn-primary mt-3')
+            Field('quantity', css_class='form-control mb-3', type='number', min='0'),
+            Submit('save', 'Menüye Ekle', css_class='btn btn-primary')
         )
+
+        self.fields['product_image'].widget.attrs.update({'class': 'custom-file-input', 'id': 'id_product_image'})
+        self.fields['product_image'].label = 'Ürün Görseli'
 
 
