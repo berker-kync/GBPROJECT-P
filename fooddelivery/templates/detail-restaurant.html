@@ -123,7 +123,7 @@
 									{% for item in cart_items %}
 										<li id="cart-item-{{ item.id }}" class="d-flex align-items-center mb-2">
 											<div class="item-details flex-grow-1 me-2">
-												<strong>{{ item.menu }}</strong>
+												<strong>{{ item.menu }},{{ item.portion }},{{ item.extras.all }}</strong>
 											</div>
 											<div class="quantity_control d-flex align-items-center me-2">
 												<button class="decrease-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">-</button>
@@ -381,6 +381,29 @@
             <input type="text" value="1" id="qty_1" class="qty2 form-control" name="quantity" min="1">
             <!-- Remove the hidden productid input, as we set it dynamically with JavaScript -->
         </div>
+		<h5>Size</h5>
+        <ul class="clearfix">
+			{% for portion in portions %}
+            <li>
+                <label class="container_radio">{{ portion.name }}<span id="portion-price">+ ₺{{ portion.price }}</span>
+                    <input type="radio" value="{{ portion.id }}" name="portion">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+			{% endfor %}
+            <li>
+        </ul>
+        <h5>Extra Ingredients</h5>
+        <ul class="clearfix">
+			{% for extra in extras %}
+            <li>
+                <label class="container_check">{{ extra.name }}<span>+ ₺{{ extra.price }}</span>
+                    <input type="checkbox" value="{{ extra.id}}" name="extras">
+                    <span class="checkmark"></span>
+                </label>
+            </li>
+			{% endfor %}
+        </ul>
 
         <form action="" method="POST">
             {% csrf_token %}

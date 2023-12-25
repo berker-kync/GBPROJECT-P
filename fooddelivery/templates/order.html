@@ -140,7 +140,7 @@
                                     {% for item in cart_items %}
                                         <li>
                                             <button class="remove-item-btn" data-id="{{ item.id }}">  {{ item.quantity }}x {{ item.menu.name }}</button>
-                                            <span>₺{{ item.menu.price }}</span>
+                                            <span>₺{{ item.total_price }}</span>
                                         </li>
                                     {% endfor %}
                                 </ul>

@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from .models import Adress, Cart, Order, OrderItem, Restaurant, Menu, Menu_Category, Province
+from .models import Adress, Cart, Extras, Order, OrderItem, Portion, Restaurant, Menu, Menu_Category, Province
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib import messages
@@ -167,8 +167,10 @@ def detailRestaurant(request, name_slug):
     restaurant = Restaurant.objects.get(name_slug=name_slug)
     reviews = restaurant.reviews.all().order_by('-created_at')[:5]
     food_items = Menu.objects.filter(restaurant=restaurant)
+    portions = Portion.objects.filter(menus__in=food_items).distinct()
+    extras = Extras.objects.filter(menus__in=food_items).distinct()
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
-    menu_slugs = [category.menu_slug for category in menu_categories]
+    menu_slugs = [category.menu_slug for category in menu_categories] # Menü kategorilerinin slug'ları yok ki bakalım buna.
 
     # Kullanıcı giriş yapmışsa ek işlemler
     if request.user.is_authenticated:
@@ -199,6 +201,8 @@ def detailRestaurant(request, name_slug):
 
     context = {
         'food_items': food_items,
+        'portions': portions,
+        'extras': extras,
         'restaurant': restaurant,
         'reviews': reviews,
         'average_score': round(average_score, 1) if average_score else 'Skor Yok',
@@ -207,39 +211,46 @@ def detailRestaurant(request, name_slug):
         'total_price': total_price,
         'menu_categories': menu_categories,
         'menu_slugs': menu_slugs,
-        # Kullanıcı giriş yapmış mı kontrolü
         'is_user_authenticated': request.user.is_authenticated,
     }
     return render(request, 'detail-restaurant.html', context)
 
 
-
 @login_required(login_url='/login')
-@require_POST  # Bu dekoratör fonksiyonun yalnızca POST istekleri ile çağrılmasını sağlar.
+@require_POST
 def add_to_cart(request, menu_id):
     menu = get_object_or_404(Menu, id=menu_id)
-    selected_quantity = int(request.POST.get('quantity', 1))
+    portion = request.POST.get('portion')
+    extras = request.POST.getlist('extras')
+    quantity = int(request.POST.get('quantity'))
 
-    if menu.quantity < selected_quantity:
-        return JsonResponse({"success": False, "message": "Yetersiz menü öğesi miktarı."})
-    
-    # Sepette başka restoranın ürünleri varsa temizle
-    cart_items = Cart.objects.filter(customer=request.user)
-    if cart_items.exists() and cart_items.first().menu.restaurant != menu.restaurant:
-        cart_items.delete()  # Kullanıcının eski sepetini temizle
+    portion_instance = Portion.objects.get(id=portion) if portion else None
 
-    # Sepete yeni ürün ekle veya var olanı güncelle
-    cart_item, created = Cart.objects.get_or_create(customer=request.user, menu=menu)
-    if not created:
-        if menu.quantity < (cart_item.quantity + selected_quantity):
-            return JsonResponse({"success": False, "message": "Yetersiz menü öğesi miktarı."})
-        cart_item.quantity += selected_quantity
-        cart_item.save()
+    # Sepeti oluştur veya güncelle
+    cart_item, created = Cart.objects.get_or_create(
+        customer=request.user,
+        menu=menu,
+        portion=portion_instance,
+        defaults={'quantity': quantity}
+    )
+
+    if created:
+        # ManyToManyField için set() metodunu kullan
+        cart_item.extras.set(Extras.objects.filter(id__in=extras))
     else:
-        cart_item.quantity = selected_quantity
-        cart_item.save()
+        # Farklı porsiyon veya ekstralar seçildiyse yeni bir sepet öğesi oluştur
+        cart_item = Cart.objects.create(
+            customer=request.user,
+            menu=menu,
+            portion=portion_instance,
+            quantity=quantity
+        )
+        cart_item.extras.set(Extras.objects.filter(id__in=extras))
 
-    return JsonResponse({"success": True, "message": "Menü öğesi sepete eklendi"})
+    cart_item.save()
+    
+    return JsonResponse({"success": True, "message": "Menü öğesi sepete eklendi", "cart_item_id": cart_item.id})
+
 
 @login_required
 @require_POST
@@ -330,14 +341,17 @@ def order(request):
 
             order_details = ""
             for item in cart_items:
-                OrderItem.objects.create(
+                # OrderItem nesnesi oluştur
+                order_item = OrderItem.objects.create(
                     order=new_order,
                     menu=item.menu,
                     quantity=item.quantity,
+                    portion=item.portion,  # Porsiyon bilgisini ekle
                     shipping=shipping_address,
                 )
-                item_detail = f"Ürün: {item.menu.name}, Adet: {item.quantity}, Ücret: {item.menu.price} (adet fiyatı)\n"
-                order_details += item_detail
+                order_item.extras.set(item.extras.all())  # Ekstraları ekle
+
+                # Ürün stok miktarını güncelle
                 item.menu.quantity -= item.quantity
                 item.menu.save()
 

@@ -211,22 +211,31 @@ $.ajaxSetup({
 		e.preventDefault();
 		const productQuantity = parseInt($('#qty_1').val(), 10); // Get the quantity
 		const productId = $('#modal-dialog').data('productid'); // Get the product ID from the modal
+		const selectedPortion = $('input[name=portion]:checked').val();
+		const selectedExtras = $('input[name=extras]:checked').map(function() {
+			return this.value;
+		}).get();
+
 	
 		$.ajax({
 			url: `/add_to_cart/${productId}/`, // Send the request with the specific product ID in the URL
 			type: "POST",
 			data: {
 				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-				quantity: productQuantity
+				quantity: productQuantity,
+				portion : selectedPortion,
+				extras : selectedExtras
 			},
+			traditional: true,
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
 					$('#qty_1').val(1); // Reset the quantity to 1
+					$('#total-price').text(data.total_price); // Update the total price in the navbar
+
+					$.magnificPopup.close(); // Close the modal
 					// reload the page
 					location.reload();
-					$("#cart-items").html(data.cart_items);
-					$("#total-price").text(data.total_price);
 				} else {
 					alert(data.message); // Show error message
 				}
