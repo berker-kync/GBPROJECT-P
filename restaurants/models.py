@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator, RegexVa
 from decimal import Decimal
 from django.conf import settings
 from django.db.models import Avg
+from fooddelivery.validators import phone_number_validator
 
 class Province(models.Model):
     province = models.CharField(max_length=100, null=False, blank=False)
@@ -66,6 +67,7 @@ class Restaurant(models.Model):
 class RestaurantRegistration(models.Model):
     email = models.EmailField(null=False, blank=False, unique=True, editable=True)
     name = models.CharField(max_length=150, null=False, blank=False, editable=True)
+    phone = models.CharField(max_length=10, validators=[phone_number_validator])
     restaurant_name = models.CharField(max_length=150, null=False, blank=False, unique=True, editable=True)
     address = models.CharField(max_length=255, null=False, blank=False, editable=True)
     province = models.ForeignKey(Province, on_delete=models.CASCADE, related_name='restaurant_registrations', editable=True)
@@ -76,6 +78,7 @@ class RestaurantRegistration(models.Model):
         verbose_name = 'RestaurantRegistration'
         verbose_name_plural = 'RestaurantRegistrations'
 
+
     def __str__(self):
-        return f'{self.restaurant_name}'
+        return f'Kişi:{self.name}, Restoran:{self.restaurant_name}, Email:{self.email}'
        

@@ -76,7 +76,7 @@ class Menu_Category (models.Model):
         app_label = 'fooddelivery'
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 class Extras(models.Model):
     name = models.CharField(max_length=30, null=False, blank=False)

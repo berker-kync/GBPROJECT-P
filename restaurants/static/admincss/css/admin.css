@@ -316,7 +316,7 @@ body.sidenav-toggled .navbar-sidenav {
   width: 55px;
 }
 body.sidenav-toggled .navbar-sidenav .nav-link-text {
-  display: none;
+  display: none;fa fa-fw fa-shoppi
 }
 body.sidenav-toggled .navbar-sidenav .nav-item,
 body.sidenav-toggled .navbar-sidenav .nav-link {

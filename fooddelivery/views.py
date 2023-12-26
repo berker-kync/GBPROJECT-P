@@ -80,11 +80,19 @@ def register(request):
     form = RegisterForm(request.POST or None)
 
     if request.method == "POST" and form.is_valid():
-        form.save()
+        user = form.save()
         messages.success(request, 'Üyeliğiniz oluşturuldu.')
+        
+        # Kullanıcıya kayıt maili için
+        subject = "TencereKapak'a Hoş Geldiniz!"
+        message = f"Merhaba {user.name},\n\nAramıza hoş geldin! Üyeliğin başarıyla oluşturuldu."
+        to_email = user.email
+        send_email(subject, message, to_email)
+
         return redirect('login')
     
     return render(request, 'register.html', {'form': form})
+
 
 def restaurants(request):
     restaurants = Restaurant.objects.all()
