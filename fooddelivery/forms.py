@@ -56,17 +56,15 @@ class CustomerAddressForm(forms.ModelForm):
 class RegisterForm(UserCreationForm):
     class Meta:
         model = Customer
-        fields = ['name', 'email', 'phone']
+        fields = ['name', 'email']
 
     
     name = forms.CharField(label="Ad Soyad", min_length=3, max_length=50)
     email = forms.EmailField(label="Email", max_length=100)
-    phone = forms.CharField(label="Telefon" ,max_length=10, validators=[phone_number_validator])
     
     widgets = {
         'name': forms.TextInput(attrs={'class': 'form-control'}),
         'email': forms.EmailInput(attrs={'class': 'form-control'}),
-        'phone': forms.TextInput(attrs={'class': 'form-control'}),
     }
 
 

@@ -1,0 +1,14 @@
+asgiref==3.7.2
+certifi==2023.11.17
+charset-normalizer==3.3.2
+crispy-bootstrap5==0.7
+Django==4.2.6
+django-autoslug==1.9.9
+django-crispy-forms==2.1
+idna==3.6
+Pillow==10.1.0
+python-decouple==3.8
+requests==2.31.0
+sqlparse==0.4.4
+tzdata==2023.3
+urllib3==2.1.0

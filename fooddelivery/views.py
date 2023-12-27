@@ -194,13 +194,22 @@ def profile(request):
 
     return render(request, 'profile.html', context)
 
+def get_menu_item_details(request):
+    menu_id = request.GET.get('menu_id')
+    menu_item = Menu.objects.get(id=menu_id)
+
+    portions = list(menu_item.portions.values('name', 'price'))
+    extras = list(menu_item.extras.values('name', 'price'))
+
+    return JsonResponse({
+        'portions': portions,
+        'extras': extras
+    })
     
 def detailRestaurant(request, name_slug):
     restaurant = Restaurant.objects.get(name_slug=name_slug)
     reviews = restaurant.reviews.all().order_by('-created_at')[:5]
     food_items = Menu.objects.filter(restaurant=restaurant)
-    portions = Portion.objects.filter(menus__in=food_items).distinct()
-    extras = Extras.objects.filter(menus__in=food_items).distinct()
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
     menu_slugs = [category.menu_slug for category in menu_categories] # Menü kategorilerinin slug'ları yok ki bakalım buna.
 
@@ -233,8 +242,6 @@ def detailRestaurant(request, name_slug):
 
     context = {
         'food_items': food_items,
-        'portions': portions,
-        'extras': extras,
         'restaurant': restaurant,
         'reviews': reviews,
         'average_score': round(average_score, 1) if average_score else 'Skor Yok',

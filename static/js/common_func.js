@@ -205,6 +205,7 @@ $.ajaxSetup({
 		e.preventDefault();
 		let productID = $(this).data('productid');
 		$('#modal-dialog').data('productid', productID);  // Set the product ID in the modal
+		
 	});
 	
 	$('#add-to-cart-btn').click(function(e) {
