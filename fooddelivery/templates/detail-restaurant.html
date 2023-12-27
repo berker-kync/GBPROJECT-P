@@ -127,12 +127,11 @@
 											</div>
 											<div class="quantity_control d-flex align-items-center me-2">
 												<button class="decrease-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">-</button>
-												<button class="remove-item-btn btn btn-danger btn-sm" data-id="{{ item.id }}" style="display: none;">X</button>
+												<button class="remove-item-btn btn btn-outline-secondary btn-sm" data-id="{{ item.id }}" style="display: none;">X</button>
 												<strong id="qty_{{ item.id }}" class="mx-2">{{ item.quantity }}</strong>
 												<button class="increase-quantity btn btn-outline-secondary btn-sm" data-id="{{ item.id }}">+</button>
 											</div>
 											<span id="item-total-price-{{ item.id }}" class="me-2">₺{{ item.total_price }}</span>
-											<button class="remove-item-btn btn btn-danger btn-sm" data-id="{{ item.id }}" style="display: none;">Remove</button>
 										</li>
 									{% endfor %}
 		                        </ul>
@@ -391,9 +390,15 @@
                     <!-- <div class="col-md-4">
                         <button type="button" class="btn_1 outline full-width mb-mobile" data-bs-dismiss="modal">İptal Et</button>
                     </div> -->
+					{% if is_user_authenticated %}
                     <div class="col-md">
                         <button type="submit" class="btn_1 full-width" id="add-to-cart-btn">Sepete Ekle</button>
                     </div>
+					{% else %}
+					<div class="col-md">
+						<a href="/login" class="btn_1 full-width">Sepete Ekle</a>
+					</div>
+					{% endif %}
                 </div>
                 <!-- /Row -->
             </div>

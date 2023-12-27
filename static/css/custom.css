@@ -4,29 +4,20 @@
 /*============================================================================================*/
 
 
-.box_order .main .remove-item-btn:before{
-    font-family: "ElegantIcons";
-    content: "\4f";
-    font-size: 16px;
-    font-size: 1rem;
-    left: -20px;
-    top: 3px;
-    line-height: 1;
-    position: absolute;
+.box_order .main .remove-item-btn:before {
+  font-family: "ElegantIcons";
+  font-size: 16px;
+  left: -20px;
+  top: 3px;
+  line-height: 1;
+  position: absolute;
+  color: red; /* Make the icon red */
 }
 
-.box_order .main .remove-item-btn{
-    border: none;
-    text-align: center;
-    background: none;
-    border-radius: 20px;
-    position: relative;
-    bottom: auto;
-}
 
 
 .box_order .main .remove-item-btn:hover {
-    color: red;
+  color: red; /* Maintain red color on hover */
 }
 
 .asteriskField {
