@@ -23,4 +23,5 @@ urlpatterns = [
     path('restaurant/<slug:name_slug>/', views.detailRestaurant, name='detail-restaurant'),
     path('delete-address/<int:address_id>/', views.delete_address, name='delete_address'),
     path('edit-address/<int:address_id>/', views.edit_address, name='edit_address'),
+
 ]

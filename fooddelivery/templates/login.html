@@ -31,6 +31,7 @@
 
     <!-- YOUR CUSTOM CSS -->
     <link href="{% static 'css/custom.css' %}" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
     
 </head>
@@ -39,16 +40,12 @@
 	
 	<div id="register">
 		{% if messages %}
-			<div class="container mt-3"> <!-- Container to align the messages properly -->
+		<div id="django-messages" style="display: none;">
 			{% for message in messages %}
-				<!-- Display each message in a Bootstrap alert component -->
-				<div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-				{{ message }}
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-				</div>
+				<div class="message" data-type="{{ message.tags }}">{{ message }}</div>
 			{% endfor %}
-			</div>
-  		{% endif %}
+		</div>
+		{% endif %}
 		<aside>
 			<figure>
 				<a href="/"><img src="{% static 'img/TencereKapak.svg' %}" width="140" height="35" alt=""></a>
@@ -82,9 +79,8 @@
 	<!-- /login -->
 	
 	<!-- COMMON SCRIPTS -->
-    <!-- <script src="{% static 'js/common_scripts.min.js' %}"></script>
-    <script src="{% static 'js/common_func.js' %}"></script>
-    <script src="{% static 'js/validate.js' %}"></script> -->
-  
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+	<script src="{% static 'js/toastrmessage.js' %}"></script>  
 </body>
 </html>

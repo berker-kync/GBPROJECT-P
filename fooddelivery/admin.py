@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Adress, Order, Customer, Menu_Category, Menu
+from .models import Adress, Order, Customer, Menu_Category, Menu, Extras, Extracategory, Portion
 from restaurants.models import Restaurant, Restaurant_Category
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -56,6 +56,9 @@ admin.site.register(Customer, CustomerAdmin)
 admin.site.register(Adress)
 admin.site.register(Restaurant)
 admin.site.register(Restaurant_Category)
+admin.site.register(Extras)
+admin.site.register(Extracategory)
+admin.site.register(Portion)
 admin.site.register(Menu_Category)
 admin.site.register(Menu)
 

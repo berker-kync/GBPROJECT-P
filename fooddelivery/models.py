@@ -55,6 +55,12 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 
     def __str__ (self):
         return self.email
+    
+    def has_module_perms(self, app_label):
+        return self.is_superuser
+
+    def has_perm(self, perm, obj=None):
+        return self.is_superuser
 
 
 # menu category model
@@ -72,6 +78,47 @@ class Menu_Category (models.Model):
     def __str__(self):
         return self.name
 
+class Extras(models.Model):
+    name = models.CharField(max_length=30, null=False, blank=False)
+    price = models.DecimalField(null=False, max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    
+    class Meta:
+        db_table = 'extras'
+        verbose_name = 'Extra'
+        verbose_name_plural = 'Extras'
+
+    def __str__(self):
+        return f'{self.name}'
+
+    
+
+class Extracategory(models.Model):
+    name = models.CharField(max_length=30, null=False, blank=False)
+    extras = models.ManyToManyField(Extras, related_name='extra_categories')
+
+    class Meta:
+        db_table = 'extra_category'
+        verbose_name = 'Extra Category'
+        verbose_name_plural = 'Extra Categories'
+
+    def __str__(self):
+        return f'{self.name}'
+    
+
+class Portion(models.Model):
+    name = models.CharField(max_length=30, null=False, blank=False)
+    price = models.DecimalField(null=False, max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.00'))])
+
+    class Meta:
+        db_table = 'portions'
+        verbose_name = 'Portion'
+        verbose_name_plural = 'Portions'
+
+    def __str__(self):
+        return f'{self.name}'
+    
+
+
 class Menu(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menus')
     name = models.CharField(max_length=150)
@@ -80,6 +127,8 @@ class Menu(models.Model):
     category = models.ForeignKey(Menu_Category, on_delete=models.CASCADE, related_name='menu_items')  
     quantity = models.PositiveIntegerField()
     product_image = models.ImageField(upload_to='products/img', null=False, blank=True)
+    extras = models.ManyToManyField(Extras, related_name='menus', blank=True)
+    portions = models.ManyToManyField(Portion, related_name='menus', blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -92,6 +141,10 @@ class Menu(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+    
+    # @property
+    # def total_price(self):
+    #     return (self.price + self.extras.price + self.portions.price)* self.quantity
 
 
 # cart model
@@ -100,6 +153,8 @@ class Cart(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT, related_name='carts')
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='carts')
     quantity = models.PositiveIntegerField(default=1)
+    portion = models.ForeignKey(Portion, on_delete=models.SET_NULL, null=True, blank=True)
+    extras = models.ManyToManyField(Extras, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -113,7 +168,12 @@ class Cart(models.Model):
     
     @property
     def total_price(self):
-        return self.menu.price * self.quantity
+        total_price = self.menu.price
+        if self.portion:
+            total_price += self.portion.price
+        for extra in self.extras.all():
+            total_price += extra.price
+        return total_price * self.quantity
 
 
 class Adress(models.Model):
@@ -182,6 +242,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='orderitems')
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='menus')
     quantity = models.PositiveIntegerField()
+    portion = models.ForeignKey(Portion, on_delete=models.SET_NULL, null=True, blank=True)
+    extras = models.ManyToManyField(Extras, blank=True)
     shipping = models.ForeignKey(Adress, on_delete=models.CASCADE, related_name='orderitems_adresses')
 
 
@@ -195,8 +257,12 @@ class OrderItem(models.Model):
 
     @property
     def total_item_price(self):
-        return self.menu.price * self.quantity
-    
+        total_price = self.menu.price
+        if self.portion:
+            total_price += self.portion.price
+        for extra in self.extras.all():
+            total_price += extra.price
+        return total_price * self.quantity
 
 
 

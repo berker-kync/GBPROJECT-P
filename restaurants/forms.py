@@ -1,9 +1,7 @@
 from django import forms
 from .models import Province, RestaurantRegistration
-from fooddelivery.models import Menu, Menu_Category
+from fooddelivery.models import Menu, Menu_Category, Portion, Extras
 from fooddelivery.validators import phone_number_validator
-
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Div, HTML, Submit
 
@@ -27,8 +25,6 @@ class RestaurantRegistrationForm(forms.ModelForm):
     postal_code = forms.CharField(label='Posta Kodu', min_length=5, max_length=5)
 
 
-
-
 class MenuItemForm(forms.ModelForm):
     category = forms.ModelChoiceField(
         queryset=Menu_Category.objects.all(),
@@ -41,9 +37,21 @@ class MenuItemForm(forms.ModelForm):
         widget=forms.ClearableFileInput(attrs={'class': 'custom-file-input'})
     )
 
+    # Yeni eklenen alanlar
+    portions = forms.ModelMultipleChoiceField(
+        queryset=Portion.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label='Porsiyon Seçenekleri'
+    )
+    extras = forms.ModelMultipleChoiceField(
+        queryset=Extras.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label='Ekstra Seçenekler'
+    )
+
     class Meta:
         model = Menu
-        fields = ['name', 'price', 'description', 'category', 'quantity', 'product_image']
+        fields = ['name', 'price', 'description', 'category', 'quantity', 'product_image', 'portions', 'extras']
         labels = {
             'name': 'Ürün İsmi',
             'price': 'Ücret',
@@ -51,9 +59,22 @@ class MenuItemForm(forms.ModelForm):
             'category': 'Kategori',
             'quantity': 'Ürün Adedi',
             'product_image': 'Ürün Görseli',
+            'portions': 'Porsiyon Seçenekleri',
+            'extras': 'Ekstra Seçenekler',
         }
 
     def __init__(self, *args, **kwargs):
+
+        instance = kwargs.get('instance', None)
+        
+        # Eğer form bir instance üzerinden başlatılmışsa, 
+        # initial değerleri ayarla.
+        if instance:
+            initial = kwargs.get('initial', {})
+            initial['portions'] = instance.portions.values_list('id', flat=True)
+            initial['extras'] = instance.extras.values_list('id', flat=True)
+            kwargs['initial'] = initial
+
         super(MenuItemForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
@@ -61,6 +82,8 @@ class MenuItemForm(forms.ModelForm):
             Field('price', css_class='form-control mb-3', type='number', min='0'),
             Field('description', css_class='form-control mb-3', rows=3),
             Field('category', css_class='form-control custom-select mb-3'),
+            Field('portions', wrapper_class='my-custom-class-for-portions'),
+            Field('extras', wrapper_class='my-custom-class-for-extras'),
             Div(
                 HTML('<label class="custom-file-label" for="id_product_image">Choose file</label>'),
                 Field('product_image', css_class='custom-file-input'),

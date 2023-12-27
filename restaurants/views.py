@@ -65,8 +65,6 @@ def partner(request):
     return render(request, 'partner.html', {'form': form})
 
 
-
-
 def stafflogin(request):
     if request.user.is_authenticated:
         return redirect('adminmain')
@@ -109,12 +107,12 @@ def adminmain(request):
         restaurants = Restaurant.objects.filter(manager=request.user)
     else:
         restaurants = Restaurant.objects.none()
+        logout(request)
         return render(request, 'access-denied.html')
 
 
     context = {'restaurants': restaurants}
     return render(request, 'adminmain.html', context)
-
 
 
 @login_required(login_url='staff-login')
@@ -143,10 +141,6 @@ def addtomenu(request, item_id=None):
             return redirect('addtomenu')
 
     return render(request, 'addtomenu.html', {'form': form, 'restaurant': restaurant, 'existing_menu_items': existing_menu_items})
-
-
-
-
 
 @login_required
 @require_http_methods(["DELETE"])
@@ -211,6 +205,18 @@ def filter_restaurants(request):
 def order_list(request):
     orders = Order.objects.filter(orderitems__menu__restaurant__manager=request.user).distinct()
     return render(request, 'order_list.html', {'orders': orders})
+
+@login_required
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order_items = order.orderitems.all()
+
+    context = {
+        'order': order,
+        'order_items': order_items,
+    }
+
+    return render(request, 'order_detail.html', context)
 
 
 @login_required

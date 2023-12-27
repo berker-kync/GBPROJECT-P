@@ -27,12 +27,13 @@
 
     <!-- SPECIFIC CSS -->
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 
 
 </head>
 
 <body data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75" data-spy="scroll" data-bs-target="#secondary_nav" data-offset="75">
-                
+
     <header class="header clearfix element_to_stick">
         <div class="container">
             <div id="logo">
@@ -83,7 +84,13 @@
         </div>
     </header>
     <!-- /header -->
-
+    {% if messages %}
+    <div id="django-messages" style="display: none;">
+        {% for message in messages %}
+            <div class="message" data-type="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <main>
         <div class="hero_single version_2">
             <div class="opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.6)">
@@ -175,7 +182,7 @@
     </main>
     <!-- /main -->
 
-    {% include 'footer.html' %}
+    {% include 'footer.html' %}      
 
 </body>
 </html>
