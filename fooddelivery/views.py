@@ -1,3 +1,4 @@
+from math import e
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Adress, Cart, Extras, Order, OrderItem, Portion, Restaurant, Menu, Menu_Category, Province
 from django.http import JsonResponse
@@ -9,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.db.models import Avg
 from restaurants.views import send_email
+from django.template.loader import render_to_string
 
 
 def index(request):
@@ -194,24 +196,25 @@ def profile(request):
 
     return render(request, 'profile.html', context)
 
-def get_menu_item_details(request):
-    menu_id = request.GET.get('menu_id')
-    menu_item = Menu.objects.get(id=menu_id)
+def get_food_item_details(request, food_item_id):
+    food_item = Menu.objects.get(id=food_item_id)
+    portions = food_item.portions.all()
+    extras = food_item.extras.all()
 
-    portions = list(menu_item.portions.values('name', 'price'))
-    extras = list(menu_item.extras.values('name', 'price'))
+    portions_data = [{'id': portion.id, 'name': portion.name, 'price': portion.price} for portion in portions]
+    extras_data = [{'id': extra.id, 'name': extra.name, 'price': extra.price} for extra in extras]
 
     return JsonResponse({
-        'portions': portions,
-        'extras': extras
+        'portions': portions_data,
+        'extras': extras_data
     })
-    
+
 def detailRestaurant(request, name_slug):
     restaurant = Restaurant.objects.get(name_slug=name_slug)
     reviews = restaurant.reviews.all().order_by('-created_at')[:5]
     food_items = Menu.objects.filter(restaurant=restaurant)
     menu_categories = Menu_Category.objects.filter(menu_items__restaurant=restaurant).distinct()
-    menu_slugs = [category.menu_slug for category in menu_categories] # Menü kategorilerinin slug'ları yok ki bakalım buna.
+    menu_slugs = [category.menu_slug for category in menu_categories]
 
     # Kullanıcı giriş yapmışsa ek işlemler
     if request.user.is_authenticated:

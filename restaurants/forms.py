@@ -46,7 +46,8 @@ class MenuItemForm(forms.ModelForm):
     extras = forms.ModelMultipleChoiceField(
         queryset=Extras.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label='Ekstra Seçenekler'
+        label='Ekstra Seçenekler',
+        required=False
     )
 
     class Meta:

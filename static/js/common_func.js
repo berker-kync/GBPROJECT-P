@@ -204,9 +204,32 @@ $.ajaxSetup({
 	$('.modal_dialog').click(function(e) {
 		e.preventDefault();
 		let productID = $(this).data('productid');
-		$('#modal-dialog').data('productid', productID);  // Set the product ID in the modal
-		
+		$('#modal-dialog').data('productid', productID); // Ürün ID'sini modal'a ayarla
+	
+		// AJAX isteği ile portions ve extras bilgilerini getir
+		$.ajax({
+			url: `/get-food-item-details/${productID}/`, // Bu URL, Django view'unuza karşılık gelmelidir
+			type: 'GET',
+			dataType: 'json',
+			success: function(data) {
+				var portionsHtml = '';
+				data.portions.forEach(function(portion, index) {
+					portionsHtml += `<li><label class="container_radio">${portion.name}<span>+ ₺${portion.price}</span><input type="radio" value="${portion.id}" name="portion" ${index === 0 ? 'checked' : ''}><span class="checkmark"></span></label></li>`;
+				});
+				$('#modal-portions-list').html(portionsHtml);
+	
+				var extrasHtml = '';
+				data.extras.forEach(function(extra) {
+					extrasHtml += `<li><label class="container_check">${extra.name}<span>+ ₺${extra.price}</span><input type="checkbox" value="${extra.id}" name="extras"><span class="checkmark"></span></label></li>`;
+				});
+				$('#modal-extras-list').html(extrasHtml);
+			},
+			error: function(error) {
+				console.error("Error loading food item details:", error);
+			}
+		});
 	});
+	
 	
 	$('#add-to-cart-btn').click(function(e) {
 		e.preventDefault();
