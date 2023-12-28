@@ -153,3 +153,4 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 MAILGUN_API_KEY = config('MAILGUN_API_KEY')
 MAILGUN_DOMAIN = config('MAILGUN_DOMAIN')
 MAILGUN_SEND_URL = 'https://api.eu.mailgun.net/v3/{}/messages'.format(MAILGUN_DOMAIN)
+

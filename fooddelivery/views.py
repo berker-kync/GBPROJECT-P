@@ -4,7 +4,7 @@ from .models import Adress, Cart, Extras, Order, OrderItem, Portion, Restaurant,
 from django.http import JsonResponse
 from django.db import transaction
 from django.contrib import messages
-from .forms import ChangePasswordForm, ChangeUserForm, CustomerAddressForm, RegisterForm, LoginForm, ReviewForm
+from .forms import ChangePasswordForm, ChangeUserForm, ContactForm, CustomerAddressForm, RegisterForm, LoginForm, ReviewForm
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
@@ -465,3 +465,31 @@ def review(request, order_id):
 
     return render(request, 'leave-review.html', {'form': form, 'order': order, 'restaurant': restaurant})
 
+def mailquest(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            message = form.cleaned_data['message']
+
+            subject = f"{name} tarafından yeni bir iletişim talebi"
+            text = f"Mesaj: {message}\nGönderen: {name}\nE-posta: {email}"
+            to_email = 'info@gizemylmz.com.tr'
+
+            # E-posta gönderme işlemi
+            response = send_email(subject, text, to_email)
+
+            # E-posta gönderme işleminin başarılı olup olmadığını kontrol etme
+            if response.ok:
+                messages.success(request, 'Mesajınız gönderildi.')
+                return redirect('index')
+            else:
+                # Hata durumunda kullanıcıya bilgi verme
+                messages.error(request, 'Mesaj gönderilirken bir sorun oluştu.')
+
+            return render(request, 'mail-quest.html', {'form': form})
+    else:
+        form = ContactForm()
+
+    return render(request, 'mail-quest.html', {'form': form})

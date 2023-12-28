@@ -109,3 +109,13 @@ class ReviewForm(forms.ModelForm):
         }
 
 
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Adınız', widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label='E-posta Adresiniz', widget=forms.EmailInput(attrs={'class': 'form-control'}))
+    message = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control col-md-12', 'rows': 6}), label='Mesajınız')  # rows değerini artırın
+
+    def __init__(self, *args, **kwargs):
+        super(ContactForm, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['email'].widget.attrs.update({'class': 'form-control'})
+        self.fields['message'].widget.attrs.update({'class': 'form-control', 'rows': 10})  # Burada da rows değerini artırın

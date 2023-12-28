@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<main>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <div class="container mt-5">
+        <h2>Soru ve Öneri Formu</h2>
+        <form method="post" class="mt-3">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit"name="password_form" class="btn btn-primary">Gönder</button>
+        </form>
+    </div>
+
+</main>
+
+
+{% endblock %}
+
+{% block extra_js %}
+<style>
+    textarea.form-control {
+        height: auto; /* Yüksekliği içerik boyutuna göre ayarlar */
+        min-height: 150px; /* Minimum yüksekliği belirler */
+    }
+    </style>
+{% endblock %}
