@@ -195,12 +195,19 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 def get_menu_item_details(request):
+    # Get 'menu_id' from the request; return an error if not provided
     menu_id = request.GET.get('menu_id')
-    menu_item = Menu.objects.get(id=menu_id)
+    if not menu_id:
+        return JsonResponse({'error': 'Menu ID not provided'}, status=400)
 
+    # Safely retrieve the menu item; return 404 if not found
+    menu_item = get_object_or_404(Menu, id=menu_id)
+
+    # Extract portions and extras
     portions = list(menu_item.portions.values('name', 'price'))
     extras = list(menu_item.extras.values('name', 'price'))
 
+    # Return the response
     return JsonResponse({
         'portions': portions,
         'extras': extras

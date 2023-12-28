@@ -204,43 +204,67 @@ $.ajaxSetup({
 	$('.modal_dialog').click(function(e) {
 		e.preventDefault();
 		let productID = $(this).data('productid');
-		$('#modal-dialog').data('productid', productID);  // Set the product ID in the modal
-		
+	
+		$.ajax({
+			url: `/get_menu_item_details/?menu_id=${productID}`, // Make sure this is the correct endpoint
+			type: "GET",
+			success: function(data) {
+				console.log("Data received:", data); // Log the data to the console
+	
+				// Existing code to handle the data...
+				populateModal(data.portions, data.extras);
+			},
+			error: function(err) {
+				console.error("Error fetching item details:", err);
+			}
+		});
 	});
+	
+	
+	function populateModal(portions, extras) {
+
+		console.log("Populating modal with portions:", portions);
+		console.log("Populating modal with extras:", extras);
+		// Clear existing options
+		$('#modal-portions-section').empty();
+		$('#modal-extras-section').empty();
+	
+		// Populate portions
+		portions.forEach(function(portion) {
+			$('#modal-portions-section').append(`<li>${portion.name} + ₺${portion.price}</li>`);
+		});
+	
+		// Populate extras
+		extras.forEach(function(extra) {
+			$('#modal-extras-section').append(`<li>${extra.name} + ₺${extra.price}</li>`);
+		});
+	
+		// Now show your modal or ensure it updates
+		$('#modal-dialog').modal('show');
+	}
 	
 	$('#add-to-cart-btn').click(function(e) {
 		e.preventDefault();
 		const productQuantity = parseInt($('#qty_1').val(), 10); // Get the quantity
 		const productId = $('#modal-dialog').data('productid'); // Get the product ID from the modal
-		const selectedPortion = $('input[name=portion]:checked').val();
-		const selectedExtras = $('input[name=extras]:checked').map(function() {
-			return this.value;
-		}).get();
-
 	
 		$.ajax({
 			url: `/add_to_cart/${productId}/`, // Send the request with the specific product ID in the URL
 			type: "POST",
 			data: {
 				csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
-				quantity: productQuantity,
-				portion : selectedPortion,
-				extras : selectedExtras
+				quantity: productQuantity
 			},
-			traditional: true,
 			dataType: 'json',
 			success: function(data) {
 				if (data.success) {
-					toastr.success(data.message); // Show success message
 					$('#qty_1').val(1); // Reset the quantity to 1
-					$('#total-price').text(data.total_price); // Update the total price in the navbar
-
-					$.magnificPopup.close(); // Close the modal
+					// reload the page
 					location.reload();
+					$("#cart-items").html(data.cart_items);
+					$("#total-price").text(data.total_price);
 				} else {
-					toastr.error(data.message); // Show error message
-					$.magnificPopup.close(); // Close the modal
-
+					alert(data.message); // Show error message
 				}
 			},
 			error: function(err) {
@@ -248,8 +272,7 @@ $.ajaxSetup({
 			}
 		});
 	});
-
-
+	
 	// remove from cart
 	$('.remove-item-btn').click(function(e) {
 		e.preventDefault();
@@ -273,59 +296,7 @@ $.ajaxSetup({
 			}
 		});
 	});
-
-	$('.increase-quantity, .decrease-quantity').click(function() {
-		let itemId = $(this).data('id');
-		let pricePerItem = $(this).data('price');
-		let quantitySpan = $('#qty_' + itemId);
-		let currentQuantity = parseInt(quantitySpan.text(), 10);
-		let decreaseButton = $(`#cart-item-${itemId} .decrease-quantity`);
-		let removeButton = $(`#cart-item-${itemId} .remove-item-btn`);
 	
-		if ($(this).hasClass('increase-quantity')) {
-			currentQuantity++;
-		} else if (currentQuantity > 1) {
-			currentQuantity--;
-		} else {
-			decreaseButton.hide();
-			removeButton.show();
-			return;
-		}
-	
-		quantitySpan.text(currentQuantity);  // Miktarı güncelle
-		$('#item-total-price-' + itemId).text('₺' + (currentQuantity * pricePerItem).toFixed(2));  // Toplam fiyatı güncelle
-		
-		if (currentQuantity === 1) {
-			decreaseButton.hide();
-			removeButton.show();
-		} else {
-			decreaseButton.show();
-			removeButton.hide();
-		}
-
-		// AJAX isteği ile sunucuya güncelleme gönder
-		$.ajax({
-			url: '/update_cart_quantity/',  // Bu URL Django view'unuza karşılık gelmelidir
-			type: 'POST',
-			data: {
-				'itemId': itemId,
-				'quantity': currentQuantity,
-				'csrfmiddlewaretoken': $('input[name=csrfmiddlewaretoken]').val()
-			},
-			success: function(response) {
-				if(response.success) {
-					var totalPrice = parseFloat(response.total_price);
-					if (!isNaN(totalPrice)) {
-						$('#item-total-price-' + itemId).text('₺' + totalPrice.toFixed(2));
-					}
-					$('#total-price span').text('₺' + response.total_cart_price.toFixed(2));
-				}
-			},
-			error: function(error) {
-				// İsteğin başarısız olması durumunda gerçekleştirilecek işlemler
-			}
-		});
-	});
 	
 	
 	// Modal

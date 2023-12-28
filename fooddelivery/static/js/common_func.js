@@ -205,7 +205,39 @@ $.ajaxSetup({
 		e.preventDefault();
 		let productID = $(this).data('productid');
 		$('#modal-dialog').data('productid', productID);  // Set the product ID in the modal
+		
+		// Fetch portions and extras for the clicked item
+		$.ajax({
+			url: `/get_menu_item_details/?menu_id=${productID}`, // Update with the correct endpoint
+			type: "GET",
+			success: function(data) {
+				// Assuming 'data' contains 'portions' and 'extras' arrays
+				populateModal(data.portions, data.extras);
+			},
+			error: function(err) {
+				console.error("Error fetching item details:", err);
+			}
+		});
 	});
+	
+	function populateModal(portions, extras) {
+		// Clear existing options
+		$('#modal-portions-section').empty();
+		$('#modal-extras-section').empty();
+	
+		// Populate portions
+		portions.forEach(function(portion) {
+			$('#modal-portions-section').append(`<li>${portion.name} + ₺${portion.price}</li>`);
+		});
+	
+		// Populate extras
+		extras.forEach(function(extra) {
+			$('#modal-extras-section').append(`<li>${extra.name} + ₺${extra.price}</li>`);
+		});
+	
+		// Now show your modal or ensure it updates
+		$('#modal-dialog').modal('show');
+	}
 	
 	$('#add-to-cart-btn').click(function(e) {
 		e.preventDefault();
@@ -236,7 +268,7 @@ $.ajaxSetup({
 			}
 		});
 	});
-
+	
 	// remove from cart
 	$('.remove-item-btn').click(function(e) {
 		e.preventDefault();
@@ -260,6 +292,7 @@ $.ajaxSetup({
 			}
 		});
 	});
+	
 	
 	
 	// Modal

@@ -372,60 +372,38 @@
 <!-- Modal item order -->
 <div id="modal-dialog" class="zoom-anim-dialog mfp-hide">
     <div class="small-dialog-header">
-        <h3></h3>
+        <h3>Order Item</h3> <!-- You can dynamically set this to the item's name -->
     </div>
     <div class="content">
         <h5>Quantity</h5>
         <div class="numbers-row">
             <input type="text" value="1" id="qty_1" class="qty2 form-control" name="quantity" min="1">
-            <!-- Remove the hidden productid input, as we set it dynamically with JavaScript -->
         </div>
-		<h5>Size</h5>
-        <ul class="clearfix">
-			{% for portion in portions %}
-            <li>
-                <label class="container_radio">{{ portion.name }}<span id="portion-price">+ ₺{{ portion.price }}</span>
-                    <input type="radio" value="{{ portion.id }}" name="portion" {% if forloop.first %}checked{% endif %}>
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-			{% endfor %}
-        </ul>
+
+        <h5>Size</h5>
+        <!-- Placeholder for dynamically added portion sizes -->
+        <div id="modal-portions-section"></div>
+
         <h5>Extra Ingredients</h5>
-        <ul class="clearfix">
-			{% for extra in extras %}
-            <li>
-                <label class="container_check">{{ extra.name }}<span>+ ₺{{ extra.price }}</span>
-                    <input type="checkbox" value="{{ extra.id}}" name="extras">
-                    <span class="checkmark"></span>
-                </label>
-            </li>
-			{% endfor %}
-        </ul>
+        <!-- Placeholder for dynamically added extra ingredients -->
+        <div id="modal-extras-section"></div>
 
         <form action="" method="POST">
             {% csrf_token %}
-            <!-- You don't need the data-productid attribute here -->
             <div class="footer">
                 <div class="row small-gutters">
-                    <!-- <div class="col-md-4">
-                        <button type="button" class="btn_1 outline full-width mb-mobile" data-bs-dismiss="modal">İptal Et</button>
-                    </div> -->
-					{% if is_user_authenticated %}
                     <div class="col-md">
-                        <button type="submit" class="btn_1 full-width" id="add-to-cart-btn">Sepete Ekle</button>
+                        <button type="button" class="btn_1 full-width" id="add-to-cart-btn">Add to Cart</button>
                     </div>
-					{% else %}
-					<div class="col-md">
-						<a href="/login" class="btn_1 full-width">Sepete Ekle</a>
-					</div>
-					{% endif %}
                 </div>
                 <!-- /Row -->
             </div>
         </form>
     </div>
 </div>
+<!-- /Modal item order -->
+
+
 
     <!-- /Modal item order -->
 	
