@@ -11,8 +11,14 @@
 
 {% block content %}
 
-
-    <main class="bg_gray padded-main">
+    {% if messages %}
+    <div id="django-messages" style="display: none;">
+        {% for message in messages %}
+            <div class="message" data-type="{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <main class="bg_gray padded-main mt-5">
             <div class="row justify-content-center">
                 <div class="col-xl-6 col-lg-8">
                     <form method="post">

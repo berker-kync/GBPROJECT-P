@@ -79,7 +79,7 @@ class Menu_Category (models.Model):
         return self.name
 
 class Extras(models.Model):
-    name = models.CharField(max_length=30, null=False, blank=False)
+    name = models.CharField(max_length=30, null=False, blank=True)
     price = models.DecimalField(null=False, max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     
     class Meta:
@@ -128,7 +128,7 @@ class Menu(models.Model):
     quantity = models.PositiveIntegerField()
     product_image = models.ImageField(upload_to='products/img', null=False, blank=True)
     extras = models.ManyToManyField(Extras, related_name='menus', blank=True)
-    portions = models.ManyToManyField(Portion, related_name='menus', blank=True)
+    portions = models.ManyToManyField(Portion, related_name='menus', blank=False)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

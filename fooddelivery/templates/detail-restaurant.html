@@ -379,14 +379,13 @@
         <div class="numbers-row">
             <input type="text" value="1" id="qty_1" class="qty2 form-control" name="quantity" min="1">
         </div>
+		<h5>Size</h5>
+		<ul class="clearfix" id="modal-portions-list">
+		</ul>
+		<h5>Extra Ingredients</h5>
+		<ul class="clearfix" id="modal-extras-list">
+		</ul>
 
-        <h5>Size</h5>
-        <!-- Placeholder for dynamically added portion sizes -->
-        <div id="modal-portions-section"></div>
-
-        <h5>Extra Ingredients</h5>
-        <!-- Placeholder for dynamically added extra ingredients -->
-        <div id="modal-extras-section"></div>
 
         <form action="" method="POST">
             {% csrf_token %}
@@ -395,6 +394,11 @@
                     <div class="col-md">
                         <button type="button" class="btn_1 full-width" id="add-to-cart-btn">Add to Cart</button>
                     </div>
+					{% else %}
+					<div class="col-md">
+						<a href="/login?next={{ request.path }}" class="btn_1 full-width">Sepete Ekle</a>
+					</div>
+					{% endif %}
                 </div>
                 <!-- /Row -->
             </div>
@@ -420,7 +424,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 	<script src="{% static 'js/toastrmessage.js' %}"></script>
-
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 </body>
 </html>

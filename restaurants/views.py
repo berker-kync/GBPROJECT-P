@@ -137,6 +137,7 @@ def addtomenu(request, item_id=None):
             new_item = form.save(commit=False)
             new_item.restaurant = restaurant
             new_item.save()
+            form.save_m2m()
             messages.success(request, 'Ürün eklendi')
             return redirect('addtomenu')
 

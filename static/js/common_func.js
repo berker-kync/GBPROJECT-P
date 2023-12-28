@@ -204,44 +204,32 @@ $.ajaxSetup({
 	$('.modal_dialog').click(function(e) {
 		e.preventDefault();
 		let productID = $(this).data('productid');
+		$('#modal-dialog').data('productid', productID); // Ürün ID'sini modal'a ayarla
 	
+		// AJAX isteği ile portions ve extras bilgilerini getir
 		$.ajax({
-			url: `/get_menu_item_details/?menu_id=${productID}`, // Make sure this is the correct endpoint
-			type: "GET",
+			url: `/get-food-item-details/${productID}/`, // Bu URL, Django view'unuza karşılık gelmelidir
+			type: 'GET',
+			dataType: 'json',
 			success: function(data) {
-				console.log("Data received:", data); // Log the data to the console
+				var portionsHtml = '';
+				data.portions.forEach(function(portion, index) {
+					portionsHtml += `<li><label class="container_radio">${portion.name}<span>+ ₺${portion.price}</span><input type="radio" value="${portion.id}" name="portion" ${index === 0 ? 'checked' : ''}><span class="checkmark"></span></label></li>`;
+				});
+				$('#modal-portions-list').html(portionsHtml);
 	
-				// Existing code to handle the data...
-				populateModal(data.portions, data.extras);
+				var extrasHtml = '';
+				data.extras.forEach(function(extra) {
+					extrasHtml += `<li><label class="container_check">${extra.name}<span>+ ₺${extra.price}</span><input type="checkbox" value="${extra.id}" name="extras"><span class="checkmark"></span></label></li>`;
+				});
+				$('#modal-extras-list').html(extrasHtml);
 			},
-			error: function(err) {
-				console.error("Error fetching item details:", err);
+			error: function(error) {
+				console.error("Error loading food item details:", error);
 			}
 		});
 	});
 	
-	
-	function populateModal(portions, extras) {
-
-		console.log("Populating modal with portions:", portions);
-		console.log("Populating modal with extras:", extras);
-		// Clear existing options
-		$('#modal-portions-section').empty();
-		$('#modal-extras-section').empty();
-	
-		// Populate portions
-		portions.forEach(function(portion) {
-			$('#modal-portions-section').append(`<li>${portion.name} + ₺${portion.price}</li>`);
-		});
-	
-		// Populate extras
-		extras.forEach(function(extra) {
-			$('#modal-extras-section').append(`<li>${extra.name} + ₺${extra.price}</li>`);
-		});
-	
-		// Now show your modal or ensure it updates
-		$('#modal-dialog').modal('show');
-	}
 	
 	$('#add-to-cart-btn').click(function(e) {
 		e.preventDefault();
