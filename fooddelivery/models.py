@@ -14,7 +14,7 @@ class CustomerManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError(_('The Email must be set'))
-        email = self.normalize_email(email)
+        email = self.normalize_email(email) # emaili küçük harfe çevirir
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -41,10 +41,10 @@ class Customer(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
-    objects = CustomerManager()
+    objects = CustomerManager() # CustomerManager classını kullanarak kullanıcı oluşturmak için
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    USERNAME_FIELD = 'email' # email alanı ile giriş yapılacak
+    REQUIRED_FIELDS = ['name'] # kullanıcı oluştururken name alanı da zorunlu olacak
 
     class Meta:
         ordering = ['email']
@@ -63,9 +63,7 @@ class Customer(AbstractBaseUser, PermissionsMixin):
         return self.is_superuser
 
 
-# menu category model
-
-class Menu_Category (models.Model):
+class Menu_Category(models.Model):
     name = models.CharField(max_length=150, unique=True)
     menu_slug = AutoSlugField(populate_from='name', unique=True, editable=True, blank=True)
 
@@ -264,9 +262,6 @@ class OrderItem(models.Model):
             total_price += extra.price
         return total_price * self.quantity
 
-
-
-# REVIEW DENEMESİ
 
 class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
