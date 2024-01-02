@@ -4,6 +4,8 @@ from restaurants.models import Restaurant, Restaurant_Category
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
+
+#User yaratma alanı
 class MyUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = Customer
@@ -44,6 +46,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ('status', 'created_at', 'updated_at')
     search_fields = ('customer_name', 'customer_email')
     list_editable = ('status',)
+
 
 class AdressAdmin(admin.ModelAdmin):
     list_display = ('customer', 'name', 'phone', 'street', 'apartment', 'door_number', 'city', 'postal_code')

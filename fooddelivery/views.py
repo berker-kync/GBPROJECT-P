@@ -18,7 +18,7 @@ def index(request):
     if request.user.is_staff:
         return user_logout(request)
       
-    restaurants = Restaurant.objects.all()[:10]
+    restaurants = Restaurant.objects.all()[:10] #html'den sildik
 
     return render(request, 'index.html', {'restaurants': restaurants})
 
@@ -113,9 +113,9 @@ def termsconditions(request):
 def privacy(request):
     return render(request, 'privacy.html')
 
-
 def custom_404(request, exception):
     return render(request, '404.html', status=404)
+
 
 def delete_address(request, address_id):
     address = get_object_or_404(Adress, id=address_id)
@@ -204,11 +204,11 @@ def get_food_item_details(request, food_item_id):
     portions_data = [{'id': portion.id, 'name': portion.name, 'price': portion.price} for portion in portions]
     extras_data = [{'id': extra.id, 'name': extra.name, 'price': extra.price} for extra in extras]
 
-    # Return the response
     return JsonResponse({
         'portions': portions_data,
         'extras': extras_data
     })
+
 
 def detailRestaurant(request, name_slug):
     restaurant = Restaurant.objects.get(name_slug=name_slug)
@@ -240,7 +240,7 @@ def detailRestaurant(request, name_slug):
         cart_items = None
         total_price = 0
 
-    # Ortalama skor ve yorum sayısı hesaplamaları
+    # Ortalama skor ve yorum sayısı hesaplamaları:
     average_score = reviews.aggregate(Avg('score'))['score__avg'] if reviews else 0
     review_count = reviews.count()
 
@@ -325,14 +325,13 @@ def update_cart_quantity(request):
 
 
 
-@login_required(login_url='/login')  # Requires the user to be authenticated
+@login_required(login_url='/login') 
 def remove_from_cart(request, id):
     try:
-        # Find the cart item by its ID, associated with the authenticated user (Customer)
+        # giriş yapan userla ilgili itemı id ile bula
         cart_item = Cart.objects.filter(customer=request.user, id=id).first()
 
         if cart_item:
-            # Remove the cart item
             cart_item.delete()
             return JsonResponse({"success": True, "message": "Ürün sepetten silindi.", "toastr_type": "success"})
         else:
@@ -347,7 +346,7 @@ def order(request):
     customer = request.user
     cart_items = Cart.objects.filter(customer=customer)
 
-    # Check cart items
+    # sepet ürünlerine bakar
     if cart_items.exists():
         current_restaurant = cart_items.first().menu.restaurant
         restaurant_province = current_restaurant.province
@@ -408,7 +407,7 @@ def order(request):
 
             # Email sending logic
             subject = 'Sipariş Onay'
-            message = f'Sevgili {customer.name},\n\nSiparişin restorana ulaştı:\n\nOrder ID: {new_order.id}\n\n{order_details}\nToplam Tutar: {total_price}\n\nBizi tercih ettiğiniz için teşekkür ederiz.'
+            message = f'Sevgili {customer.name},\n\nSiparişin restorana ulaştı:\n\n{order_details}\nToplam Tutar: {total_price}\n\nBizi tercih ettiğiniz için teşekkür ederiz.'
             to_email = customer.email
 
             send_email(subject, message, to_email)
@@ -440,7 +439,7 @@ def review(request, order_id):
 
     # review edilmiş mi
     if order.reviewed:
-        messages.error(request, "You have already reviewed this order.")
+        messages.error(request, "Bu siparişi zaten değerlendirdiniz.")
         return redirect('profile')
 
     if request.method == 'POST':
@@ -457,7 +456,7 @@ def review(request, order_id):
             order.reviewed = True
             order.save()
 
-            messages.success(request, "Thank you for your review.")
+            messages.success(request, "Değerlendirmeniz için teşekkür ederiz.")
             return redirect('profile')
     else:
         form = ReviewForm()

@@ -29,7 +29,7 @@
 		<!-- /page_header -->
 
         <div class="container mt-3 text-bg-danger">
-            <p class="text-center p-3">Restoranlarımız şuan sadece bulundukları ilçeye paket servis vermektedir.</p>
+            <p class="text-center p-3">Restoranlarımız şu an sadece bulundukları ilçeye paket servis vermektedir.</p>
         </div>
 
         {% if messages %}
@@ -136,7 +136,7 @@
                                     </a>
                                 </figure>
                                 <ul>
-                                    <li> <span class="operating hours"> <strong>Hours: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
+                                    <li> <span class="operating hours"> <strong>Çalışma Saatleri: {{ restaurant.opening_hour }} - {{ restaurant.closing_hour }}</strong></span></li>
                                     <li>
                                         <div class="score"><strong>{{ restaurant.avg_score|default_if_none:"0.0" }}</strong></div>
                                     </li>

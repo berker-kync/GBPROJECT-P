@@ -228,20 +228,20 @@ def update_order_status(request, order_id):
 
     order = get_object_or_404(Order, id=order_id)
 
-    # Ensure the user manages the restaurant related to the order
+    # kullanıcı sipariş verilen restoranın menajeri mi
     if not request.user.managed_restaurants.filter(menus__order=order).exists():
         return JsonResponse({'status': 'error', 'message': 'You do not have permission for this action'}, status=403)
 
     data = json.loads(request.body.decode('utf-8'))
     status = data.get('status')
 
-    # Check if the order status is already 'delivered' or 'rejected'
+    # order status check edilir
     if order.status in ['delivered', 'rejected']:
         return JsonResponse({'status': 'error', 'message': 'Order status cannot be changed once delivered or rejected'}, status=400)
 
-    # Update the order status if it's a valid status and not 'delivered' or 'rejected'
+    # valid order mı?
     if status in dict(Order.STATUS).keys():
-        # Revert menu item quantities if the order is being rejected
+        # quantityleri check et revert et
         if status == 'rejected' and not order.status == 'rejected':
             for item in order.orderitems.all():
                 item.menu.quantity = F('quantity') + item.quantity
