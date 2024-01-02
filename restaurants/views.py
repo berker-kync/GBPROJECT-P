@@ -50,7 +50,7 @@ def partner(request):
 
         subject1 = "Yeni Partner Restoran Kayıt Bilgisi"
         message1 = f"Yeni bir kayıt formu geldi. İşte detaylar:\n\n{form_data_str}"
-        to_email1 = "berkerkoyuncu@gmail.com"  
+        to_email1 = "info@gizemylmz.com.tr"  
         send_email(subject1, message1, to_email1)
 
 

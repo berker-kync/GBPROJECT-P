@@ -1,4 +1,3 @@
-from math import e
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Adress, Cart, Extras, Order, OrderItem, Portion, Restaurant, Menu, Menu_Category, Province
 from django.http import JsonResponse
@@ -10,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.db.models import Avg
 from restaurants.views import send_email
-from django.template.loader import render_to_string
+
 
 
 def index(request):
